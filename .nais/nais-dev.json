@@ -1,0 +1,4 @@
+{
+  "kafka_cluster": "nav-dev",
+  "rapidsandrivers_enabled": false
+}
