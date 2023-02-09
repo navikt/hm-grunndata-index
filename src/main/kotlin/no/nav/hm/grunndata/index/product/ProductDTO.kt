@@ -71,7 +71,6 @@ enum class MediaType {
 }
 
 enum class AttributeNames(private val type: AttributeType) {
-
     manufacturer(AttributeType.STRING),
     articlename(AttributeType.STRING),
     compatible(AttributeType.LIST),
@@ -82,7 +81,6 @@ enum class AttributeNames(private val type: AttributeType) {
     url(AttributeType.URL),
     tags(AttributeType.LIST),
     bestillingsordning(AttributeType.BOOLEAN)
-
 }
 
 enum class AttributeType {

@@ -1,0 +1,45 @@
+micronaut:
+  application:
+    name: hm-grunndata-index
+    thread-selection: auto
+  executors:
+    consumer:
+      type: fixed
+      nThreads: 1
+  http:
+    client:
+      max-content-length: 10833718
+      read-timeout: "15m"
+  server:
+    max-request-size: 10833718
+    port: 8080
+
+jackson:
+  bean-introspection-module: true
+  serialization:
+    indentOutput: true
+
+opensearch:
+  password: ${OPEN_SEARCH_PASSWORD:admin}
+  user: ${OPEN_SEARCH_USERNAME:admin}
+  url: ${OPEN_SEARCH_URI:`https://localhost:9200`}
+
+hmdb:
+  url: ${HMDB_URL:`http://localhost:8081`}
+
+# Rapids and rivers config
+rapidsandrivers:
+  enabled: ${RAPIDSANDRIVERS_ENABLED:false}
+
+kafka:
+  topic: teamdigihot.hm-grunndata-v1
+  consumerGroupId: hm-grunndata-index-g1
+  trustStorePath: ${KAFKA_TRUSTSTORE_PATH:}
+  trustStorePassword: ${KAFKA_CREDSTORE_PASSWORD:}
+  keystorePath: ${KAFKA_KEYSTORE_PATH:}
+  keystorePassword: ${KAFKA_CREDSTORE_PASSWORD:}
+  health:
+    enabled: false
+
+schedulers:
+  enabled: ${SCHEDULERS_ENABLED:false}
