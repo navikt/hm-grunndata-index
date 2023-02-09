@@ -3,19 +3,16 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 val jvmTarget = "17"
-val micronautVersion="3.8.3"
+val micronautVersion="3.8.4"
 val kafkaVersion = "3.2.1"
 val micrometerRegistryPrometheusVersion = "1.9.1"
 val junitJupiterVersion = "5.9.0"
 val jacksonVersion = "2.13.4"
 val logbackClassicVersion = "1.2.11"
 val logbackEncoderVersion = "7.2"
-val kafkaEmbeddedVersion = "3.2.1"
-val postgresqlVersion= "42.3.3"
 val tcVersion= "1.16.3"
 val mockkVersion = "1.13.2"
 val kotestVersion = "5.5.0"
-val apachePoiVersion = "5.2.3"
 val openSearchRestClientVersion = "1.3.7"
 val rapidsRiversVersion = "202301310932"
 
@@ -48,16 +45,12 @@ dependencies {
     implementation("io.micronaut.data:micronaut-data-jdbc")
     implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    runtimeOnly("io.micronaut.sql:micronaut-jdbc-hikari")
-    annotationProcessor("io.micronaut.data:micronaut-data-processor")
-    implementation("org.postgresql:postgresql:${postgresqlVersion}")
-    implementation("io.micronaut.flyway:micronaut-flyway")
+
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-http-client")
     implementation("org.opensearch.client:opensearch-rest-high-level-client:${openSearchRestClientVersion}")
-    implementation("io.micronaut.cache:micronaut-cache-caffeine")
 
     implementation("com.github.navikt:hm-rapids-and-rivers-v2-core:$rapidsRiversVersion")
     implementation("com.github.navikt:hm-rapids-and-rivers-v2-micronaut:$rapidsRiversVersion")
@@ -68,7 +61,6 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
-    testImplementation("org.testcontainers:postgresql:${tcVersion}")
 }
 
 micronaut {
