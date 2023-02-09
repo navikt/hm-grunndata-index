@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.db
+package no.nav.hm.grunndata.index
 
 import io.micronaut.runtime.Micronaut
 
