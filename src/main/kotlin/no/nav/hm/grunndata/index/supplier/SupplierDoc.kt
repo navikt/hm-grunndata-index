@@ -1,5 +1,6 @@
 package no.nav.hm.grunndata.index.supplier
 
+import no.nav.hm.grunndata.dto.SupplierDTO
 import no.nav.hm.grunndata.index.SearchDoc
 import java.time.LocalDateTime
 
