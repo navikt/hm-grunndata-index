@@ -43,3 +43,13 @@ kafka:
 
 schedulers:
   enabled: ${SCHEDULERS_ENABLED:false}
+
+agreements:
+  aliasName: ${AGREEMENTS_ALIASNAME:agreements}
+  indexName: ${AGREEMENTS_INDEXNAME:agreements_20230213}
+suppliers:
+  aliasName: ${SUPPLIERS_ALIASNAME:suppliers}
+  indexName: ${SUPPLIERS_INDEXNAME:suppliers_20230213}
+products:
+  aliasName: ${PRODUCTS_ALIASNAME:products}
+  indexName: ${PRODUCTS_INDEXNAME:products_20230213}

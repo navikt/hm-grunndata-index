@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory
 
 @Singleton
 class SupplierIndexer(private val indexer: Indexer,
-                      @Value("\${SUPPLIER_ALIASNAME:supplier}") private val aliasName: String,
-                      @Value("\${SUPPLIER_INDEXNAME:supplier_202302}") private val indexName: String ) {
+                      @Value("\${suppliers.aliasName}") private val aliasName: String,
+                      @Value("\${suppliers.indexName}") private val indexName: String ) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(SupplierIndexer::class.java)
