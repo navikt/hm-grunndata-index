@@ -11,7 +11,7 @@ import no.nav.hm.grunndata.dto.ProductDTO
 interface ProductGdbApiClient {
 
     @Get(uri="/", consumes = [APPLICATION_JSON])
-    fun findProducts(params: Map<String, String>, @QueryValue("size") size: Int? = null,
+    fun findProducts(params: Map<String, String>?=null, @QueryValue("size") size: Int? = null,
                      @QueryValue("number") number: Int?=null, @QueryValue("sort") sort: String? = null): Page<ProductDTO>
 
 }
