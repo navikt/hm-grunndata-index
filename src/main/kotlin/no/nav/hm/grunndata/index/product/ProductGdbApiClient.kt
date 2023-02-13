@@ -12,6 +12,6 @@ interface ProductGdbApiClient {
 
     @Get(uri="/", consumes = [APPLICATION_JSON])
     fun findProducts(params: Map<String, String>?=null, @QueryValue("size") size: Int? = null,
-                     @QueryValue("number") number: Int?=null, @QueryValue("sort") sort: String? = null): Page<ProductDTO>
+                     @QueryValue("page") page: Int?=null, @QueryValue("sort") sort: String? = null): Page<ProductDTO>
 
 }

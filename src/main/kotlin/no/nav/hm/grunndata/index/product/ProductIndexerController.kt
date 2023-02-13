@@ -14,10 +14,19 @@ class ProductIndexerController(private val productGdbApiClient: ProductGdbApiCli
 
     @Post("/{?indexName}")
     fun indexProducts(@QueryValue indexName: String) {
-        val products = productGdbApiClient.findProducts().content.map { it.toDoc() }
-        LOG.info("indexing ${products.size} products to $indexName")
-        productIndexer.index(products, indexName)
+        var page = productGdbApiClient.findProducts(params = mapOf("updated" to "2011-01-01T00:00:00"),
+            size=1000, page = 0)
+        while(page.pageNumber<page.totalPages) {
+            println("page: ${page.pageNumber} Totalpage: ${page.totalPages} " +
+                    "Totalsize: ${page.totalSize} number: ${page.numberOfElements}")
+            if (page.numberOfElements>0) {
+                val products = page.content.map { it.toDoc() }
+                LOG.info("indexing ${products.size} products to $indexName")
+                productIndexer.index(products, indexName)
+            }
+            page = productGdbApiClient.findProducts(params = mapOf("updated" to "2010-01-01T00:00:00"),
+                size=1000, page = page.pageNumber+1)
+        }
     }
-
 
 }

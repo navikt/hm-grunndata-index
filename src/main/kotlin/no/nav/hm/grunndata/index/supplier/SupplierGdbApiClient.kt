@@ -13,7 +13,7 @@ interface SupplierGdbApiClient {
     @Get(uri="/", consumes = [MediaType.APPLICATION_JSON])
     fun findSuppliers(params: Map<String, String>?=null,
                       @QueryValue("size") size: Int? = null,
-                      @QueryValue("number") number: Int?=null,
+                      @QueryValue("page") number: Int?=null,
                       @QueryValue("sort") sort: String? = null): Page<SupplierDTO>
 
 }

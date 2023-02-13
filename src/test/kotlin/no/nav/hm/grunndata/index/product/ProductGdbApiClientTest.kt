@@ -13,7 +13,7 @@ class ProductGdbApiClientTest(private val productGdbApiClient: ProductGdbApiClie
     //@Test
     fun findGdbProducts() {
         val page = productGdbApiClient.findProducts(params = mapOf( "updated" to LocalDateTime.now().minusYears(15).toString()),
-            size = 1000, number= 0, sort = "updated,asc")
+            size = 1000, page = 0, sort = "updated,asc")
         println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(page))
     }
 
