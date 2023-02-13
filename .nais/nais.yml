@@ -34,6 +34,8 @@ spec:
   env:
     - name: RAPIDSANDRIVERS_ENABLED
       value: "{{ rapidsandrivers_enabled }}"
+    - name: GRUNNDATA_DB_URL
+      value: "http://hm-grunndata-db"
   kafka:
     pool: {{ kafka_cluster }}
   accessPolicy:

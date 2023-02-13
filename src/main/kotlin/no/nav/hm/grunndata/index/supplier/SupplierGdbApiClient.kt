@@ -7,7 +7,7 @@ import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.annotation.Client
 import no.nav.hm.grunndata.dto.SupplierDTO
 
-@Client("\${grunndata.db.url:`http://localhost:8888`}/api/v1/suppliers")
+@Client("\${grunndata.db.url}/api/v1/suppliers")
 interface SupplierGdbApiClient {
 
     @Get(uri="/", consumes = [MediaType.APPLICATION_JSON])

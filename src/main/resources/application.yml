@@ -53,3 +53,7 @@ suppliers:
 products:
   aliasName: ${PRODUCTS_ALIASNAME:products}
   indexName: ${PRODUCTS_INDEXNAME:products_20230213}
+
+grunndata:
+  db:
+    url: ${GRUNNDATA_DB_URL:`http://localhost:8888`}
