@@ -13,6 +13,9 @@ micronaut:
   server:
     max-request-size: 10833718
     port: 8080
+  data:
+    pageable:
+      max-page-size: 1000
 
 jackson:
   bean-introspection-module: true
@@ -40,9 +43,6 @@ kafka:
   keystorePassword: ${KAFKA_CREDSTORE_PASSWORD:}
   health:
     enabled: false
-
-schedulers:
-  enabled: ${SCHEDULERS_ENABLED:false}
 
 agreements:
   aliasName: ${AGREEMENTS_ALIASNAME:agreements}

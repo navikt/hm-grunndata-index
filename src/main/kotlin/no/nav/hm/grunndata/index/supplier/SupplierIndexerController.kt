@@ -1,5 +1,6 @@
 package no.nav.hm.grunndata.index.supplier
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.QueryValue
@@ -14,7 +15,8 @@ class SupplierIndexerController(private val supplierGdbApiClient: SupplierGdbApi
 
     @Post("/{?indexName}")
     fun indexSuppliers(@QueryValue indexName: String) {
-        val suppliers = supplierGdbApiClient.findSuppliers().content.map { it.toDoc() }
+        val page = supplierGdbApiClient.findSuppliers(size=1000, number = 0, sort="updated,asc")
+        val suppliers = page.content.map { it.toDoc() }
         LOG.info("indexing ${suppliers.size} suppliers to $indexName")
         supplierIndexer.index(suppliers, indexName)
     }

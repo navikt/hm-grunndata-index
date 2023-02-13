@@ -14,7 +14,7 @@ class AgreementIndexerController(private val agreementGdbApiClient: AgreementGdb
 
     @Post("/{?indexName}")
     fun indexAgreements(@QueryValue indexName: String) {
-        val agreements = agreementGdbApiClient.findAgreements().content.map { it.toDoc() }
+        val agreements = agreementGdbApiClient.findAgreements(size=1000, number=0).content.map { it.toDoc() }
         LOG.info("indexing ${agreements.size} agreements to $indexName")
         agreementIndexer.index(agreements, indexName)
     }

@@ -11,8 +11,10 @@ import no.nav.hm.grunndata.dto.SupplierDTO
 interface SupplierGdbApiClient {
 
     @Get(uri="/", consumes = [MediaType.APPLICATION_JSON])
-    fun findSuppliers(params: Map<String, String>?=null, @QueryValue("size") size: Int? = null,
-                     @QueryValue("number") number: Int?=null, @QueryValue("sort") sort: String? = null): Page<SupplierDTO>
+    fun findSuppliers(params: Map<String, String>?=null,
+                      @QueryValue("size") size: Int? = null,
+                      @QueryValue("number") number: Int?=null,
+                      @QueryValue("sort") sort: String? = null): Page<SupplierDTO>
 
 }
 
