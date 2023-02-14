@@ -7,10 +7,10 @@ import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.annotation.Client
 import no.nav.hm.grunndata.dto.SupplierDTO
 
-@Client("\${grunndata.db.url}/api/v1/suppliers")
+@Client("\${grunndata.db.url}")
 interface SupplierGdbApiClient {
 
-    @Get(uri="/", consumes = [MediaType.APPLICATION_JSON])
+    @Get(uri="/api/v1/suppliers", consumes = [MediaType.APPLICATION_JSON])
     fun findSuppliers(params: Map<String, String>?=null,
                       @QueryValue("size") size: Int? = null,
                       @QueryValue("page") number: Int?=null,

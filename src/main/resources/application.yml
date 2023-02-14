@@ -8,14 +8,20 @@ micronaut:
       nThreads: 1
   http:
     client:
-      max-content-length: 10833718
-      read-timeout: "15m"
+      max-content-length: 100833718
+      read-timeout: "30s"
+      event-loop-group: http
+  netty:
+    event-loops:
+      http:
+        num-threads: 10
+        prefer-native-transport: true
   server:
-    max-request-size: 10833718
+    max-request-size: 100833718
     port: 8080
   data:
     pageable:
-      max-page-size: 1000
+      max-page-size: 5000
 
 jackson:
   bean-introspection-module: true

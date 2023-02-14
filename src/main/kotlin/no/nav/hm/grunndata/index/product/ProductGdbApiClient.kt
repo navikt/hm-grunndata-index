@@ -7,11 +7,13 @@ import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.annotation.Client
 import no.nav.hm.grunndata.dto.ProductDTO
 
-@Client("\${grunndata.db.url}/api/v1/products")
+@Client("\${grunndata.db.url}")
 interface ProductGdbApiClient {
 
-    @Get(uri="/", consumes = [APPLICATION_JSON])
-    fun findProducts(params: Map<String, String>?=null, @QueryValue("size") size: Int? = null,
-                     @QueryValue("page") page: Int?=null, @QueryValue("sort") sort: String? = null): Page<ProductDTO>
+    @Get(uri="/api/v1/products", consumes = [APPLICATION_JSON])
+    fun findProducts(params: Map<String, String>?=null,
+                     @QueryValue("size") size: Int? = null,
+                     @QueryValue("page") page: Int?=null,
+                     @QueryValue("sort") sort: String? = null): Page<ProductDTO>
 
 }

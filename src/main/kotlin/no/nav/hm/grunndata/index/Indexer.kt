@@ -71,7 +71,6 @@ class Indexer(private val client: RestHighLevelClient,
     fun index(docs: List<SearchDoc>, indexName: String): BulkResponse {
         val bulkRequest = BulkRequest()
         docs.forEach {
-            LOG.debug("indexing ${it.id}")
             bulkRequest.add(
                 IndexRequest(indexName)
                     .id(it.id)

@@ -8,12 +8,14 @@ import io.micronaut.http.client.annotation.Client
 import no.nav.hm.grunndata.dto.AgreementDTO
 import no.nav.hm.grunndata.dto.SupplierDTO
 
-@Client("\${grunndata.db.url}/api/v1/agreements")
+@Client("\${grunndata.db.url}")
 interface AgreementGdbApiClient {
 
-    @Get(uri="/", consumes = [MediaType.APPLICATION_JSON])
-    fun findAgreements(params: Map<String, String>?=null, @QueryValue("size") size: Int? = null,
-                     @QueryValue("page") number: Int?=null, @QueryValue("sort") sort: String? = null): Page<AgreementDTO>
+    @Get(uri="/api/v1/agreements", consumes = [MediaType.APPLICATION_JSON])
+    fun findAgreements(params: Map<String, String>?=null,
+                       @QueryValue("size") size: Int? = null,
+                       @QueryValue("page") number: Int?=null,
+                       @QueryValue("sort") sort: String? = null): Page<AgreementDTO>
 
 }
 
