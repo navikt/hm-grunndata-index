@@ -1,6 +1,6 @@
 package no.nav.hm.grunndata.index.product
 
-import no.nav.hm.grunndata.dto.*
+import no.nav.hm.grunndata.rapid.dto.*
 import no.nav.hm.grunndata.index.SearchDoc
 import java.time.LocalDateTime
 

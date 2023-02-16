@@ -1,8 +1,8 @@
 package no.nav.hm.grunndata.index.agreement
 
-import no.nav.hm.grunndata.dto.AgreementAttachment
-import no.nav.hm.grunndata.dto.AgreementDTO
-import no.nav.hm.grunndata.dto.AgreementPost
+import no.nav.hm.grunndata.rapid.dto.AgreementAttachment
+import no.nav.hm.grunndata.rapid.dto.AgreementDTO
+import no.nav.hm.grunndata.rapid.dto.AgreementPost
 import no.nav.hm.grunndata.index.SearchDoc
 import java.time.LocalDateTime
 
