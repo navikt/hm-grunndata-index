@@ -8,6 +8,7 @@ import no.nav.helse.rapids_rivers.KafkaRapid
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.River
 import no.nav.hm.grunndata.rapid.dto.AgreementDTO
+import no.nav.hm.grunndata.rapid.dto.rapidDTOVersion
 import no.nav.hm.rapids_rivers.micronaut.RiverHead
 import org.slf4j.LoggerFactory
 
@@ -25,12 +26,15 @@ class AgreementIndexerRiver(river: RiverHead, private val objectMapper: ObjectMa
         river
             .validate { it.demandValue("payloadType", AgreementDTO::class.java.simpleName)}
             .validate { it.demandKey("payload")}
+            .validate { it.requireKey("dtoVersion")}
             .register(this)
     }
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         val dto = objectMapper.treeToValue(packet["payload"], AgreementDTO::class.java)
-        LOG.info("indexing agreement ${dto.id}")
+        val dtoVersion = packet["dtoVersion"]
+        LOG.info("indexing agreement id: ${dto.id} reference: ${dto.reference} EventDTOVersion: $dtoVersion " +
+                "rapidDTOVersion: $rapidDTOVersion")
         agreementIndexer.index(dto.toDoc())
     }
 

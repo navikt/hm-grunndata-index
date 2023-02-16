@@ -9,6 +9,7 @@ import no.nav.helse.rapids_rivers.KafkaRapid
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.River
 import no.nav.hm.grunndata.rapid.dto.ProductDTO
+import no.nav.hm.grunndata.rapid.dto.rapidDTOVersion
 import no.nav.hm.rapids_rivers.micronaut.RiverHead
 import org.slf4j.LoggerFactory
 
@@ -26,15 +27,16 @@ class ProductIndexerRiver(river: RiverHead, private val objectMapper: ObjectMapp
             .validate { it.demandValue("createdBy", "GDB")}
             .validate { it.demandValue("payloadType", ProductDTO::class.java.simpleName)}
             .validate { it.demandKey("payload")}
+            .validate { it.demandKey("dtoVersion")}
             .register(this)
     }
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         val dto = objectMapper.treeToValue(packet["payload"], ProductDTO::class.java)
-        LOG.debug("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr}")
-        runBlocking {
-            productIndexer.index(dto.toDoc())
-        }
+        val dtoVersion = packet["dtoVersion"]
+        LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr} EventDTOVersion: $dtoVersion " +
+                "rapidDTOVersion: $rapidDTOVersion")
+        productIndexer.index(dto.toDoc())
     }
 
 }
