@@ -33,9 +33,9 @@ class SupplierIndexerRiver(river: RiverHead, private val objectMapper: ObjectMap
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         val dto = objectMapper.treeToValue(packet["payload"], SupplierDTO::class.java)
-        val dtoVersion = packet["dtoVersion"]
-        LOG.info("indexing supplier id: ${dto.id} name: ${dto.name} EventDTOVersion: $dtoVersion " +
-                "rapidDTOVersion: $rapidDTOVersion")
+        val dtoVersion = packet["dtoVersion"].asLong()
+        if (dtoVersion > rapidDTOVersion) LOG.warn("this event dto version $dtoVersion is newer than $rapidDTOVersion")
+        LOG.info("indexing supplier id: ${dto.id} name: ${dto.name}")
         supplierIndexer.index(dto.toDoc())
     }
 }

@@ -3,7 +3,6 @@ package no.nav.hm.grunndata.index.product
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.context.annotation.Context
 import io.micronaut.context.annotation.Requires
-import kotlinx.coroutines.runBlocking
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.KafkaRapid
 import no.nav.helse.rapids_rivers.MessageContext
@@ -33,9 +32,9 @@ class ProductIndexerRiver(river: RiverHead, private val objectMapper: ObjectMapp
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         val dto = objectMapper.treeToValue(packet["payload"], ProductDTO::class.java)
-        val dtoVersion = packet["dtoVersion"]
-        LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr} EventDTOVersion: $dtoVersion " +
-                "rapidDTOVersion: $rapidDTOVersion")
+        val dtoVersion = packet["dtoVersion"].asLong()
+        if (dtoVersion > rapidDTOVersion) LOG.warn("this event dto version $dtoVersion is newer than $rapidDTOVersion")
+        LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr}")
         productIndexer.index(dto.toDoc())
     }
 
