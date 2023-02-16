@@ -23,6 +23,7 @@ class ProductIndexerRiver(river: RiverHead, private val objectMapper: ObjectMapp
 
     init {
         river
+            .validate { it.demandValue("createdBy", "GDB")}
             .validate { it.demandValue("payloadType", ProductDTO::class.java.simpleName)}
             .validate { it.demandKey("payload")}
             .register(this)
