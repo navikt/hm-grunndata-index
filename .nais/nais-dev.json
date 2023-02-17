@@ -3,5 +3,7 @@
   "rapidsandrivers_enabled": true,
   "agreements_indexname": "agreements_20230217",
   "suppliers_indexname": "suppliers_20230217",
-  "products_indexname": "products_20230217"
+  "products_indexname": "products_20230217",
+  "min_replicas": 1,
+  "max_replicas": 1
 }
