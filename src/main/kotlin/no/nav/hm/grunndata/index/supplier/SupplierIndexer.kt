@@ -28,11 +28,11 @@ class SupplierIndexer(private val indexer: Indexer,
     }
 
     fun index(docs: List<SupplierDoc>): BulkResponse {
-        return indexer.index(docs, indexName)
+        return indexer.index(docs, aliasName)
     }
 
     fun index(doc: SupplierDoc): BulkResponse {
-        return indexer.index(listOf(doc), indexName)
+        return indexer.index(listOf(doc), aliasName)
     }
 
     fun index(doc: SupplierDoc, indexName: String): BulkResponse {

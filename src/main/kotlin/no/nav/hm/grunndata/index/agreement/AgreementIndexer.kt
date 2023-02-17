@@ -28,11 +28,11 @@ class AgreementIndexer(private val indexer: Indexer,
     }
 
     fun index(docs: List<AgreementDoc>): BulkResponse {
-        return indexer.index(docs, indexName)
+        return indexer.index(docs, aliasName)
     }
 
     fun index(doc: AgreementDoc): BulkResponse {
-        return indexer.index(listOf(doc), indexName)
+        return indexer.index(listOf(doc), aliasName)
     }
 
     fun index(doc: AgreementDoc, indexName: String): BulkResponse {

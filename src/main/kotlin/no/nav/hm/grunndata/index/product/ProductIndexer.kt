@@ -32,11 +32,11 @@ class ProductIndexer(private val indexer: Indexer,
         }
     }
 
-    fun index(docs: List<ProductDoc>): BulkResponse = indexer.index(docs, indexName)
+    fun index(docs: List<ProductDoc>): BulkResponse = indexer.index(docs, aliasName)
 
 
     fun index(doc: ProductDoc): BulkResponse {
-        return indexer.index(listOf(doc), indexName)
+        return indexer.index(listOf(doc), aliasName)
     }
 
 
