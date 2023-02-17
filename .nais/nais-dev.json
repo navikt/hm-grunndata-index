@@ -1,4 +1,7 @@
 {
   "kafka_cluster": "nav-dev",
-  "rapidsandrivers_enabled": false
+  "rapidsandrivers_enabled": false,
+  "agreements_indexname": "agreements_20230217",
+  "suppliers_indexname": "suppliers_20230217",
+  "products_indexname": "products_20230217"
 }

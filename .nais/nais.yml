@@ -36,6 +36,12 @@ spec:
       value: "{{ rapidsandrivers_enabled }}"
     - name: GRUNNDATA_DB_URL
       value: "http://hm-grunndata-db"
+    - name: AGREEMENTS_INDEXNAME
+      value: "{{ agreements_indexname }}"
+    - name: SUPPLIERS_INDEXNAME
+      value: "{{ suppliers_indexname }}"
+    - name: PRODUCTS_INDEXNAME
+      value: "{{ products_indexname }}"
   kafka:
     pool: {{ kafka_cluster }}
   accessPolicy:
