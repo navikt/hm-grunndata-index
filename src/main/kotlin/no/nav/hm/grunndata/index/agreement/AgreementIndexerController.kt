@@ -13,15 +13,15 @@ class AgreementIndexerController(private val agreementGdbApiClient: AgreementGdb
         private val LOG = LoggerFactory.getLogger(AgreementIndexerController::class.java)
     }
 
-    @Post("/{?indexName}")
-    fun indexAgreements(@QueryValue indexName: String) {
+    @Post("/{indexName}")
+    fun indexAgreements(indexName: String) {
         val agreements = agreementGdbApiClient.findAgreements(size=1000, number=0).content.map { it.toDoc() }
         LOG.info("indexing ${agreements.size} agreements to $indexName")
         agreementIndexer.index(agreements, indexName)
     }
 
-    @Put("/alias/{?indexName}")
-    fun aliasAgreements(@QueryValue indexName: String) {
+    @Put("/alias/{indexName}")
+    fun aliasAgreements(indexName: String) {
         agreementIndexer.updateAlias(indexName)
     }
 

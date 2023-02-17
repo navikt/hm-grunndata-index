@@ -14,8 +14,8 @@ class ProductIndexerController(private val productGdbApiClient: ProductGdbApiCli
         private val LOG = LoggerFactory.getLogger(ProductIndexerController::class.java)
     }
 
-    @Post("/{?indexName}")
-    fun indexProducts(@QueryValue indexName: String) {
+    @Post("/{indexName}")
+    fun indexProducts(indexName: String) {
         val dateString =  LocalDateTime.now().minusYears(15).toString()
         var page = productGdbApiClient.findProducts(params = mapOf("updated" to dateString),
             size=1000, page = 0, sort="updated,asc")
@@ -30,8 +30,8 @@ class ProductIndexerController(private val productGdbApiClient: ProductGdbApiCli
         }
     }
 
-    @Put("/alias/{?indexName}")
-    fun aliasProducts(@QueryValue indexName: String) {
+    @Put("/alias/{indexName}")
+    fun aliasProducts(indexName: String) {
         productIndexer.updateAlias(indexName)
     }
 
