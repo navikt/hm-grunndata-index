@@ -16,6 +16,10 @@ class ProductIndexerController(private val productGdbApiClient: ProductGdbApiCli
 
     @Post("/{indexName}")
     fun indexProducts(indexName: String) {
+        if (!productIndexer.indexExists(indexName)) {
+            LOG.info("creating index $indexName")
+            productIndexer.createIndex(indexName)
+        }
         val dateString =  LocalDateTime.now().minusYears(15).toString()
         var page = productGdbApiClient.findProducts(params = mapOf("updated" to dateString),
             size=1000, page = 0, sort="updated,asc")
