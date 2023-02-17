@@ -2,6 +2,7 @@ package no.nav.hm.grunndata.index.product
 
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.Put
 import io.micronaut.http.annotation.QueryValue
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
@@ -27,6 +28,11 @@ class ProductIndexerController(private val productGdbApiClient: ProductGdbApiCli
             page = productGdbApiClient.findProducts(params = mapOf("updated" to dateString),
                 size=1000, page = page.pageNumber+1, sort="updated,asc")
         }
+    }
+
+    @Put("/alias/{?indexName}")
+    fun aliasProducts(@QueryValue indexName: String) {
+        productIndexer.updateAlias(indexName)
     }
 
 }

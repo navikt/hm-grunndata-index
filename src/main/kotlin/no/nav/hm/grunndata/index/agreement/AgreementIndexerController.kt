@@ -2,6 +2,7 @@ package no.nav.hm.grunndata.index.agreement
 
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.Put
 import io.micronaut.http.annotation.QueryValue
 import org.slf4j.LoggerFactory
 
@@ -19,5 +20,9 @@ class AgreementIndexerController(private val agreementGdbApiClient: AgreementGdb
         agreementIndexer.index(agreements, indexName)
     }
 
+    @Put("/alias/{?indexName}")
+    fun aliasAgreements(@QueryValue indexName: String) {
+        agreementIndexer.updateAlias(indexName)
+    }
 
 }

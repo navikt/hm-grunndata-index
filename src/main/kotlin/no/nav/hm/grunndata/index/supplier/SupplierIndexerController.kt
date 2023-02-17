@@ -1,8 +1,8 @@
 package no.nav.hm.grunndata.index.supplier
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.Put
 import io.micronaut.http.annotation.QueryValue
 import org.slf4j.LoggerFactory
 
@@ -21,5 +21,9 @@ class SupplierIndexerController(private val supplierGdbApiClient: SupplierGdbApi
         supplierIndexer.index(suppliers, indexName)
     }
 
+    @Put("/alias/{?indexName}")
+    fun aliasSuppliers(@QueryValue indexName: String) {
+        supplierIndexer.updateAlias(indexName)
+    }
 
 }
