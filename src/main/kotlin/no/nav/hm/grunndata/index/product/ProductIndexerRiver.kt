@@ -22,6 +22,7 @@ class ProductIndexerRiver(river: RiverHead, private val objectMapper: ObjectMapp
     }
 
     init {
+        LOG.info("Using Rapid DTO version $rapidDTOVersion")
         river
             .validate { it.demandValue("createdBy", "GDB")}
             .validate { it.demandValue("payloadType", ProductDTO::class.java.simpleName)}

@@ -18,7 +18,7 @@ data class ProductDoc (
     val sparePart: Boolean = false,
     val seriesId: String?=null,
     val data: List<TechData> = emptyList(),
-    val media: List<Media> = emptyList(),
+    val media: List<MediaDTO> = emptyList(),
     val created: LocalDateTime,
     val updated: LocalDateTime,
     val expired: LocalDateTime,
