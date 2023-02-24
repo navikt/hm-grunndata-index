@@ -1,4 +1,5 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.internal.execution.history.changes.ExecutionStateChanges.incremental
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
@@ -15,7 +16,7 @@ val mockkVersion = "1.13.2"
 val kotestVersion = "5.5.0"
 val openSearchRestClientVersion = "2.4.1"
 val rapidsRiversVersion = "202301310932"
-val grunndataDtoVersion = "202302221558"
+val grunndataDtoVersion = "202302241543"
 
 group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
@@ -111,8 +112,7 @@ tasks.withType<Wrapper> {
 repositories {
     mavenLocal()
     mavenCentral()
-    maven("https://packages.confluent.io/maven/")
     maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
-
+    maven("https://packages.confluent.io/maven/")
 }
 
