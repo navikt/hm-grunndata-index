@@ -3,6 +3,7 @@ package no.nav.hm.grunndata.index.product
 import no.nav.hm.grunndata.rapid.dto.*
 import no.nav.hm.grunndata.index.SearchDoc
 import java.time.LocalDateTime
+import java.util.*
 
 data class ProductDoc (
     override val id: String,
@@ -18,7 +19,7 @@ data class ProductDoc (
     val sparePart: Boolean = false,
     val seriesId: String?=null,
     val data: List<TechData> = emptyList(),
-    val media: List<MediaDTO> = emptyList(),
+    val media: List<MediaDoc> = emptyList(),
     val created: LocalDateTime,
     val updated: LocalDateTime,
     val expired: LocalDateTime,
@@ -29,6 +30,13 @@ data class ProductDoc (
     val hasAgreement: Boolean = false,
 ): SearchDoc
 
+data class MediaDoc (
+    val uri:    String,
+    val priority: Int = 1,
+    val type: MediaType = MediaType.IMAGE,
+    val text:   String?=null,
+    val source: MediaSourceType = MediaSourceType.HMDB
+)
 
 data class TechDataFilters(val fyllmateriale:String?, val setebreddeMaksCM: Int?, val setebreddeMinCM: Int?,
                            val brukervektMinKG: Int?, val materialeTrekk:String?, val setedybdeMinCM:Int?,
@@ -42,9 +50,17 @@ fun ProductDTO.toDoc() : ProductDoc = ProductDoc (
     id = id.toString(), supplier = ProductSupplier(id = supplier.id.toString(), identifier = supplier.identifier,
         name = supplier.name), title = title, attributes = attributes, status = status, hmsArtNr = hmsArtNr,
             identifier = identifier, supplierRef = supplierRef, isoCategory = isoCategory, accessory = accessory,
-    sparePart = sparePart, seriesId = seriesId, data = techData, media = media, created = created,
+    sparePart = sparePart, seriesId = seriesId, data = techData, media = media.map { it.toDoc() } , created = created,
     updated = updated, expired = expired, createdBy = createdBy, updatedBy = updatedBy, agreementInfo = agreementInfo,
     hasAgreement = agreementInfo!=null, filters = mapTechDataFilters(techData)
+)
+
+fun MediaDTO.toDoc() : MediaDoc = MediaDoc (
+    uri = uri,
+    priority = priority,
+    type = type,
+    text = text,
+    source = source
 )
 
 fun mapTechDataFilters(data: List<TechData>): TechDataFilters {
