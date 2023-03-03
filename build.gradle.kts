@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 val jvmTarget = "17"
-val micronautVersion="3.8.4"
+val micronautVersion="3.8.5"
 val kafkaVersion = "3.2.1"
 val micrometerRegistryPrometheusVersion = "1.9.1"
 val junitJupiterVersion = "5.9.0"
@@ -27,7 +27,7 @@ plugins {
     kotlin("plugin.allopen") version "1.7.0"
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "3.6.6"
+    id("io.micronaut.application") version "3.7.2"
 }
 
 configurations.all {
@@ -89,10 +89,13 @@ java {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = jvmTarget
+    kapt.includeCompileClasspath = false
+
 }
 
 tasks.named<KotlinCompile>("compileTestKotlin") {
     kotlinOptions.jvmTarget = jvmTarget
+    kapt.includeCompileClasspath = false
 }
 
 tasks.withType<Test> {
@@ -108,7 +111,7 @@ tasks.withType<Test> {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "7.5.1"
+    gradleVersion = "8.0.1"
 }
 
 repositories {
