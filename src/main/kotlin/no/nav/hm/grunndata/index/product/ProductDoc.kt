@@ -15,8 +15,8 @@ data class ProductDoc (
     val identifier: String,
     val supplierRef: String,
     val isoCategory: String,
-    val isoCategoryLongName: String,
-    val isoCategoryShortName: String,
+    val isoCategoryLongName: String?,
+    val isoCategoryShortName: String?,
     val accessory: Boolean = false,
     val sparePart: Boolean = false,
     val seriesId: String?=null,
@@ -48,15 +48,19 @@ data class TechDataFilters(val fyllmateriale:String?, val setebreddeMaksCM: Int?
 
 data class ProductSupplier(val id: String, val identifier: String, val name: String)
 
-fun ProductDTO.toDoc(isoCategoryMap: IsoCategory) : ProductDoc = ProductDoc (
+fun ProductDTO.toDoc(isoCategoryMap: IsoCategory) : ProductDoc = try { ProductDoc (
     id = id.toString(), supplier = ProductSupplier(id = supplier.id.toString(), identifier = supplier.identifier,
         name = supplier.name), title = title, attributes = attributes, status = status, hmsArtNr = hmsArtNr,
             identifier = identifier, supplierRef = supplierRef, isoCategory = isoCategory,
-    isoCategoryShortName = isoCategoryMap.kortnavn(isoCategory)!!, isoCategoryLongName = isoCategoryMap.tittel(isoCategory)!!,  accessory = accessory,
+    isoCategoryShortName = isoCategoryMap.kortnavn(isoCategory), isoCategoryLongName = isoCategoryMap.tittel(isoCategory),  accessory = accessory,
     sparePart = sparePart, seriesId = seriesId, data = techData, media = media.map { it.toDoc() } , created = created,
     updated = updated, expired = expired, createdBy = createdBy, updatedBy = updatedBy, agreementInfo = agreementInfo,
-    hasAgreement = agreementInfo!=null, filters = mapTechDataFilters(techData)
-)
+    hasAgreement = agreementInfo!=null, filters = mapTechDataFilters(techData)) }
+    catch (e: Exception) {
+        println(isoCategory)
+        throw e
+    }
+
 
 
 
