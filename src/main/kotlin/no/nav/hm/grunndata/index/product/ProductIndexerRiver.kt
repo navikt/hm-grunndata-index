@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory
 @Context
 @Requires(bean = KafkaRapid::class)
 class ProductIndexerRiver(river: RiverHead, private val objectMapper: ObjectMapper,
-                          private val productIndexer: ProductIndexer): River.PacketListener {
+                          private val productIndexer: ProductIndexer, private val isoCategory: IsoCategory): River.PacketListener {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(ProductIndexerRiver::class.java)
@@ -36,7 +36,7 @@ class ProductIndexerRiver(river: RiverHead, private val objectMapper: ObjectMapp
         if (dtoVersion > rapidDTOVersion) LOG.warn("this event dto version $dtoVersion is newer than $rapidDTOVersion")
         val dto = objectMapper.treeToValue(packet["payload"], ProductDTO::class.java)
         LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr}")
-        productIndexer.index(dto.toDoc())
+        productIndexer.index(dto.toDoc(isoCategory))
     }
 
 }

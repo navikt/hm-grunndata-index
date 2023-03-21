@@ -94,3 +94,6 @@ products:
 grunndata:
   db:
     url: ${GRUNNDATA_DB_URL:`http://localhost:8888`}
+
+isocategory:
+  url: ${ISOCATEGORY_URL:`https://navikt.github.io/digihot-sortiment/isokategorier.json`}

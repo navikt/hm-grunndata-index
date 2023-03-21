@@ -9,7 +9,8 @@ import java.time.LocalDateTime
 
 @Controller("/internal/index/products")
 class ProductIndexerController(private val productGdbApiClient: ProductGdbApiClient,
-                               private val productIndexer: ProductIndexer) {
+                               private val productIndexer: ProductIndexer,
+                               private val isoCategory: IsoCategory) {
     companion object {
         private val LOG = LoggerFactory.getLogger(ProductIndexerController::class.java)
     }
@@ -25,7 +26,7 @@ class ProductIndexerController(private val productGdbApiClient: ProductGdbApiCli
             size=1000, page = 0, sort="updated,asc")
         while(page.pageNumber<page.totalPages) {
             if (page.numberOfElements>0) {
-                val products = page.content.map { it.toDoc() }
+                val products = page.content.map { it.toDoc(isoCategory) }
                 LOG.info("indexing ${products.size} products to $indexName")
                 productIndexer.index(products, indexName)
             }
