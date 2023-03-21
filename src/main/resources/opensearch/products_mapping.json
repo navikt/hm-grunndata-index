@@ -144,6 +144,14 @@
       "type": "keyword",
       "copy_to": "keywords_suggest"
     },
+    "isoCategoryShortName": {
+      "type": "keyword",
+      "copy_to": "keywords_suggest"
+    },
+    "isoCategoryLongName": {
+      "type": "keyword",
+      "copy_to": "keywords_suggest"
+    },
     "media": {
       "enabled": false
     },
