@@ -9,6 +9,7 @@ data class ProductDoc (
     override val id: String,
     val supplier: ProductSupplier,
     val title: String,
+    val articleName:String,
     val attributes: Map<AttributeNames,Any> = emptyMap(),
     val status: ProductStatus,
     val hmsArtNr: String?=null,
@@ -50,7 +51,7 @@ data class ProductSupplier(val id: String, val identifier: String, val name: Str
 
 fun ProductDTO.toDoc(isoCategoryMap: IsoCategory) : ProductDoc = try { ProductDoc (
     id = id.toString(), supplier = ProductSupplier(id = supplier.id.toString(), identifier = supplier.identifier,
-        name = supplier.name), title = title, attributes = attributes, status = status, hmsArtNr = hmsArtNr,
+        name = supplier.name), title = title, articleName = articleName, attributes = attributes, status = status, hmsArtNr = hmsArtNr,
             identifier = identifier, supplierRef = supplierRef, isoCategory = isoCategory,
     isoCategoryShortName = isoCategoryMap.kortnavn(isoCategory), isoCategoryLongName = isoCategoryMap.tittel(isoCategory),  accessory = accessory,
     sparePart = sparePart, seriesId = seriesId, data = techData, media = media.map { it.toDoc() } , created = created,
