@@ -33,7 +33,7 @@ class AgreementIndexerRiver(river: RiverHead, private val objectMapper: ObjectMa
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
 
         val dtoVersion = packet["dtoVersion"].asLong()
-        if (dtoVersion > rapidDTOVersion) LOG.warn("this event dto version $dtoVersion is newer than $rapidDTOVersion")
+        if (dtoVersion > rapidDTOVersion) LOG.warn("this event dto version $dtoVersion is newer than our version: $rapidDTOVersion")
         val dto = objectMapper.treeToValue(packet["payload"], AgreementDTO::class.java)
         LOG.info("indexing agreement id: ${dto.id} reference: ${dto.reference}")
         agreementIndexer.index(dto.toDoc())

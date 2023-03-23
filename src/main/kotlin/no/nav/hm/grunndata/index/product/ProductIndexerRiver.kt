@@ -33,7 +33,7 @@ class ProductIndexerRiver(river: RiverHead, private val objectMapper: ObjectMapp
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         val dtoVersion = packet["dtoVersion"].asLong()
-        if (dtoVersion > rapidDTOVersion) LOG.warn("this event dto version $dtoVersion is newer than $rapidDTOVersion")
+        if (dtoVersion > rapidDTOVersion) LOG.warn("this event dto version $dtoVersion is newer than our version: $rapidDTOVersion")
         val dto = objectMapper.treeToValue(packet["payload"], ProductDTO::class.java)
         LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr}")
         productIndexer.index(dto.toDoc(isoCategory))
