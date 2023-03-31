@@ -10,7 +10,7 @@ data class ProductDoc (
     val supplier: ProductSupplier,
     val title: String,
     val articleName:String,
-    val attributes: Map<AttributeNames,Any> = emptyMap(),
+    val attributes: AttributesDoc,
     val status: ProductStatus,
     val hmsArtNr: String?=null,
     val identifier: String,
@@ -33,6 +33,18 @@ data class ProductDoc (
     val hasAgreement: Boolean = false,
 ): SearchDoc
 
+
+data class AttributesDoc (
+    val manufacturer: String? = null,
+    val compatible: List<String>? = null,
+    val tags: List<String>? = null,
+    val series: String? = null,
+    val shortdescription: String? = null,
+    val text: String? = null,
+    val url: String? = null,
+    val bestillingsordning: Boolean? = null
+)
+
 data class MediaDoc (
     val uri:    String,
     val priority: Int = 1,
@@ -51,7 +63,7 @@ data class ProductSupplier(val id: String, val identifier: String, val name: Str
 
 fun ProductDTO.toDoc(isoCategoryMap: IsoCategory) : ProductDoc = try { ProductDoc (
     id = id.toString(), supplier = ProductSupplier(id = supplier.id.toString(), identifier = supplier.identifier,
-        name = supplier.name), title = title, articleName = articleName, attributes = attributes, status = status, hmsArtNr = hmsArtNr,
+        name = supplier.name), title = title, articleName = articleName, attributes = attributes.toDoc(), status = status, hmsArtNr = hmsArtNr,
             identifier = identifier, supplierRef = supplierRef, isoCategory = isoCategory,
     isoCategoryShortName = isoCategoryMap.kortnavn(isoCategory), isoCategoryLongName = isoCategoryMap.tittel(isoCategory),  accessory = accessory,
     sparePart = sparePart, seriesId = seriesId, data = techData, media = media.map { it.toDoc() } , created = created,
@@ -62,10 +74,22 @@ fun ProductDTO.toDoc(isoCategoryMap: IsoCategory) : ProductDoc = try { ProductDo
         throw e
     }
 
+private fun Attributes.toDoc(): AttributesDoc {
+    return AttributesDoc(
+        manufacturer = manufacturer,
+        tags = tags,
+        series = series,
+        shortdescription = shortdescription,
+        text = text,
+        url = url,
+        bestillingsordning = bestillingsordning,
+        compatible = compatible
+            ?.flatMap { listOf(it.hmsArtNr, it.supplierRef, it.id?.toString())}?.filterNotNull()
+    )
+}
 
 
-
-fun MediaDTO.toDoc() : MediaDoc = MediaDoc (
+fun MediaInfo.toDoc() : MediaDoc = MediaDoc (
     uri = uri,
     priority = priority,
     type = type,
@@ -112,5 +136,7 @@ fun mapTechDataFilters(data: List<TechData>): TechDataFilters {
         setehoydeMinCM = setehoydeMinCM, totalVektKG = totalVektKG, lengdeCM = lengdeCM, breddeCM = breddeCM,
         beregnetBarn = beregnetBarn, brukervektMaksKG = brukervektMaksKG)
 }
+
+
 
 private fun String.decimalToInt(): Int? = substringBeforeLast(".").toInt()
