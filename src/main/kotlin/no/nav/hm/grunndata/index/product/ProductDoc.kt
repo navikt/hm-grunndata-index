@@ -83,7 +83,8 @@ private fun Attributes.toDoc(): AttributesDoc {
         url = url,
         bestillingsordning = bestillingsordning,
         compatible = compatible
-            ?.flatMap { listOf(it.hmsArtNr, it.supplierRef, it.id?.toString())}?.filterNotNull()
+            ?.flatMap { listOf(it.hmsArtNr, it.supplierRef, it.id?.toString())}
+            ?.filterNotNull()
     )
 }
 
