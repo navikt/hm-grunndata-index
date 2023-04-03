@@ -4,19 +4,19 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 val jvmTarget = "17"
-val micronautVersion="3.8.5"
+val micronautVersion="3.8.7"
 val kafkaVersion = "3.2.1"
 val micrometerRegistryPrometheusVersion = "1.9.1"
 val junitJupiterVersion = "5.9.0"
 val jacksonVersion = "2.13.4"
-val logbackClassicVersion = "1.2.11"
-val logbackEncoderVersion = "7.2"
+val logbackClassicVersion = "1.4.6"
+val logbackEncoderVersion = "7.3"
 val tcVersion= "1.16.3"
 val mockkVersion = "1.13.2"
-val kotestVersion = "5.5.0"
+val kotestVersion = "5.5.5"
 val openSearchRestClientVersion = "2.4.1"
 val rapidsRiversVersion = "202303011052"
-val grunndataDtoVersion = "202303311459"
+val grunndataDtoVersion = "202304030755"
 
 group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
@@ -24,10 +24,9 @@ version = properties["version"] ?: "local-build"
 plugins {
     kotlin("jvm") version "1.7.0"
     kotlin("kapt") version "1.7.0"
-    kotlin("plugin.allopen") version "1.7.0"
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "3.7.2"
+    id("io.micronaut.application") version "3.7.4"
 }
 
 configurations.all {
@@ -45,7 +44,7 @@ dependencies {
 
     // micronaut-data
     implementation("io.micronaut.data:micronaut-data-jdbc")
-    implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
+    implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     implementation("io.micronaut:micronaut-runtime")
@@ -65,7 +64,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
 }
 
 micronaut {

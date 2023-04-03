@@ -3,7 +3,6 @@ package no.nav.hm.grunndata.index.product
 import no.nav.hm.grunndata.rapid.dto.*
 import no.nav.hm.grunndata.index.SearchDoc
 import java.time.LocalDateTime
-import java.util.*
 
 data class ProductDoc (
     override val id: String,
@@ -37,7 +36,7 @@ data class ProductDoc (
 data class AttributesDoc (
     val manufacturer: String? = null,
     val compatible: List<String>? = null,
-    val tags: List<String>? = null,
+    val keywords: List<String>? = null,
     val series: String? = null,
     val shortdescription: String? = null,
     val text: String? = null,
@@ -77,7 +76,7 @@ fun ProductDTO.toDoc(isoCategoryMap: IsoCategory) : ProductDoc = try { ProductDo
 private fun Attributes.toDoc(): AttributesDoc {
     return AttributesDoc(
         manufacturer = manufacturer,
-        tags = tags,
+        keywords = keywords,
         series = series,
         shortdescription = shortdescription,
         text = text,
