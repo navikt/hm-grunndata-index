@@ -9,6 +9,7 @@ import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.River
 import no.nav.hm.grunndata.rapid.dto.AgreementDTO
 import no.nav.hm.grunndata.rapid.dto.rapidDTOVersion
+import no.nav.hm.grunndata.rapid.event.EventName
 import no.nav.hm.grunndata.rapid.event.RapidApp
 import no.nav.hm.rapids_rivers.micronaut.RiverHead
 import org.slf4j.LoggerFactory
@@ -26,7 +27,6 @@ class AgreementIndexerRiver(river: RiverHead, private val objectMapper: ObjectMa
     init {
         river
             .validate { it.demandValue("createdBy", RapidApp.grunndata_db)}
-            .validate { it.demandValue("payloadType", AgreementDTO::class.java.simpleName)}
             .validate { it.demandKey("payload")}
             .validate { it.requireKey("dtoVersion")}
             .register(this)

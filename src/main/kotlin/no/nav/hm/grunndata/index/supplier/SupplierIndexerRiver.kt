@@ -26,7 +26,6 @@ class SupplierIndexerRiver(river: RiverHead, private val objectMapper: ObjectMap
     init {
         river
             .validate { it.demandValue("createdBy", RapidApp.grunndata_db)}
-            .validate { it.demandValue("payloadType", SupplierDTO::class.java.simpleName)}
             .validate { it.demandKey("payload")}
             .validate { it.demandKey("dtoVersion")}
             .register(this)
