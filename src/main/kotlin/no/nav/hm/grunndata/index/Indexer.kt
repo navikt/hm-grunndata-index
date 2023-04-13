@@ -12,6 +12,7 @@ import org.opensearch.client.RequestOptions
 import org.opensearch.client.RestHighLevelClient
 import org.opensearch.client.indices.CreateIndexRequest
 import org.opensearch.client.indices.GetIndexRequest
+import org.opensearch.cluster.metadata.AliasMetadata
 import org.opensearch.common.xcontent.XContentType
 import org.opensearch.rest.RestStatus
 import org.slf4j.LoggerFactory
@@ -56,6 +57,9 @@ class Indexer(private val client: RestHighLevelClient,
         LOG.info("updateAlias for alias $aliasName and pointing to $indexName ")
         return client.indices().updateAliases(request, RequestOptions.DEFAULT).isAcknowledged
     }
+
+    fun getAlias(aliasName: String): Map<String, MutableSet<AliasMetadata>> =
+        client.indices().getAlias(GetAliasesRequest(aliasName), RequestOptions.DEFAULT).aliases
 
     fun createIndex(indexName: String, settings: String?=null, mapping: String?=null): Boolean {
         val createIndexRequest = CreateIndexRequest(indexName)
