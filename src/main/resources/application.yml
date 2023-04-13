@@ -22,7 +22,6 @@ micronaut:
   data:
     pageable:
       max-page-size: 5000
-
   metrics:
     enabled: true
     binders:

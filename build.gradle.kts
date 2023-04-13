@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val jvmTarget = "17"
 val micronautVersion="3.8.8"
 val kafkaVersion = "3.2.1"
-val micrometerRegistryPrometheusVersion = "1.9.1"
 val junitJupiterVersion = "5.9.0"
 val jacksonVersion = "2.13.4"
 val logbackClassicVersion = "1.4.6"
@@ -52,8 +51,10 @@ dependencies {
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-http-client")
     implementation("org.opensearch.client:opensearch-rest-high-level-client:${openSearchRestClientVersion}")
+
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+    implementation("io.micronaut:micronaut-management")
 
     implementation("com.github.navikt:hm-rapids-and-rivers-v2-core:$rapidsRiversVersion")
     implementation("com.github.navikt:hm-rapids-and-rivers-v2-micronaut:$rapidsRiversVersion")
