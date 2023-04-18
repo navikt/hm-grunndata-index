@@ -9,6 +9,7 @@ import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.River
 import no.nav.hm.grunndata.rapid.dto.ProductDTO
 import no.nav.hm.grunndata.rapid.dto.rapidDTOVersion
+import no.nav.hm.grunndata.rapid.event.EventName
 import no.nav.hm.grunndata.rapid.event.RapidApp
 import no.nav.hm.rapids_rivers.micronaut.RiverHead
 import org.slf4j.LoggerFactory
@@ -28,6 +29,7 @@ class ProductIndexerRiver(river: RiverHead,
         LOG.info("Using Rapid DTO version $rapidDTOVersion")
         river
             .validate { it.demandValue("createdBy", RapidApp.grunndata_db)}
+            .validate { it.demandValue("eventName", EventName.hmdbproductsyncV1)}
             .validate { it.demandKey("payload")}
             .validate { it.demandKey("dtoVersion")}
             .register(this)

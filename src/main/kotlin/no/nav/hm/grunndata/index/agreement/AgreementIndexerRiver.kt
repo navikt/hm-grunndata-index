@@ -27,6 +27,7 @@ class AgreementIndexerRiver(river: RiverHead, private val objectMapper: ObjectMa
     init {
         river
             .validate { it.demandValue("createdBy", RapidApp.grunndata_db)}
+            .validate { it.demandValue("eventName", EventName.hmdbagreementsyncV1)}
             .validate { it.demandKey("payload")}
             .validate { it.requireKey("dtoVersion")}
             .register(this)
