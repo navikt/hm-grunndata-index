@@ -60,14 +60,33 @@ data class TechDataFilters(val fyllmateriale:String?, val setebreddeMaksCM: Int?
 
 data class ProductSupplier(val id: String, val identifier: String, val name: String)
 
-fun ProductDTO.toDoc(isoCategoryMap: IsoCategory) : ProductDoc = try { ProductDoc (
-    id = id.toString(), supplier = ProductSupplier(id = supplier.id.toString(), identifier = supplier.identifier,
-        name = supplier.name), title = title, articleName = articleName, attributes = attributes.toDoc(), status = status, hmsArtNr = hmsArtNr,
-            identifier = identifier, supplierRef = supplierRef, isoCategory = isoCategory,
-    isoCategoryShortName = isoCategoryMap.kortnavn(isoCategory), isoCategoryLongName = isoCategoryMap.tittel(isoCategory),  accessory = accessory,
-    sparePart = sparePart, seriesId = seriesId, data = techData, media = media.map { it.toDoc() } , created = created,
-    updated = updated, expired = expired, createdBy = createdBy, updatedBy = updatedBy, agreementInfo = agreementInfo,
-    hasAgreement = agreementInfo!=null, filters = mapTechDataFilters(techData)) }
+fun ProductDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc = try { ProductDoc (
+    id = id.toString(),
+    supplier = ProductSupplier(id = supplier.id.toString(), identifier = supplier.identifier,
+        name = supplier.name),
+    title = title,
+    articleName = articleName,
+    attributes = attributes.toDoc(),
+    status = status,
+    hmsArtNr = hmsArtNr,
+    identifier = identifier,
+    supplierRef = supplierRef,
+    isoCategory = isoCategory,
+    isoCategoryShortName = isoCategoryService.lookUpCode(isoCategory)?.isoTitle,
+    isoCategoryLongName = isoCategoryService.lookUpCode(isoCategory)?.isoText,
+    accessory = accessory,
+    sparePart = sparePart,
+    seriesId = seriesId,
+    data = techData,
+    media = media.map { it.toDoc() },
+    created = created,
+    updated = updated,
+    expired = expired,
+    createdBy = createdBy,
+    updatedBy = updatedBy,
+    agreementInfo = agreementInfo,
+    hasAgreement = agreementInfo!=null,
+    filters = mapTechDataFilters(techData)) }
     catch (e: Exception) {
         println(isoCategory)
         throw e

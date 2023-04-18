@@ -6,22 +6,21 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
 @MicronautTest
-class ProductGdbApiClientTest(private val productGdbApiClient: ProductGdbApiClient,
-                              private val objectMapper: ObjectMapper,
-                              private val isoCategory: IsoCategory) {
+class ProductGdbApiClientTest(private val gdbApiClient: GdbApiClient,
+                              private val isoCategoryService: IsoCategoryService) {
 
 
     //@Test ignore integration test
     fun findGdbProducts() {
         val dateString =  LocalDateTime.now().minusYears(15).toString()
-        var page = productGdbApiClient.findProducts(params = mapOf("updated" to dateString),
+        var page = gdbApiClient.findProducts(params = mapOf("updated" to dateString),
             size=1000, page = 0, sort="updated,asc")
         while(page.pageNumber<page.totalPages) {
             if (page.numberOfElements>0) {
-                val products = page.content.map { it.toDoc(isoCategory) }
+                val products = page.content.map { it.toDoc(isoCategoryService) }
                 println(products.size)
             }
-            page = productGdbApiClient.findProducts(params = mapOf("updated" to dateString),
+            page = gdbApiClient.findProducts(params = mapOf("updated" to dateString),
                 size=1000, page = page.pageNumber+1, sort="updated,asc")
         }
     }

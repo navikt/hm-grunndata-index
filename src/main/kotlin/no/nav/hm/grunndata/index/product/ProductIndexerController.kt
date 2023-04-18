@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 
 @Controller("/internal/index/products")
-class ProductIndexerController(private val productGdbApiClient: ProductGdbApiClient,
+class ProductIndexerController(private val gdbApiClient: GdbApiClient,
                                private val productIndexer: ProductIndexer,
-                               private val isoCategory: IsoCategory) {
+                               private val isoCategoryService: IsoCategoryService) {
     companion object {
         private val LOG = LoggerFactory.getLogger(ProductIndexerController::class.java)
     }
@@ -19,15 +19,15 @@ class ProductIndexerController(private val productGdbApiClient: ProductGdbApiCli
             productIndexer.createIndex(indexName)
         }
         val dateString =  LocalDateTime.now().minusYears(15).toString()
-        var page = productGdbApiClient.findProducts(params = mapOf("updated" to dateString),
+        var page = gdbApiClient.findProducts(params = mapOf("updated" to dateString),
             size=1000, page = 0, sort="updated,asc")
         while(page.pageNumber<page.totalPages) {
             if (page.numberOfElements>0) {
-                val products = page.content.map { it.toDoc(isoCategory) }
+                val products = page.content.map { it.toDoc(isoCategoryService) }
                 LOG.info("indexing ${products.size} products to $indexName")
                 productIndexer.index(products, indexName)
             }
-            page = productGdbApiClient.findProducts(params = mapOf("updated" to dateString),
+            page = gdbApiClient.findProducts(params = mapOf("updated" to dateString),
                 size=1000, page = page.pageNumber+1, sort="updated,asc")
         }
     }
