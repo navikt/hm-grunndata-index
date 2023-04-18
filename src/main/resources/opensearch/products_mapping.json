@@ -140,13 +140,17 @@
       "type": "keyword",
       "copy_to": "keywords_suggest"
     },
-    "isoCategoryShortName": {
+    "isoCategoryTitle": {
       "type": "keyword",
-      "copy_to": "keywords_suggest"
+      "copy_to": ["keywords_suggest", "isoCategory_no"]
     },
-    "isoCategoryLongName": {
-      "type": "keyword",
-      "copy_to": "keywords_suggest"
+    "isoCategoryText": {
+      "type": "text",
+      "copy_to": ["isoCategory_no"]
+    },
+    "isoCategory_no": {
+      "type": "text",
+      "analyzer": "norwegian"
     },
     "media": {
       "enabled": false
@@ -184,7 +188,7 @@
     },
     "articleName": {
       "type": "text",
-      "copy_to": "norwegian"
+      "analyzer": "norwegian"
     },
     "updated": {
       "type": "date",
