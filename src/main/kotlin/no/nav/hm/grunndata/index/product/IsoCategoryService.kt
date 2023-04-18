@@ -5,7 +5,7 @@ import no.nav.hm.grunndata.rapid.dto.IsoCategoryDTO
 import org.slf4j.LoggerFactory
 
 @Singleton
-class IsoCategoryService(private val gdbApiClient: GdbApiClient) {
+class IsoCategoryService(gdbApiClient: GdbApiClient) {
 
     private val isoCategories: Map<String, IsoCategoryDTO> =
         gdbApiClient.retrieveIsoCategories().associateBy { it.isoCode }
@@ -15,7 +15,7 @@ class IsoCategoryService(private val gdbApiClient: GdbApiClient) {
     }
 
     init {
-        LOG.info("Iso categories initialized with size: ${isoCategories.size}")
+        LOG.info("Got isoCategories: ${isoCategories.size}")
     }
 
     fun lookUpCode(isoCode: String): IsoCategoryDTO? = isoCategories[isoCode]

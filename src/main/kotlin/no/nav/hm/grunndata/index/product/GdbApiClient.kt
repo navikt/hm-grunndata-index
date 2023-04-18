@@ -17,7 +17,7 @@ interface GdbApiClient {
                      @QueryValue("page") page: Int?=null,
                      @QueryValue("sort") sort: String? = null): Page<ProductDTO>
 
-    @Get(uri="/api/v1/iso", consumes = [APPLICATION_JSON])
+    @Get(uri="/api/v1/isocategories", consumes = [APPLICATION_JSON])
     fun retrieveIsoCategories(): List<IsoCategoryDTO>
 
 }

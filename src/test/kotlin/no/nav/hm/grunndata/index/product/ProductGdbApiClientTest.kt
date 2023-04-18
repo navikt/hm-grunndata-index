@@ -1,6 +1,5 @@
 package no.nav.hm.grunndata.index.product
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -10,7 +9,7 @@ class ProductGdbApiClientTest(private val gdbApiClient: GdbApiClient,
                               private val isoCategoryService: IsoCategoryService) {
 
 
-    //@Test ignore integration test
+    @Test //ignore integration test
     fun findGdbProducts() {
         val dateString =  LocalDateTime.now().minusYears(15).toString()
         var page = gdbApiClient.findProducts(params = mapOf("updated" to dateString),

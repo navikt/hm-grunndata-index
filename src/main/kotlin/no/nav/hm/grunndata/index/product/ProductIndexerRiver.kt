@@ -15,7 +15,8 @@ import org.slf4j.LoggerFactory
 
 @Context
 @Requires(bean = KafkaRapid::class)
-class ProductIndexerRiver(river: RiverHead, private val objectMapper: ObjectMapper,
+class ProductIndexerRiver(river: RiverHead,
+                          private val objectMapper: ObjectMapper,
                           private val productIndexer: ProductIndexer,
                           private val isoCategoryService: IsoCategoryService): River.PacketListener {
 
