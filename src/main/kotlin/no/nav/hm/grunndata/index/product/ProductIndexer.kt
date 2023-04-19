@@ -3,13 +3,16 @@ package no.nav.hm.grunndata.index.product
 import io.micronaut.context.annotation.Value
 import jakarta.inject.Singleton
 import no.nav.hm.grunndata.index.Indexer
+import org.opensearch.action.admin.indices.alias.get.GetAliasesRequest
 import org.opensearch.action.bulk.BulkResponse
+import org.opensearch.client.RequestOptions
+import org.opensearch.rest.RestStatus
 import org.slf4j.LoggerFactory
+import java.time.LocalDate
 
 @Singleton
 class ProductIndexer(private val indexer: Indexer,
-                     @Value("\${products.aliasName}") private val aliasName: String,
-                     @Value("\${products.indexName}") private val indexName: String) {
+                     @Value("\${products.aliasName}") private val aliasName: String) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(ProductIndexer::class.java)
@@ -22,13 +25,11 @@ class ProductIndexer(private val indexer: Indexer,
     init {
 
         try {
-            indexer.initIndex(indexName, settings, mapping)
-            indexer.initAlias(aliasName,indexName)
+            initAlias()
         } catch (e: Exception) {
             LOG.error("OpenSearch might not be ready ${e.message}, will wait 10s and retry")
             Thread.sleep(10000)
-            indexer.initIndex(indexName, settings, mapping)
-            indexer.initAlias(aliasName,indexName)
+            initAlias()
         }
     }
 
@@ -56,6 +57,17 @@ class ProductIndexer(private val indexer: Indexer,
 
     fun indexExists(indexName: String): Boolean = indexer.indexExists(indexName)
 
-
+    fun initAlias() {
+        val alias = indexer.getAlias(aliasName)
+        if (alias.isEmpty()) {
+            LOG.warn("alias $aliasName is not pointing any index")
+            val indexName = "${aliasName}_${LocalDate.now()}"
+            LOG.warn("Creating index $indexName")
+            createIndex(indexName)
+            updateAlias(indexName)
+        }
+        else
+            LOG.info("alias $aliasName is pointing to ${alias.values.elementAt(0)}")
+    }
 
 }

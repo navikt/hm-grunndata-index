@@ -1,9 +1,6 @@
 {
   "kafka_cluster": "nav-dev",
   "rapidsandrivers_enabled": true,
-  "agreements_indexname": "agreements_20230217",
-  "suppliers_indexname": "suppliers_20230217",
-  "products_indexname": "products_2023170212",
   "min_replicas": 1,
   "max_replicas": 1
 }

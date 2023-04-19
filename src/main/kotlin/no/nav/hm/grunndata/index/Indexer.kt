@@ -16,6 +16,8 @@ import org.opensearch.cluster.metadata.AliasMetadata
 import org.opensearch.common.xcontent.XContentType
 import org.opensearch.rest.RestStatus
 import org.slf4j.LoggerFactory
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Singleton
 class Indexer(private val client: RestHighLevelClient,
@@ -31,15 +33,6 @@ class Indexer(private val client: RestHighLevelClient,
                 LOG.info("$indexName has been created")
             else
                 LOG.error("Failed to create $indexName")
-        }
-    }
-
-    fun initAlias(aliasName: String, indexName: String) {
-        val aliasIndexRequest = GetAliasesRequest(aliasName)
-        val response = client.indices().getAlias(aliasIndexRequest, RequestOptions.DEFAULT)
-        if (response.status() == RestStatus.NOT_FOUND) {
-            LOG.warn("Alias $aliasName is not pointing to any index, updating alias")
-            updateAlias(indexName, aliasName)
         }
     }
 
