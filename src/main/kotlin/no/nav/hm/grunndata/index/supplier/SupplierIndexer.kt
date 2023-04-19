@@ -58,6 +58,6 @@ class SupplierIndexer(private val indexer: Indexer,
             updateAlias(indexName)
         }
         else
-            LOG.info("alias $aliasName is pointing to ${alias.values.elementAt(0)}")
+            LOG.info("alias $aliasName is pointing to ${alias.keys.elementAt(0)}")
     }
 }
