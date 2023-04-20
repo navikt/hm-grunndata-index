@@ -1,0 +1,40 @@
+{
+  "date_detection": false,
+  "properties": {
+    "address": {
+      "type": "text"
+    },
+    "created": {
+      "type": "date",
+      "format": "strict_date_optional_time"
+    },
+    "createdBy": {
+      "enabled": false
+    },
+    "email": {
+      "type": "keyword"
+    },
+    "homepage": {
+      "type": "text"
+    },
+    "id": {
+      "type": "keyword"
+    },
+    "identifier": {
+      "type": "keyword"
+    },
+    "name": {
+      "type": "text"
+    },
+    "phone": {
+      "enabled": false
+    },
+    "updated": {
+      "type": "date",
+      "format": "strict_date_optional_time"
+    },
+    "updatedBy": {
+      "enabled": false
+    }
+  }
+}
