@@ -49,15 +49,6 @@ class SupplierIndexer(private val indexer: Indexer,
     fun indexExists(indexName: String): Boolean = indexer.indexExists(indexName)
 
     fun initAlias() {
-        val alias = indexer.getAlias(aliasName)
-        if (alias.isEmpty()) {
-            LOG.warn("alias $aliasName is not pointing any index")
-            val indexName = "${aliasName}_${LocalDate.now()}"
-            LOG.warn("Creating index $indexName")
-            createIndex(indexName)
-            updateAlias(indexName)
-        }
-        else
-            LOG.info("alias $aliasName is pointing to ${alias.keys.elementAt(0)}")
+        indexer.initAlias(aliasName)
     }
 }

@@ -3,6 +3,7 @@ package no.nav.hm.grunndata.index
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.inject.Singleton
+import no.nav.hm.grunndata.index.product.ProductIndexer
 import org.opensearch.action.admin.indices.alias.IndicesAliasesRequest
 import org.opensearch.action.admin.indices.alias.get.GetAliasesRequest
 import org.opensearch.action.bulk.BulkRequest
@@ -79,5 +80,18 @@ class Indexer(private val client: RestHighLevelClient,
 
     fun indexExists(indexName: String):Boolean = client.indices()
         .exists(GetIndexRequest(indexName), RequestOptions.DEFAULT)
+
+    fun initAlias(aliasName: String, settings: String?=null, mapping: String?=null) {
+        val alias = getAlias(aliasName)
+        if (alias.isEmpty()) {
+            LOG.warn("alias $aliasName is not pointing any index")
+            val indexName = "${aliasName}_${LocalDate.now()}"
+            LOG.warn("Creating index $indexName")
+            createIndex(indexName,settings, mapping)
+            updateAlias(indexName, aliasName)
+        }
+        else
+           LOG.info("alias $aliasName is pointing to ${alias.keys.elementAt(0)}")
+    }
 
 }
