@@ -26,21 +26,15 @@ class SupplierIndexer(private val indexer: Indexer,
         }
     }
 
-    fun index(docs: List<SupplierDoc>): BulkResponse {
-        return indexer.index(docs, aliasName)
-    }
+    fun index(docs: List<SupplierDoc>): BulkResponse = indexer.index(docs, aliasName)
 
-    fun index(doc: SupplierDoc): BulkResponse {
-        return indexer.index(listOf(doc), aliasName)
-    }
+    fun index(doc: SupplierDoc): BulkResponse = indexer.index(listOf(doc), aliasName)
 
-    fun index(doc: SupplierDoc, indexName: String): BulkResponse {
-        return indexer.index(listOf(doc), indexName)
-    }
+    fun index(doc: SupplierDoc, indexName: String): BulkResponse = indexer.index(listOf(doc), indexName)
 
-    fun index(docs: List<SupplierDoc>, indexName: String): BulkResponse {
-        return indexer.index(docs,indexName)
-    }
+
+    fun index(docs: List<SupplierDoc>, indexName: String): BulkResponse = indexer.index(docs,indexName)
+
 
     fun createIndex(indexName: String): Boolean = indexer.createIndex(indexName)
 
@@ -48,7 +42,5 @@ class SupplierIndexer(private val indexer: Indexer,
 
     fun indexExists(indexName: String): Boolean = indexer.indexExists(indexName)
 
-    fun initAlias() {
-        indexer.initAlias(aliasName)
-    }
+    fun initAlias() = indexer.initAlias(aliasName)
 }

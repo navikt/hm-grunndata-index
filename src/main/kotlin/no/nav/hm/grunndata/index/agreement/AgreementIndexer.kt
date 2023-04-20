@@ -26,21 +26,13 @@ class AgreementIndexer(private val indexer: Indexer,
         }
     }
 
-    fun index(docs: List<AgreementDoc>): BulkResponse {
-        return indexer.index(docs, aliasName)
-    }
+    fun index(docs: List<AgreementDoc>): BulkResponse = indexer.index(docs, aliasName)
 
-    fun index(doc: AgreementDoc): BulkResponse {
-        return indexer.index(listOf(doc), aliasName)
-    }
+    fun index(doc: AgreementDoc): BulkResponse = indexer.index(listOf(doc), aliasName)
 
-    fun index(doc: AgreementDoc, indexName: String): BulkResponse {
-        return indexer.index(listOf(doc), indexName)
-    }
+    fun index(doc: AgreementDoc, indexName: String): BulkResponse = indexer.index(listOf(doc), indexName)
 
-    fun index(docs: List<AgreementDoc>, indexName: String): BulkResponse {
-        return indexer.index(docs,indexName)
-    }
+    fun index(docs: List<AgreementDoc>, indexName: String): BulkResponse = indexer.index(docs,indexName)
 
     fun createIndex(indexName: String): Boolean = indexer.createIndex(indexName)
 
@@ -48,7 +40,5 @@ class AgreementIndexer(private val indexer: Indexer,
 
     fun indexExists(indexName: String): Boolean = indexer.indexExists(indexName)
 
-    fun initAlias() {
-        indexer.initAlias(aliasName)
-    }
+    fun initAlias() = indexer.initAlias(aliasName)
 }

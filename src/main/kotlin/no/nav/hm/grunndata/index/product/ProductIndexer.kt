@@ -36,9 +36,7 @@ class ProductIndexer(private val indexer: Indexer,
     fun index(docs: List<ProductDoc>): BulkResponse = indexer.index(docs, aliasName)
 
 
-    fun index(doc: ProductDoc): BulkResponse {
-        return indexer.index(listOf(doc), aliasName)
-    }
+    fun index(doc: ProductDoc): BulkResponse = indexer.index(listOf(doc), aliasName)
 
 
     fun index(doc: ProductDoc, indexName: String): BulkResponse =
@@ -57,8 +55,6 @@ class ProductIndexer(private val indexer: Indexer,
 
     fun indexExists(indexName: String): Boolean = indexer.indexExists(indexName)
 
-    fun initAlias() {
-        indexer.initAlias(aliasName, settings, mapping)
-    }
+    fun initAlias() = indexer.initAlias(aliasName, settings, mapping)
 
 }
