@@ -141,14 +141,11 @@
       "copy_to": "keywords_suggest"
     },
     "isoCategoryTitle": {
-      "type": "keyword",
-      "copy_to": ["keywords_suggest", "isoCategory_no"]
+      "type": "text",
+      "analyzer": "norwegian",
+      "copy_to": ["keywords_suggest"]
     },
     "isoCategoryText": {
-      "type": "text",
-      "copy_to": ["isoCategory_no"]
-    },
-    "isoCategory_no": {
       "type": "text",
       "analyzer": "norwegian"
     },
