@@ -1,10 +1,10 @@
 package no.nav.hm.grunndata.index.agreement
 
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Post
-import io.micronaut.http.annotation.Put
-import io.micronaut.http.annotation.QueryValue
+import io.micronaut.http.annotation.*
+import no.nav.hm.grunndata.index.product.ProductIndexerController
+import no.nav.hm.grunndata.index.product.toDoc
 import org.slf4j.LoggerFactory
+import java.time.LocalDateTime
 
 @Controller("/internal/index/agreements")
 class AgreementIndexerController(private val agreementGdbApiClient: AgreementGdbApiClient,
@@ -15,9 +15,22 @@ class AgreementIndexerController(private val agreementGdbApiClient: AgreementGdb
 
     @Post("/{indexName}")
     fun indexAgreements(indexName: String) {
-        val agreements = agreementGdbApiClient.findAgreements(size=1000, number=0).content.map { it.toDoc() }
-        LOG.info("indexing ${agreements.size} agreements to $indexName")
-        agreementIndexer.index(agreements, indexName)
+        if (!agreementIndexer.indexExists(indexName)) {
+            LOG.info("creating index $indexName")
+            agreementIndexer.createIndex(indexName)
+        }
+        val dateString =  LocalDateTime.now().minusYears(30).toString()
+        var page = agreementGdbApiClient.findAgreements(params = mapOf("updated" to dateString),
+            size=1000, page = 0, sort="updated,asc")
+        while(page.pageNumber<page.totalPages) {
+            if (page.numberOfElements>0) {
+                val agreements = page.content.map { it.toDoc() }
+               LOG.info("indexing ${agreements.size} products to $indexName")
+                agreementIndexer.index(agreements, indexName)
+            }
+            page = agreementGdbApiClient.findAgreements(params = mapOf("updated" to dateString),
+                size=1000, page = page.pageNumber+1, sort="updated,asc")
+        }
     }
 
     @Put("/alias/{indexName}")
@@ -25,4 +38,6 @@ class AgreementIndexerController(private val agreementGdbApiClient: AgreementGdb
         agreementIndexer.updateAlias(indexName)
     }
 
+    @Get("/alias")
+    fun getAlias() = agreementIndexer.getAlias()
 }

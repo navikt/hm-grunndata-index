@@ -43,4 +43,6 @@ class AgreementIndexer(private val indexer: Indexer,
     fun indexExists(indexName: String): Boolean = indexer.indexExists(indexName)
 
     fun initAlias() = indexer.initAlias(aliasName, settings, mapping)
+
+    fun getAlias() = indexer.getAlias(aliasName)
 }

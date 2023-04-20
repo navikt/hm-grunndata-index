@@ -13,7 +13,7 @@ interface AgreementGdbApiClient {
     @Get(uri="/api/v1/agreements", consumes = [MediaType.APPLICATION_JSON])
     fun findAgreements(params: Map<String, String>?=null,
                        @QueryValue("size") size: Int? = null,
-                       @QueryValue("page") number: Int?=null,
+                       @QueryValue("page") page: Int?=null,
                        @QueryValue("sort") sort: String? = null): Page<AgreementDTO>
 
 }

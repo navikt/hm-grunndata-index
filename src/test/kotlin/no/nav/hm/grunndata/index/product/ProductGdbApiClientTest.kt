@@ -1,6 +1,7 @@
 package no.nav.hm.grunndata.index.product
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
 @MicronautTest
