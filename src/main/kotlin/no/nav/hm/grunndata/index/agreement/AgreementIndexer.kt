@@ -3,10 +3,8 @@ package no.nav.hm.grunndata.index.agreement
 import io.micronaut.context.annotation.Value
 import jakarta.inject.Singleton
 import no.nav.hm.grunndata.index.Indexer
-
 import org.opensearch.action.bulk.BulkResponse
 import org.slf4j.LoggerFactory
-import java.time.LocalDate
 
 @Singleton
 class AgreementIndexer(private val indexer: Indexer,
@@ -14,6 +12,10 @@ class AgreementIndexer(private val indexer: Indexer,
 
     companion object {
         private val LOG = LoggerFactory.getLogger(AgreementIndexer::class.java)
+        private val settings = AgreementIndexer::class.java
+            .getResource("/opensearch/agreements_settings.json")?.readText()
+        private val mapping = AgreementIndexer::class.java
+            .getResource("/opensearch/agreements_mapping.json")?.readText()
     }
 
     init {
@@ -34,11 +36,11 @@ class AgreementIndexer(private val indexer: Indexer,
 
     fun index(docs: List<AgreementDoc>, indexName: String): BulkResponse = indexer.index(docs,indexName)
 
-    fun createIndex(indexName: String): Boolean = indexer.createIndex(indexName)
+    fun createIndex(indexName: String): Boolean = indexer.createIndex(indexName, settings, mapping)
 
     fun updateAlias(indexName: String): Boolean = indexer.updateAlias(indexName,aliasName)
 
     fun indexExists(indexName: String): Boolean = indexer.indexExists(indexName)
 
-    fun initAlias() = indexer.initAlias(aliasName)
+    fun initAlias() = indexer.initAlias(aliasName, settings, mapping)
 }

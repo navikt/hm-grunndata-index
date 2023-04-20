@@ -6,7 +6,6 @@ import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.index.product.ProductIndexer
 import org.opensearch.action.bulk.BulkResponse
 import org.slf4j.LoggerFactory
-import java.time.LocalDate
 
 @Singleton
 class SupplierIndexer(private val indexer: Indexer,
@@ -14,6 +13,10 @@ class SupplierIndexer(private val indexer: Indexer,
 
     companion object {
         private val LOG = LoggerFactory.getLogger(SupplierIndexer::class.java)
+        private val settings = ProductIndexer::class.java
+            .getResource("/opensearch/suppliers_settings.json")?.readText()
+        private val mapping = ProductIndexer::class.java
+            .getResource("/opensearch/suppliers_mapping.json")?.readText()
     }
 
     init {
@@ -36,11 +39,11 @@ class SupplierIndexer(private val indexer: Indexer,
     fun index(docs: List<SupplierDoc>, indexName: String): BulkResponse = indexer.index(docs,indexName)
 
 
-    fun createIndex(indexName: String): Boolean = indexer.createIndex(indexName)
+    fun createIndex(indexName: String): Boolean = indexer.createIndex(indexName, settings, mapping)
 
     fun updateAlias(indexName: String): Boolean = indexer.updateAlias(indexName,aliasName)
 
     fun indexExists(indexName: String): Boolean = indexer.indexExists(indexName)
 
-    fun initAlias() = indexer.initAlias(aliasName)
+    fun initAlias() = indexer.initAlias(aliasName, settings, mapping)
 }
