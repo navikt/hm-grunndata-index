@@ -52,7 +52,7 @@
           "type": "boolean"
         },
         "series": {
-          "type": "text"
+          "type": "keyword"
         }
       }
     },
