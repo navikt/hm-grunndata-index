@@ -52,7 +52,8 @@
           "type": "boolean"
         },
         "series": {
-          "type": "keyword"
+          "type": "keyword",
+          "copy_to": "keywords_suggest"
         }
       }
     },
