@@ -177,8 +177,7 @@
       }
     },
     "supplierRef": {
-      "type": "keyword",
-      "copy_to": "keywords_suggest"
+      "type": "keyword"
     },
     "title": {
       "type": "text",
