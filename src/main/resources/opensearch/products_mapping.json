@@ -130,7 +130,7 @@
     "hasAgreement": {
       "type": "boolean"
     },
-    "hmsartNr": {
+    "hmsArtNr": {
       "type": "keyword",
       "copy_to": "keywords_suggest"
     },
