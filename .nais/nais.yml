@@ -23,7 +23,7 @@ spec:
       memory: 1024Mi
     requests:
       cpu: 200m
-      memory: 256Mi
+      memory: 128Mi
   prometheus:
     enabled: true
     path: /internal/prometheus
@@ -35,6 +35,8 @@ spec:
       value: "{{ rapidsandrivers_enabled }}"
     - name: GRUNNDATA_DB_URL
       value: "http://hm-grunndata-db"
+    - name: JAVA_OPTS
+      value: "{{java_opts}}"
   kafka:
     pool: {{ kafka_cluster }}
   accessPolicy:

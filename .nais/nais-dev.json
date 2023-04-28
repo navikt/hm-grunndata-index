@@ -2,5 +2,6 @@
   "kafka_cluster": "nav-dev",
   "rapidsandrivers_enabled": true,
   "min_replicas": 1,
-  "max_replicas": 1
+  "max_replicas": 1,
+  "java_opts": "-Xms128m -Xmx512m"
 }
