@@ -1,9 +1,6 @@
 package no.nav.hm.grunndata.index.supplier
 
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.Post
-import io.micronaut.http.annotation.Put
+import io.micronaut.http.annotation.*
 import org.slf4j.LoggerFactory
 
 @Controller("/internal/index/suppliers")
@@ -14,11 +11,14 @@ class SupplierIndexerController(private val supplierGdbApiClient: SupplierGdbApi
     }
 
     @Post("/{indexName}")
-    fun indexSuppliers(indexName: String) {
-        val page = supplierGdbApiClient.findSuppliers(size=1000, page = 0, sort="updated,asc")
+    fun indexSuppliers(@PathVariable indexName: String, @QueryValue(value = "alias", defaultValue = "false") alias: Boolean) {
+        val page = supplierGdbApiClient.findSuppliers(size=5000, page = 0, sort="updated,asc")
         val suppliers = page.content.map { it.toDoc() }
         LOG.info("indexing ${suppliers.size} suppliers to $indexName")
         supplierIndexer.index(suppliers, indexName)
+        if (alias) {
+            supplierIndexer.updateAlias(indexName)
+        }
     }
 
     @Put("/alias/{indexName}")

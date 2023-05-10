@@ -13,7 +13,8 @@ class ProductIndexerController(private val gdbApiClient: GdbApiClient,
     }
 
     @Post("/{indexName}")
-    fun indexProducts(indexName: String) {
+    fun indexProducts(@PathVariable indexName: String,
+                      @QueryValue(value = "alias", defaultValue = "false") alias: Boolean) {
         if (!productIndexer.indexExists(indexName)) {
             LOG.info("creating index $indexName")
             productIndexer.createIndex(indexName)
@@ -29,6 +30,9 @@ class ProductIndexerController(private val gdbApiClient: GdbApiClient,
             }
             page = gdbApiClient.findProducts(params = mapOf("updated" to dateString),
                 size=1000, page = page.pageNumber+1, sort="updated,asc")
+        }
+        if (alias) {
+            productIndexer.updateAlias(indexName)
         }
     }
 

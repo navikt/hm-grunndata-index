@@ -14,7 +14,7 @@ class AgreementIndexerController(private val agreementGdbApiClient: AgreementGdb
     }
 
     @Post("/{indexName}")
-    fun indexAgreements(indexName: String) {
+    fun indexAgreements(@PathVariable indexName: String, @QueryValue(value = "alias", defaultValue = "false") alias: Boolean) {
         if (!agreementIndexer.indexExists(indexName)) {
             LOG.info("creating index $indexName")
             agreementIndexer.createIndex(indexName)
@@ -30,6 +30,9 @@ class AgreementIndexerController(private val agreementGdbApiClient: AgreementGdb
             }
             page = agreementGdbApiClient.findAgreements(params = mapOf("updated" to dateString),
                 size=1000, page = page.pageNumber+1, sort="updated,asc")
+        }
+        if (alias) {
+            agreementIndexer.updateAlias(indexName)
         }
     }
 
