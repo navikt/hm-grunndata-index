@@ -25,7 +25,7 @@ class AgreementIndexerController(private val agreementGdbApiClient: AgreementGdb
         while(page.pageNumber<page.totalPages) {
             if (page.numberOfElements>0) {
                 val agreements = page.content.map { it.toDoc() }
-               LOG.info("indexing ${agreements.size} products to $indexName")
+               LOG.info("indexing ${agreements.size} agreements to $indexName")
                 agreementIndexer.index(agreements, indexName)
             }
             page = agreementGdbApiClient.findAgreements(params = mapOf("updated" to dateString),
