@@ -124,6 +124,9 @@
         },
         "totalVektKG": {
           "type": "long"
+        },
+        "iso": {
+          "type": "keyword"
         }
       }
     },
@@ -144,11 +147,14 @@
     "isoCategoryTitle": {
       "type": "text",
       "analyzer": "norwegian",
-      "copy_to": ["keywords_suggest"]
+      "copy_to": ["keywords_suggest", "isoCategoryName"]
     },
     "isoCategoryText": {
       "type": "text",
       "analyzer": "norwegian"
+    },
+    "isoCategoryName": {
+      "type": "keyword"
     },
     "media": {
       "enabled": false
