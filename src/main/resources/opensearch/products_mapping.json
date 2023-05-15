@@ -19,6 +19,9 @@
         "postIdentifier": {
           "type": "keyword"
         },
+        "postTitle": {
+          "type": "text"
+        },
         "postNr": {
           "type": "long"
         },
