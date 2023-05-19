@@ -31,8 +31,11 @@
         "reference": {
           "type": "keyword",
           "copy_to": "keywords_suggest"
+        },
+        "expired": {
+          "type": "date",
+          "format": "strict_date_optional_time"
         }
-      }
     },
     "attributes": {
       "properties": {
