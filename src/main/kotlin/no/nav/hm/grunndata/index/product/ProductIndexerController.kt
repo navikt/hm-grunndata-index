@@ -1,6 +1,7 @@
 package no.nav.hm.grunndata.index.product
 
 import io.micronaut.http.annotation.*
+import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 
@@ -24,7 +25,10 @@ class ProductIndexerController(private val gdbApiClient: GdbApiClient,
             size=1000, page = 0, sort="updated,asc")
         while(page.pageNumber<page.totalPages) {
             if (page.numberOfElements>0) {
-                val products = page.content.map { it.toDoc(isoCategoryService) }
+
+                val products = page.content
+                    .filter { it.status != ProductStatus.DELETED }
+                    .map { it.toDoc(isoCategoryService) }
                 LOG.info("indexing ${products.size} products to $indexName")
                 productIndexer.index(products, indexName)
             }
