@@ -39,208 +39,209 @@
           "type": "date",
           "format": "strict_date_optional_time"
         }
-      },
-      "attributes": {
-        "properties": {
-          "shortdescription": {
-            "type": "text",
-            "analyzer": "norwegian_html"
-          },
-          "text": {
-            "type": "text",
-            "analyzer": "norwegian_html"
-          },
-          "keywords": {
-            "type": "keyword",
-            "copy_to": [
-              "keywords_suggest",
-              "keywords_bag"
-            ]
-          },
-          "compatible": {
-            "type": "keyword"
-          },
-          "bestillingsordning": {
-            "type": "boolean"
-          },
-          "series": {
-            "type": "keyword",
-            "copy_to": [
-              "keywords_suggest",
-              "keywords_bag"
-            ]
-          }
-        }
-      },
-      "created": {
-        "type": "date",
-        "format": "strict_date_optional_time"
-      },
-      "createdBy": {
-        "type": "keyword"
-      },
-      "data": {
-        "properties": {
-          "key": {
-            "type": "keyword"
-          },
-          "unit": {
-            "type": "keyword"
-          },
-          "value": {
-            "type": "keyword"
-          }
-        }
-      },
-      "expired": {
-        "type": "date",
-        "format": "strict_date_optional_time"
-      },
-      "filters": {
-        "properties": {
-          "beregnetBarn": {
-            "type": "keyword"
-          },
-          "breddeCM": {
-            "type": "long"
-          },
-          "brukervektMaksKG": {
-            "type": "long"
-          },
-          "brukervektMinKG": {
-            "type": "long"
-          },
-          "fyllmateriale": {
-            "type": "keyword"
-          },
-          "lengdeCM": {
-            "type": "long"
-          },
-          "materialeTrekk": {
-            "type": "keyword"
-          },
-          "setebreddeMaksCM": {
-            "type": "long"
-          },
-          "setebreddeMinCM": {
-            "type": "long"
-          },
-          "setedybdeMaksCM": {
-            "type": "long"
-          },
-          "setedybdeMinCM": {
-            "type": "long"
-          },
-          "setehoydeMaksCM": {
-            "type": "long"
-          },
-          "setehoydeMinCM": {
-            "type": "long"
-          },
-          "totalVektKG": {
-            "type": "long"
-          },
-          "iso": {
-            "type": "keyword"
-          }
-        }
-      },
-      "hasAgreement": {
-        "type": "boolean"
-      },
-      "hmsArtNr": {
-        "type": "keyword",
-        "copy_to": [
-          "keywords_suggest",
-          "keywords_bag"
-        ]
-      },
-      "identifier": {
-        "type": "keyword"
-      },
-      "isoCategory": {
-        "type": "keyword",
-        "copy_to": "keywords_suggest"
-      },
-      "isoCategoryTitle": {
-        "type": "text",
-        "analyzer": "norwegian",
-        "copy_to": [
-          "keywords_suggest",
-          "isoCategoryName"
-        ]
-      },
-      "isoCategoryText": {
-        "type": "text",
-        "analyzer": "norwegian"
-      },
-      "isoCategoryName": {
-        "type": "keyword"
-      },
-      "media": {
-        "enabled": false
-      },
-      "seriesId": {
-        "type": "keyword"
-      },
-      "sparePart": {
-        "type": "boolean"
-      },
-      "status": {
-        "type": "keyword"
-      },
-      "supplier": {
-        "properties": {
-          "id": {
-            "type": "keyword"
-          },
-          "identifier": {
-            "type": "keyword"
-          },
-          "name": {
-            "type": "keyword",
-            "copy_to": [
-              "keywords_suggest",
-              "keywords_bag"
-            ]
-          }
-        }
-      },
-      "supplierRef": {
-        "type": "keyword",
-        "copy_to": [
-          "keywords_bag"
-        ]
-      },
-      "title": {
-        "type": "text",
-        "analyzer": "norwegian"
-      },
-      "articleName": {
-        "type": "text",
-        "analyzer": "norwegian"
-      },
-      "updated": {
-        "type": "date",
-        "format": "strict_date_optional_time"
-      },
-      "updatedBy": {
-        "type": "keyword"
-      },
-      "keywords_bag": {
-        "type": "text",
-        "analyzer": "norwegian"
-      },
-      "keywords_suggest": {
-        "type": "completion",
-        "contexts": [
-          {
-            "name": "status",
-            "type": "category",
-            "path": "status"
-          }
-        ]
       }
+    },
+    "attributes": {
+      "properties": {
+        "shortdescription": {
+          "type": "text",
+          "analyzer": "norwegian_html"
+        },
+        "text": {
+          "type": "text",
+          "analyzer": "norwegian_html"
+        },
+        "keywords": {
+          "type": "keyword",
+          "copy_to": [
+            "keywords_suggest",
+            "keywords_bag"
+          ]
+        },
+        "compatible": {
+          "type": "keyword"
+        },
+        "bestillingsordning": {
+          "type": "boolean"
+        },
+        "series": {
+          "type": "keyword",
+          "copy_to": [
+            "keywords_suggest",
+            "keywords_bag"
+          ]
+        }
+      }
+    },
+    "created": {
+      "type": "date",
+      "format": "strict_date_optional_time"
+    },
+    "createdBy": {
+      "type": "keyword"
+    },
+    "data": {
+      "properties": {
+        "key": {
+          "type": "keyword"
+        },
+        "unit": {
+          "type": "keyword"
+        },
+        "value": {
+          "type": "keyword"
+        }
+      }
+    },
+    "expired": {
+      "type": "date",
+      "format": "strict_date_optional_time"
+    },
+    "filters": {
+      "properties": {
+        "beregnetBarn": {
+          "type": "keyword"
+        },
+        "breddeCM": {
+          "type": "long"
+        },
+        "brukervektMaksKG": {
+          "type": "long"
+        },
+        "brukervektMinKG": {
+          "type": "long"
+        },
+        "fyllmateriale": {
+          "type": "keyword"
+        },
+        "lengdeCM": {
+          "type": "long"
+        },
+        "materialeTrekk": {
+          "type": "keyword"
+        },
+        "setebreddeMaksCM": {
+          "type": "long"
+        },
+        "setebreddeMinCM": {
+          "type": "long"
+        },
+        "setedybdeMaksCM": {
+          "type": "long"
+        },
+        "setedybdeMinCM": {
+          "type": "long"
+        },
+        "setehoydeMaksCM": {
+          "type": "long"
+        },
+        "setehoydeMinCM": {
+          "type": "long"
+        },
+        "totalVektKG": {
+          "type": "long"
+        },
+        "iso": {
+          "type": "keyword"
+        }
+      }
+    },
+    "hasAgreement": {
+      "type": "boolean"
+    },
+    "hmsArtNr": {
+      "type": "keyword",
+      "copy_to": [
+        "keywords_suggest",
+        "keywords_bag"
+      ]
+    },
+    "identifier": {
+      "type": "keyword"
+    },
+    "isoCategory": {
+      "type": "keyword",
+      "copy_to": "keywords_suggest"
+    },
+    "isoCategoryTitle": {
+      "type": "text",
+      "analyzer": "norwegian",
+      "copy_to": [
+        "keywords_suggest",
+        "isoCategoryName"
+      ]
+    },
+    "isoCategoryText": {
+      "type": "text",
+      "analyzer": "norwegian"
+    },
+    "isoCategoryName": {
+      "type": "keyword"
+    },
+    "media": {
+      "enabled": false
+    },
+    "seriesId": {
+      "type": "keyword"
+    },
+    "sparePart": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "keyword"
+    },
+    "supplier": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "identifier": {
+          "type": "keyword"
+        },
+        "name": {
+          "type": "keyword",
+          "copy_to": [
+            "keywords_suggest",
+            "keywords_bag"
+          ]
+        }
+      }
+    },
+    "supplierRef": {
+      "type": "keyword",
+      "copy_to": [
+        "keywords_bag"
+      ]
+    },
+    "title": {
+      "type": "text",
+      "analyzer": "norwegian"
+    },
+    "articleName": {
+      "type": "text",
+      "analyzer": "norwegian"
+    },
+    "updated": {
+      "type": "date",
+      "format": "strict_date_optional_time"
+    },
+    "updatedBy": {
+      "type": "keyword"
+    },
+    "keywords_bag": {
+      "type": "text",
+      "analyzer": "norwegian"
+    },
+    "keywords_suggest": {
+      "type": "completion",
+      "contexts": [
+        {
+          "name": "status",
+          "type": "category",
+          "path": "status"
+        }
+      ]
     }
   }
 }
+
