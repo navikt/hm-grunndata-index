@@ -30,7 +30,10 @@
         },
         "reference": {
           "type": "keyword",
-          "copy_to": ["keywords_suggest", "keywords_bag"]
+          "copy_to": [
+            "keywords_suggest",
+            "keywords_bag"
+          ]
         },
         "expired": {
           "type": "date",
@@ -49,7 +52,10 @@
           },
           "keywords": {
             "type": "keyword",
-            "copy_to": "keywords_suggest"
+            "copy_to": [
+              "keywords_suggest",
+              "keywords_bag"
+            ]
           },
           "compatible": {
             "type": "keyword"
@@ -59,7 +65,10 @@
           },
           "series": {
             "type": "keyword",
-            "copy_to":  ["keywords_suggest", "keywords_bag"]
+            "copy_to": [
+              "keywords_suggest",
+              "keywords_bag"
+            ]
           }
         }
       },
@@ -141,7 +150,10 @@
       },
       "hmsArtNr": {
         "type": "keyword",
-        "copy_to":  ["keywords_suggest", "keywords_bag"]
+        "copy_to": [
+          "keywords_suggest",
+          "keywords_bag"
+        ]
       },
       "identifier": {
         "type": "keyword"
@@ -187,13 +199,18 @@
           },
           "name": {
             "type": "keyword",
-            "copy_to": ["keywords_suggest", "keywords_bag"],
+            "copy_to": [
+              "keywords_suggest",
+              "keywords_bag"
+            ]
           }
         }
       },
       "supplierRef": {
         "type": "keyword",
-        "copy_to":  ["keywords_bag"]
+        "copy_to": [
+          "keywords_bag"
+        ]
       },
       "title": {
         "type": "text",
@@ -226,3 +243,4 @@
       }
     }
   }
+}
