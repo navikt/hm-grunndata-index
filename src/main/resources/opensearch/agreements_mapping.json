@@ -46,7 +46,7 @@
       "format": "strict_date_optional_time"
     },
     "reference": {
-      "type": "keyword"
+      "type": "text"
     },
     "resume": {
       "type": "text"
@@ -56,6 +56,9 @@
     },
     "title": {
       "type": "text"
+    },
+    "status": {
+      "type": "keyword"
     },
     "updated": {
       "type": "date",

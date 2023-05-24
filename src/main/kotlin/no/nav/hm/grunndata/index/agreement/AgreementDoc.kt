@@ -4,12 +4,14 @@ import no.nav.hm.grunndata.rapid.dto.AgreementAttachment
 import no.nav.hm.grunndata.rapid.dto.AgreementDTO
 import no.nav.hm.grunndata.rapid.dto.AgreementPost
 import no.nav.hm.grunndata.index.SearchDoc
+import no.nav.hm.grunndata.rapid.dto.AgreementStatus
 import java.time.LocalDateTime
 
 data class AgreementDoc(
     override val id: String,
     val identifier: String,
     val title: String,
+    val status: AgreementStatus,
     val resume: String?,
     val text: String?,
     val reference: String,
@@ -24,7 +26,7 @@ data class AgreementDoc(
 ) : SearchDoc
 
 fun AgreementDTO.toDoc() : AgreementDoc = AgreementDoc (
-    id = id.toString(), identifier = identifier,
+    id = id.toString(), identifier = identifier, status = status,
     title = title, resume = resume, text = text,
     reference = reference, published = published, expired = expired, attachments = attachments,
     createdBy = createdBy, updatedBy = updatedBy, created = created, updated = updated,
