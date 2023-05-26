@@ -60,7 +60,7 @@ data class TechDataFilters(val fyllmateriale:String?, val setebreddeMaksCM: Int?
 
 data class ProductSupplier(val id: String, val identifier: String, val name: String)
 
-fun ProductDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc = try { ProductDoc (
+fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc = try { ProductDoc (
     id = id.toString(),
     supplier = ProductSupplier(id = supplier.id.toString(), identifier = supplier.identifier,
         name = supplier.name),
