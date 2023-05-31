@@ -29,6 +29,7 @@ data class ProductDoc (
     val updatedBy: String,
     val filters: TechDataFilters,
     val agreementInfo: AgreementInfo?,
+    val agreements: List<AgreementInfo> = emptyList(),
     val hasAgreement: Boolean = false,
 ): SearchDoc
 
@@ -85,7 +86,8 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc =
     createdBy = createdBy,
     updatedBy = updatedBy,
     agreementInfo = agreementInfo,
-    hasAgreement = agreementInfo!=null,
+    agreements = agreements,
+    hasAgreement = hasAgreement,
     filters = mapTechDataFilters(techData)) }
     catch (e: Exception) {
         println(isoCategory)
