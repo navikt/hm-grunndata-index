@@ -82,13 +82,10 @@ kafka:
 
 agreements:
   aliasName: ${AGREEMENTS_ALIASNAME:agreements}
-  indexName: ${AGREEMENTS_INDEXNAME:agreements_20230217}
 suppliers:
   aliasName: ${SUPPLIERS_ALIASNAME:suppliers}
-  indexName: ${SUPPLIERS_INDEXNAME:suppliers_20230217}
 products:
   aliasName: ${PRODUCTS_ALIASNAME:products}
-  indexName: ${PRODUCTS_INDEXNAME:products_20230217}
 
 grunndata:
   db:
