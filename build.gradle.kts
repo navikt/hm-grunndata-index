@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 val jvmTarget = "17"
-val micronautVersion="3.9.2"
+val micronautVersion="3.9.4"
 val kafkaVersion = "3.2.1"
 val junitJupiterVersion = "5.9.0"
 val jacksonVersion = "2.13.4"
@@ -14,7 +14,7 @@ val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
 val openSearchRestClientVersion = "2.4.1"
 val rapidsRiversVersion = "202305081226"
-val grunndataDtoVersion = "202305310847"
+val grunndataDtoVersion = "202307121342"
 
 group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
@@ -24,7 +24,7 @@ plugins {
     kotlin("kapt") version "1.7.0"
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "3.7.9"
+    id("io.micronaut.application") version "3.7.10"
 }
 
 configurations.all {
