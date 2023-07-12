@@ -42,7 +42,9 @@ data class AttributesDoc (
     val shortdescription: String? = null,
     val text: String? = null,
     val url: String? = null,
-    val bestillingsordning: Boolean? = null
+    val bestillingsordning: Boolean? = null,
+    val tenderId: String? = null,
+    val hasTender: Boolean? = null
 )
 
 data class MediaDoc (
@@ -103,6 +105,8 @@ private fun Attributes.toDoc(): AttributesDoc {
         text = text,
         url = url,
         bestillingsordning = bestillingsordning,
+        tenderId = tenderId,
+        hasTender = hasTender,
         compatible = compatible
             ?.flatMap { listOf(it.hmsArtNr, it.supplierRef, it.id?.toString())}
             ?.filterNotNull()
