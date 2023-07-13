@@ -3,7 +3,7 @@
     "index": {
       "number_of_shards": 3,
       "number_of_replicas": 2,
-      "max_inner_result_window": 1000
+      "max_inner_result_window": 500
     },
 
     "analysis": {
