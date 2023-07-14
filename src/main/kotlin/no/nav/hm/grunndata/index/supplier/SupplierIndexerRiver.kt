@@ -27,7 +27,7 @@ class SupplierIndexerRiver(river: RiverHead, private val objectMapper: ObjectMap
     init {
         river
             .validate { it.demandValue("createdBy", RapidApp.grunndata_db)}
-            .validate { it.demandValue("eventName", EventName.hmdbsuppliersyncV1)}
+            .validate { it.demandAny("eventName", listOf(EventName.hmdbsuppliersyncV1))}
             .validate { it.demandKey("payload")}
             .validate { it.demandKey("dtoVersion")}
             .register(this)
