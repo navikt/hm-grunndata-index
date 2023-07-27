@@ -2,7 +2,9 @@ package no.nav.hm.grunndata.index.product
 
 import no.nav.hm.grunndata.rapid.dto.*
 import no.nav.hm.grunndata.index.SearchDoc
+import no.nav.hm.grunndata.index.agreement.AgreementLabels
 import java.time.LocalDateTime
+import java.util.*
 
 data class ProductDoc (
     override val id: String,
@@ -28,11 +30,24 @@ data class ProductDoc (
     val createdBy: String,
     val updatedBy: String,
     val filters: TechDataFilters,
-    val agreementInfo: AgreementInfo?,
-    val agreements: List<AgreementInfo> = emptyList(),
+    val agreementInfo: AgreementInfoDoc?,
+    val agreements: List<AgreementInfoDoc> = emptyList(),
     val hasAgreement: Boolean = false,
 ): SearchDoc
 
+
+data class AgreementInfoDoc (
+    val id: UUID,
+    val identifier: String?=null,
+    val title: String?=null,
+    val label: String,
+    val rank: Int,
+    val postNr: Int,
+    val postIdentifier: String?=null,
+    val postTitle: String?=null,
+    val reference: String,
+    val expired: LocalDateTime,
+)
 
 data class AttributesDoc (
     val manufacturer: String? = null,
@@ -63,7 +78,7 @@ data class TechDataFilters(val fyllmateriale:String?, val setebreddeMaksCM: Int?
 
 data class ProductSupplier(val id: String, val identifier: String, val name: String)
 
-fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc = try { ProductDoc (
+fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService, agreementLabels: AgreementLabels) : ProductDoc = try { ProductDoc (
     id = id.toString(),
     supplier = ProductSupplier(id = supplier.id.toString(), identifier = supplier.identifier,
         name = supplier.name),
@@ -87,8 +102,8 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc =
     expired = expired,
     createdBy = createdBy,
     updatedBy = updatedBy,
-    agreementInfo = agreementInfo,
-    agreements = agreements,
+    agreementInfo = agreementInfo?.toDoc(agreementLabels),
+    agreements = agreements.map { it.toDoc(agreementLabels)},
     hasAgreement = hasAgreement,
     filters = mapTechDataFilters(techData)) }
     catch (e: Exception) {
@@ -96,6 +111,11 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc =
         throw e
     }
 
+private fun AgreementInfo.toDoc(agreementLabels: AgreementLabels): AgreementInfoDoc = AgreementInfoDoc(
+    id = id, identifier = identifier, title= title, label = agreementLabels.matchTitleToLabel(title?:"Annet"),
+    rank= rank, postNr = postNr, postIdentifier = postIdentifier, postTitle = postTitle, reference = reference,
+    expired = expired
+)
 private fun Attributes.toDoc(): AttributesDoc {
     return AttributesDoc(
         manufacturer = manufacturer,

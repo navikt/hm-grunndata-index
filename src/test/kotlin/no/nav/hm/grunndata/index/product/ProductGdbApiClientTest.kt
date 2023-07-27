@@ -1,12 +1,14 @@
 package no.nav.hm.grunndata.index.product
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import no.nav.hm.grunndata.index.agreement.AgreementLabels
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
 @MicronautTest
 class ProductGdbApiClientTest(private val gdbApiClient: GdbApiClient,
-                              private val isoCategoryService: IsoCategoryService) {
+                              private val isoCategoryService: IsoCategoryService,
+                              private val agreementLabels: AgreementLabels) {
 
 
     //@Test //ignore integration test
@@ -16,7 +18,7 @@ class ProductGdbApiClientTest(private val gdbApiClient: GdbApiClient,
             size=1000, page = 0, sort="updated,asc")
         while(page.pageNumber<page.totalPages) {
             if (page.numberOfElements>0) {
-                val products = page.content.map { it.toDoc(isoCategoryService) }
+                val products = page.content.map { it.toDoc(isoCategoryService, agreementLabels) }
                 println(products.size)
             }
             page = gdbApiClient.findProducts(params = mapOf("updated" to dateString),

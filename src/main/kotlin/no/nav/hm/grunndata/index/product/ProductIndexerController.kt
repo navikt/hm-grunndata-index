@@ -1,6 +1,7 @@
 package no.nav.hm.grunndata.index.product
 
 import io.micronaut.http.annotation.*
+import no.nav.hm.grunndata.index.agreement.AgreementLabels
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
@@ -8,7 +9,8 @@ import java.time.LocalDateTime
 @Controller("/internal/index/products")
 class ProductIndexerController(private val gdbApiClient: GdbApiClient,
                                private val productIndexer: ProductIndexer,
-                               private val isoCategoryService: IsoCategoryService) {
+                               private val isoCategoryService: IsoCategoryService,
+                               private val agreementLabels: AgreementLabels) {
     companion object {
         private val LOG = LoggerFactory.getLogger(ProductIndexerController::class.java)
     }
@@ -28,7 +30,7 @@ class ProductIndexerController(private val gdbApiClient: GdbApiClient,
 
                 val products = page.content
                     .filter { it.status != ProductStatus.DELETED }
-                    .map { it.toDoc(isoCategoryService) }
+                    .map { it.toDoc(isoCategoryService, agreementLabels) }
                 LOG.info("indexing ${products.size} products to $indexName")
                 productIndexer.index(products, indexName)
             }
