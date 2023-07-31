@@ -50,6 +50,9 @@
         "id" : {
           "type" : "keyword"
         },
+        "label": {
+          "type": "keyword"
+        },
         "identifier" : {
           "type" : "keyword"
         },
