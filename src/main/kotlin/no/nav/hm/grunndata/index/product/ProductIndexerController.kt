@@ -32,7 +32,7 @@ class ProductIndexerController(private val gdbApiClient: GdbApiClient,
                     .filter { it.status != ProductStatus.DELETED }
                     .map { it.toDoc(isoCategoryService, agreementLabels) }
                 LOG.info("indexing ${products.size} products to $indexName")
-                productIndexer.index(products, indexName)
+                if (products.isNotEmpty()) productIndexer.index(products, indexName)
             }
             page = gdbApiClient.findProducts(params = mapOf("updated" to dateString),
                 size=1000, page = page.pageNumber+1, sort="updated,asc")
