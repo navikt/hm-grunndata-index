@@ -6,9 +6,12 @@ import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.index.product.ProductIndexer
 import org.opensearch.action.bulk.BulkResponse
 import org.slf4j.LoggerFactory
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Singleton
 class SupplierIndexer(private val indexer: Indexer,
+                      private val supplierGdbApiClient: SupplierGdbApiClient,
                       @Value("\${suppliers.aliasName}") private val aliasName: String) {
 
     companion object {
@@ -26,6 +29,21 @@ class SupplierIndexer(private val indexer: Indexer,
             LOG.error("OpenSearch might not be ready ${e.message}, will wait 10s and retry")
             Thread.sleep(10000)
             initAlias()
+        }
+    }
+
+    fun reIndex(alias: Boolean) {
+        val indexName = "suppliers_${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddss"))}"
+        if (!indexExists(indexName)) {
+            LOG.info("creating index $indexName")
+            createIndex(indexName)
+        }
+        val page = supplierGdbApiClient.findSuppliers(size=5000, page = 0, sort="updated,asc")
+        val suppliers = page.content.map { it.toDoc() }
+        LOG.info("indexing ${suppliers.size} suppliers to $indexName")
+        index(suppliers, indexName)
+        if (alias) {
+           updateAlias(indexName)
         }
     }
 
