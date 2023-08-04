@@ -2,7 +2,9 @@ package no.nav.hm.grunndata.index.supplier
 
 import io.micronaut.context.annotation.Value
 import jakarta.inject.Singleton
+import no.nav.hm.grunndata.index.IndexType
 import no.nav.hm.grunndata.index.Indexer
+import no.nav.hm.grunndata.index.createIndexName
 import no.nav.hm.grunndata.index.product.ProductIndexer
 import org.opensearch.action.bulk.BulkResponse
 import org.slf4j.LoggerFactory
@@ -33,7 +35,7 @@ class SupplierIndexer(private val indexer: Indexer,
     }
 
     fun reIndex(alias: Boolean) {
-        val indexName = "suppliers_${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddss"))}"
+        val indexName = createIndexName(IndexType.suppliers)
         if (!indexExists(indexName)) {
             LOG.info("creating index $indexName")
             createIndex(indexName)

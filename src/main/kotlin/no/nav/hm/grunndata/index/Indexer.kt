@@ -19,6 +19,7 @@ import org.opensearch.rest.RestStatus
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Singleton
 class Indexer(private val client: RestHighLevelClient,
@@ -94,4 +95,10 @@ class Indexer(private val client: RestHighLevelClient,
            LOG.info("alias $aliasName is pointing to ${alias.keys.elementAt(0)}")
     }
 
+}
+
+fun createIndexName(type: IndexType): String = "${type.name}_${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddmm"))}"
+
+enum class IndexType {
+    products, suppliers, agreements
 }
