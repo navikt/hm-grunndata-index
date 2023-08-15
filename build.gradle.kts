@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 val jvmTarget = "17"
-val micronautVersion="4.0.2"
+val micronautVersion="4.0.3"
 val kafkaVersion = "3.2.1"
 val junitJupiterVersion = "5.9.0"
 val jacksonVersion = "2.13.4"
@@ -13,7 +13,7 @@ val tcVersion= "1.16.3"
 val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
 val openSearchRestClientVersion = "2.4.1"
-val rapidsRiversVersion = "202308011528"
+val rapidsRiversVersion = "202308150807"
 val grunndataDtoVersion = "202307310829"
 
 group = "no.nav.hm"
