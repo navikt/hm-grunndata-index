@@ -78,7 +78,7 @@ data class TechDataFilters(val fyllmateriale:String?, val setebreddeMaksCM: Int?
 
 data class ProductSupplier(val id: String, val identifier: String, val name: String)
 
-fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService, agreementLabels: AgreementLabels) : ProductDoc = try { ProductDoc (
+fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc = try { ProductDoc (
     id = id.toString(),
     supplier = ProductSupplier(id = supplier.id.toString(), identifier = supplier.identifier,
         name = supplier.name),
@@ -102,8 +102,8 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService, agreementLabel
     expired = expired,
     createdBy = createdBy,
     updatedBy = updatedBy,
-    agreementInfo = agreementInfo?.toDoc(agreementLabels),
-    agreements = agreements.map { it.toDoc(agreementLabels)},
+    agreementInfo = agreementInfo?.toDoc(),
+    agreements = agreements.map { it.toDoc()},
     hasAgreement = hasAgreement,
     filters = mapTechDataFilters(techData)) }
     catch (e: Exception) {
@@ -111,8 +111,8 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService, agreementLabel
         throw e
     }
 
-private fun AgreementInfo.toDoc(agreementLabels: AgreementLabels): AgreementInfoDoc = AgreementInfoDoc(
-    id = id, identifier = identifier, title= title, label = agreementLabels.matchTitleToLabel(title?:"Annet"),
+private fun AgreementInfo.toDoc(): AgreementInfoDoc = AgreementInfoDoc(
+    id = id, identifier = identifier, title= title, label = AgreementLabels.matchTitleToLabel(title?:"Annet"),
     rank= rank, postNr = postNr, postIdentifier = postIdentifier, postTitle = postTitle, reference = reference,
     expired = expired
 )

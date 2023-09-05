@@ -11,6 +11,7 @@ data class AgreementDoc(
     override val id: String,
     val identifier: String,
     val title: String,
+    val label: String,
     val status: AgreementStatus,
     val resume: String?,
     val text: String?,
@@ -27,7 +28,7 @@ data class AgreementDoc(
 
 fun AgreementDTO.toDoc() : AgreementDoc = AgreementDoc (
     id = id.toString(), identifier = identifier, status = status,
-    title = title, resume = resume, text = text,
+    title = title, label = AgreementLabels.matchTitleToLabel(title), resume = resume, text = text,
     reference = reference, published = published, expired = expired, attachments = attachments,
     createdBy = createdBy, updatedBy = updatedBy, created = created, updated = updated,
     posts =  posts )

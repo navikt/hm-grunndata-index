@@ -20,8 +20,7 @@ import java.time.format.DateTimeFormatter
 class ProductIndexer(private val indexer: Indexer,
                      @Value("\${products.aliasName}") private val aliasName: String,
                      private val gdbApiClient: GdbApiClient,
-                     private val isoCategoryService: IsoCategoryService,
-                     private val agreementLabels: AgreementLabels) {
+                     private val isoCategoryService: IsoCategoryService) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(ProductIndexer::class.java)
@@ -56,7 +55,7 @@ class ProductIndexer(private val indexer: Indexer,
 
                 val products = page.content
                     .filter { it.status != ProductStatus.DELETED }
-                    .map { it.toDoc(isoCategoryService, agreementLabels) }
+                    .map { it.toDoc(isoCategoryService) }
                 LOG.info("indexing ${products.size} products to $indexName")
                 if (products.isNotEmpty()) index(products, indexName)
             }

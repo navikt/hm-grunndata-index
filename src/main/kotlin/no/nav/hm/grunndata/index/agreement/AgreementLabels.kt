@@ -1,11 +1,15 @@
 package no.nav.hm.grunndata.index.agreement
 
-import jakarta.inject.Singleton
-
-@Singleton
 class AgreementLabels {
 
     companion object {
+        fun matchTitleToLabel(title: String): String {
+            labels.forEach {
+                if (title.contains(it.subString, ignoreCase = true)) return it.name
+            }
+            return "Annet"
+        }
+
         private val labels = listOf(
             AgreementLabel("Manuelle rullestoler", "Manuelle rullestoler"),
             AgreementLabel("Elektriske rullestoler", "Elektriske rullestoler"),
@@ -41,12 +45,6 @@ class AgreementLabels {
         )
 
 
-    }
-    fun matchTitleToLabel(title: String): String {
-        labels.forEach {
-            if (title.contains(it.subString, ignoreCase = true)) return it.name
-        }
-        return "Annet"
     }
 }
 

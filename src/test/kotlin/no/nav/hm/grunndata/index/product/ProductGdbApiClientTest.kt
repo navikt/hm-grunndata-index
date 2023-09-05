@@ -7,8 +7,7 @@ import java.time.LocalDateTime
 
 @MicronautTest
 class ProductGdbApiClientTest(private val gdbApiClient: GdbApiClient,
-                              private val isoCategoryService: IsoCategoryService,
-                              private val agreementLabels: AgreementLabels) {
+                              private val isoCategoryService: IsoCategoryService) {
 
 
     //@Test //ignore integration test
@@ -18,7 +17,7 @@ class ProductGdbApiClientTest(private val gdbApiClient: GdbApiClient,
             size=1000, page = 0, sort="updated,asc")
         while(page.pageNumber<page.totalPages) {
             if (page.numberOfElements>0) {
-                val products = page.content.map { it.toDoc(isoCategoryService, agreementLabels) }
+                val products = page.content.map { it.toDoc(isoCategoryService) }
                 println(products.size)
             }
             page = gdbApiClient.findProducts(params = mapOf("updated" to dateString),

@@ -57,6 +57,9 @@
     "title": {
       "type": "text"
     },
+    "label": {
+      "type": "keyword"
+    },
     "status": {
       "type": "keyword"
     },
