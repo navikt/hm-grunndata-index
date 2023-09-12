@@ -97,8 +97,15 @@
             "keywords_bag"
           ]
         },
-        "compatible": {
-          "type": "keyword"
+        "compatibleWith": {
+          "properties":  {
+            "ids": {
+              "type": "keyword"
+            },
+            "seriesIds": {
+              "type": "keyword"
+            }
+          }
         },
         "bestillingsordning": {
           "type": "boolean"

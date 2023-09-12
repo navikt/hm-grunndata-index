@@ -51,7 +51,7 @@ data class AgreementInfoDoc (
 
 data class AttributesDoc (
     val manufacturer: String? = null,
-    val compatible: List<String>? = null,
+    val compatibleWith: CompatibleWith? = null,
     val keywords: List<String>? = null,
     val series: String? = null,
     val shortdescription: String? = null,
@@ -127,9 +127,7 @@ private fun Attributes.toDoc(): AttributesDoc {
         bestillingsordning = bestillingsordning,
         tenderId = tenderId,
         hasTender = hasTender,
-        compatible = compatible
-            ?.flatMap { listOf(it.hmsArtNr, it.supplierRef, it.id?.toString())}
-            ?.filterNotNull()
+        compatibleWith = compatibleWidth
     )
 }
 
