@@ -99,9 +99,6 @@
         },
         "compatibleWith": {
           "properties":  {
-            "ids": {
-              "type": "keyword"
-            },
             "seriesIds": {
               "type": "keyword"
             }
