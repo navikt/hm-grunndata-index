@@ -112,7 +112,6 @@
         "series": {
           "type": "keyword",
           "copy_to": [
-            "keywords_suggest",
             "keywords_bag"
           ]
         }
