@@ -34,7 +34,6 @@
         "reference": {
           "type": "keyword",
           "copy_to": [
-            "keywords_suggest",
             "keywords_bag"
           ]
         },
@@ -54,7 +53,11 @@
           "type" : "keyword"
         },
         "label": {
-          "type": "keyword"
+          "type": "keyword",
+          "copy_to": [
+            "keywords_suggest",
+            "keywords_bag"
+          ]
         },
         "identifier" : {
           "type" : "keyword"
@@ -74,7 +77,6 @@
         "reference" : {
           "type" : "keyword",
           "copy_to": [
-            "keywords_suggest",
             "keywords_bag"
           ]
         }
@@ -195,7 +197,6 @@
     "hmsArtNr": {
       "type": "keyword",
       "copy_to": [
-        "keywords_suggest",
         "keywords_bag"
       ]
     },
@@ -258,7 +259,10 @@
     },
     "title": {
       "type": "text",
-      "analyzer": "norwegian"
+      "analyzer": "norwegian",
+        "copy_to": [
+            "keywords_suggest"
+        ]
     },
     "articleName": {
       "type": "text",
