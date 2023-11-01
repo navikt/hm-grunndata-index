@@ -20,6 +20,7 @@ data class AgreementDoc(
     val expired: LocalDateTime,
     val attachments: List<AgreementAttachment>,
     val posts: List<AgreementPost>,
+    val isoCategory: List<String>,
     val createdBy: String,
     val updatedBy: String,
     val created: LocalDateTime,
@@ -31,4 +32,4 @@ fun AgreementDTO.toDoc() : AgreementDoc = AgreementDoc (
     title = title, label = AgreementLabels.matchTitleToLabel(title), resume = resume, text = text,
     reference = reference, published = published, expired = expired, attachments = attachments,
     createdBy = createdBy, updatedBy = updatedBy, created = created, updated = updated,
-    posts =  posts )
+    posts =  posts, isoCategory = isoCategory)
