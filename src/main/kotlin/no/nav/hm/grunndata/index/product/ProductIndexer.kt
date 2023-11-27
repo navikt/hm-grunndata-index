@@ -6,6 +6,7 @@ import no.nav.hm.grunndata.index.IndexType
 import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.index.agreement.AgreementLabels
 import no.nav.hm.grunndata.index.createIndexName
+import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import org.opensearch.action.admin.indices.alias.get.GetAliasesRequest
 import org.opensearch.action.bulk.BulkResponse
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 @Singleton
 class ProductIndexer(private val indexer: Indexer,
@@ -47,20 +49,28 @@ class ProductIndexer(private val indexer: Indexer,
             LOG.info("creating index $indexName")
             createIndex(indexName)
         }
-        val dateString =  LocalDateTime.now().minusYears(30).toString()
-        var page = gdbApiClient.findProducts(params = mapOf("updated" to dateString),
+        var updated =  LocalDateTime.now().minusYears(30)
+        var page = gdbApiClient.findProducts(params = mapOf("updated" to updated.toString()),
             size=1000, page = 0, sort="updated,asc")
-        while(page.pageNumber<page.totalPages) {
-            if (page.numberOfElements>0) {
-
-                val products = page.content
-                    .filter { it.status != ProductStatus.DELETED }
-                    .map { it.toDoc(isoCategoryService) }
-                LOG.info("indexing ${products.size} products to $indexName")
-                if (products.isNotEmpty()) index(products, indexName)
+        var lastId: UUID? = null
+        while(page.numberOfElements>0) {
+            val products = page.content
+                .filter { it.status != ProductStatus.DELETED }
+                .map { it.toDoc(isoCategoryService) }
+            LOG.info("indexing ${products.size} products to $indexName")
+            if (products.isNotEmpty()) index(products, indexName)
+            val last = page.last()
+            if (updated.equals(last.updated) && last.id == lastId) {
+                LOG.info("Last updated ${last.updated} ${last.id}")
+                updated = updated.plusSeconds(1)
             }
-            page = gdbApiClient.findProducts(params = mapOf("updated" to dateString),
-                size=1000, page = page.pageNumber+1, sort="updated,asc")
+            else {
+                lastId = last.id
+                updated = last.updated
+            }
+            LOG.info("updated is now: $updated")
+            page = gdbApiClient.findProducts(params = mapOf("updated" to updated.toString()),
+                size=1000, page = 0, sort="updated,asc")
         }
         if (alias) {
             updateAlias(indexName)
