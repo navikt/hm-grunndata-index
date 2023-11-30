@@ -61,8 +61,8 @@ class ProductIndexer(private val indexer: Indexer,
             if (products.isNotEmpty()) index(products, indexName)
             val last = page.last()
             if (updated.equals(last.updated) && last.id == lastId) {
-                LOG.info("Last updated ${last.updated} ${last.id}")
-                updated = updated.plusSeconds(1)
+                LOG.info("Last updated ${last.updated} ${last.id} is the same, increasing last updated")
+                updated = updated.plusNanos(1000000)
             }
             else {
                 lastId = last.id
