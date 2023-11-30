@@ -3,5 +3,5 @@
   "rapidsandrivers_enabled": true,
   "min_replicas": 2,
   "max_replicas": 2,
-  "java_opts": "-Xms128m -Xmx512m"
+  "java_opts": "-Xms128m -Xmx1024m"
 }
