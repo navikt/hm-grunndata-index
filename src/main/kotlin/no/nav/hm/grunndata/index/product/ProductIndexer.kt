@@ -51,7 +51,7 @@ class ProductIndexer(private val indexer: Indexer,
         }
         var updated =  LocalDateTime.now().minusYears(30)
         var page = gdbApiClient.findProducts(updated = updated.toString(),
-            size=1000, page = 0, sort="updated,asc")
+            size=3000, page = 0, sort="updated,asc")
         var lastId: UUID? = null
         while(page.numberOfElements>0) {
             val products = page.content
@@ -69,7 +69,7 @@ class ProductIndexer(private val indexer: Indexer,
             }
             LOG.info("updated is now: $updated")
             page = gdbApiClient.findProducts(updated=updated.toString(),
-                size=1000, page = 0, sort="updated,asc")
+                size=3000, page = 0, sort="updated,asc")
         }
         if (alias) {
             updateAlias(indexName)
