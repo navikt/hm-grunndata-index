@@ -4,12 +4,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val jvmTarget = "17"
 val micronautVersion="4.2.1"
-val kafkaVersion = "3.2.1"
 val junitJupiterVersion = "5.9.0"
-val jacksonVersion = "2.13.4"
 val logbackClassicVersion = "1.4.7"
 val logbackEncoderVersion = "7.3"
-val tcVersion= "1.16.3"
+val tcVersion= "1.17.6"
 val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
 val openSearchRestClientVersion = "2.4.1"
