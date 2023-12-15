@@ -78,7 +78,9 @@ data class TechDataFilters(val fyllmateriale:String?, val setebreddeMaksCM: Int?
 
 data class ProductSupplier(val id: String, val identifier: String, val name: String)
 
-fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc = try { ProductDoc (
+fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc = try {
+    val onlyActiveAgreements = agreements.filter { it.published!!.isBefore(LocalDateTime.now()) && it.expired.isAfter(LocalDateTime.now()) }
+    ProductDoc (
     id = id.toString(),
     supplier = ProductSupplier(id = supplier.id.toString(), identifier = supplier.identifier,
         name = supplier.name),
@@ -102,9 +104,9 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc =
     expired = expired,
     createdBy = createdBy,
     updatedBy = updatedBy,
-    agreementInfo = agreementInfo?.toDoc(),
-    agreements = agreements.map { it.toDoc()},
-    hasAgreement = hasAgreement,
+    agreementInfo = onlyActiveAgreements.firstOrNull()?.toDoc(),
+    agreements =  onlyActiveAgreements.map { it.toDoc()},
+    hasAgreement = onlyActiveAgreements.isNotEmpty(),
     filters = mapTechDataFilters(techData)) }
     catch (e: Exception) {
         println(isoCategory)
