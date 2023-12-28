@@ -10,6 +10,7 @@ import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import org.opensearch.action.admin.indices.alias.get.GetAliasesRequest
 import org.opensearch.action.bulk.BulkResponse
+import org.opensearch.action.delete.DeleteResponse
 import org.opensearch.client.RequestOptions
 import org.opensearch.rest.RestStatus
 import org.slf4j.LoggerFactory
@@ -89,6 +90,7 @@ class ProductIndexer(private val indexer: Indexer,
     fun index(docs: List<ProductDoc>, indexName: String): BulkResponse =
         indexer.index(docs,indexName)
 
+    fun delete(uuid: UUID): DeleteResponse = indexer.delete(uuid.toString(), aliasName)
 
     fun createIndex(indexName: String): Boolean = indexer.createIndex(indexName, settings, mapping)
 

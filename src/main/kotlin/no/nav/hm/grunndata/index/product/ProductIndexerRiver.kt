@@ -9,6 +9,7 @@ import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.River
 import no.nav.hm.grunndata.index.agreement.AgreementLabels
 import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
+import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import no.nav.hm.grunndata.rapid.dto.rapidDTOVersion
 import no.nav.hm.grunndata.rapid.event.EventName
 import no.nav.hm.grunndata.rapid.event.RapidApp
@@ -40,8 +41,14 @@ class ProductIndexerRiver(river: RiverHead,
         val dtoVersion = packet["dtoVersion"].asLong()
         if (dtoVersion > rapidDTOVersion) LOG.warn("this event dto version $dtoVersion is newer than our version: $rapidDTOVersion")
         val dto = objectMapper.treeToValue(packet["payload"], ProductRapidDTO::class.java)
-        LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr}")
-        productIndexer.index(dto.toDoc(isoCategoryService))
+        if (dto.status == ProductStatus.DELETED) {
+            LOG.info("deleting product id: ${dto.id} hmsnr: ${dto.hmsArtNr}")
+            productIndexer.delete(dto.id)
+        }
+        else {
+            LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr}")
+            productIndexer.index(dto.toDoc(isoCategoryService))
+        }
     }
 
 }

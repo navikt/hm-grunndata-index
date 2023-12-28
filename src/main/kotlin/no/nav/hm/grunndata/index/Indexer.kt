@@ -2,13 +2,17 @@ package no.nav.hm.grunndata.index
 
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.micronaut.http.annotation.Delete
 import jakarta.inject.Singleton
 import no.nav.hm.grunndata.index.product.ProductIndexer
 import org.opensearch.action.admin.indices.alias.IndicesAliasesRequest
 import org.opensearch.action.admin.indices.alias.get.GetAliasesRequest
 import org.opensearch.action.bulk.BulkRequest
 import org.opensearch.action.bulk.BulkResponse
+import org.opensearch.action.delete.DeleteRequest
+import org.opensearch.action.delete.DeleteResponse
 import org.opensearch.action.index.IndexRequest
+import org.opensearch.action.index.IndexResponse
 import org.opensearch.client.RequestOptions
 import org.opensearch.client.RestHighLevelClient
 import org.opensearch.client.indices.CreateIndexRequest
@@ -77,6 +81,11 @@ class Indexer(private val client: RestHighLevelClient,
             )
         }
         return client.bulk(bulkRequest, RequestOptions.DEFAULT)
+    }
+
+    fun delete(id: String, indexName: String): DeleteResponse {
+        val request = DeleteRequest(indexName).id(id)
+        return client.delete(request, RequestOptions.DEFAULT)
     }
 
     fun indexExists(indexName: String):Boolean = client.indices()
