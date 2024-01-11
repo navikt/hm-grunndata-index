@@ -19,6 +19,7 @@ data class ProductDoc (
     val isoCategory: String,
     val isoCategoryTitle: String?,
     val isoCategoryText: String?,
+    val isoCategoryTextShort: String?,
     val accessory: Boolean = false,
     val sparePart: Boolean = false,
     val seriesId: String?=null,
@@ -94,6 +95,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc =
     isoCategory = isoCategory,
     isoCategoryTitle = isoCategoryService.lookUpCode(isoCategory)?.isoTitle,
     isoCategoryText = isoCategoryService.lookUpCode(isoCategory)?.isoText,
+    isoCategoryTextShort = isoCategoryService.lookUpCode(isoCategory)?.isoTextShort,
     accessory = accessory,
     sparePart = sparePart,
     seriesId = seriesIdentifier ?: seriesId, // backovercompatible with hmdbIdentifier
