@@ -1,10 +1,12 @@
 package no.nav.hm.grunndata.index.agreement
 
 import io.micronaut.http.annotation.*
+import io.micronaut.scheduling.TaskExecutors
+import io.micronaut.scheduling.annotation.ExecuteOn
 import org.slf4j.LoggerFactory
 
 @Controller("/internal/index/agreements")
-// @ExecuteOn(TaskExecutors.BLOCKING)
+@ExecuteOn(TaskExecutors.BLOCKING)
 class AgreementIndexerController(private val agreementIndexer: AgreementIndexer) {
     companion object {
         private val LOG = LoggerFactory.getLogger(AgreementIndexerController::class.java)

@@ -6,9 +6,6 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.QueryValue
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import no.nav.hm.grunndata.index.agreement.AgreementIndexer
 import no.nav.hm.grunndata.index.product.ProductIndexer
 import no.nav.hm.grunndata.index.supplier.SupplierIndexer

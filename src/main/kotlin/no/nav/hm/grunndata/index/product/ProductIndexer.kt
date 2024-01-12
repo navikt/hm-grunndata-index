@@ -56,7 +56,9 @@ class ProductIndexer(private val indexer: Indexer,
         var lastId: UUID? = null
         while(page.numberOfElements>0) {
             val products = page.content
-                .map { it.toDoc(isoCategoryService) }
+                .map { it.toDoc(isoCategoryService) }.filter {
+                    it.status != ProductStatus.DELETED
+                }
             LOG.info("indexing ${products.size} products to $indexName")
             if (products.isNotEmpty()) index(products, indexName)
             val last = page.last()
