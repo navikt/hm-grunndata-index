@@ -1,6 +1,7 @@
 package no.nav.hm.grunndata.index.product
 
 import io.micronaut.http.annotation.*
+import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import org.slf4j.LoggerFactory
 
