@@ -4,6 +4,7 @@ import io.micronaut.http.annotation.*
 import org.slf4j.LoggerFactory
 
 @Controller("/internal/index/agreements")
+// @ExecuteOn(TaskExecutors.BLOCKING)
 class AgreementIndexerController(private val agreementIndexer: AgreementIndexer) {
     companion object {
         private val LOG = LoggerFactory.getLogger(AgreementIndexerController::class.java)
