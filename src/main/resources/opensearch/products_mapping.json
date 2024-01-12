@@ -265,7 +265,13 @@
     },
     "articleName": {
       "type": "text",
-      "analyzer": "norwegian"
+      "analyzer": "norwegian",
+      "copy_to": [
+        "articleName.keyword"
+      ]
+    },
+    "articleName.keyword": {
+      "type": "keyword"
     },
     "updated": {
       "type": "date",
