@@ -267,10 +267,10 @@
       "type": "text",
       "analyzer": "norwegian",
       "copy_to": [
-        "articleName.keyword"
+        "articleName_keyword"
       ]
     },
-    "articleName.keyword": {
+    "articleName_keyword": {
       "type": "keyword"
     },
     "updated": {
