@@ -61,7 +61,7 @@ data class AttributesDoc (
     val bestillingsordning: Boolean? = null,
     val digitalSoknad: Boolean? = null,
     val ikkeTilInstitusjon: Boolean? = null,
-    val pakrevdGodkjenningskurs: Boolean? = null,
+    val pakrevdGodkjenningskurs: PakrevdGodkjenningskurs? = null,
     val produkttype: Produkttype? = null,
     val tenderId: String? = null,
     val hasTender: Boolean? = null
