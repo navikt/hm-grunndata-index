@@ -59,6 +59,10 @@ data class AttributesDoc (
     val text: String? = null,
     val url: String? = null,
     val bestillingsordning: Boolean? = null,
+    val digitalSoknad: Boolean? = null,
+    val ikkeTilInstitusjon: Boolean? = null,
+    val pakrevdGodkjenningskurs: Boolean? = null,
+    val produkttype: Produkttype? = null,
     val tenderId: String? = null,
     val hasTender: Boolean? = null
 )
@@ -129,6 +133,10 @@ private fun Attributes.toDoc(): AttributesDoc {
         text = text,
         url = url,
         bestillingsordning = bestillingsordning,
+        digitalSoknad = digitalSoknad,
+        ikkeTilInstitusjon = ikkeTilInstitusjon,
+        pakrevdGodkjenningskurs = pakrevdGodkjenningskurs,
+        produkttype = produkttype,
         tenderId = tenderId,
         hasTender = hasTender,
         compatibleWith = compatibleWidth
