@@ -2,7 +2,6 @@ package no.nav.hm.grunndata.index.product
 
 import io.micronaut.data.model.Page
 import io.micronaut.http.MediaType.APPLICATION_JSON
-import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.annotation.Client

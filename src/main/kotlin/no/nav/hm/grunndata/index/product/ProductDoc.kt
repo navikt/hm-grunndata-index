@@ -19,6 +19,7 @@ data class ProductDoc (
     val isoCategory: String,
     val isoCategoryTitle: String?,
     val isoCategoryText: String?,
+    val isoCategoryTextShort: String?,
     val accessory: Boolean = false,
     val sparePart: Boolean = false,
     val seriesId: String?=null,
@@ -58,6 +59,10 @@ data class AttributesDoc (
     val text: String? = null,
     val url: String? = null,
     val bestillingsordning: Boolean? = null,
+    val digitalSoknad: Boolean? = null,
+    val ikkeTilInstitusjon: Boolean? = null,
+    val pakrevdGodkjenningskurs: PakrevdGodkjenningskurs? = null,
+    val produkttype: Produkttype? = null,
     val tenderId: String? = null,
     val hasTender: Boolean? = null
 )
@@ -94,6 +99,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc =
     isoCategory = isoCategory,
     isoCategoryTitle = isoCategoryService.lookUpCode(isoCategory)?.isoTitle,
     isoCategoryText = isoCategoryService.lookUpCode(isoCategory)?.isoText,
+    isoCategoryTextShort = isoCategoryService.lookUpCode(isoCategory)?.isoTextShort,
     accessory = accessory,
     sparePart = sparePart,
     seriesId = seriesIdentifier ?: seriesId, // backovercompatible with hmdbIdentifier
@@ -127,6 +133,10 @@ private fun Attributes.toDoc(): AttributesDoc {
         text = text,
         url = url,
         bestillingsordning = bestillingsordning,
+        digitalSoknad = digitalSoknad,
+        ikkeTilInstitusjon = ikkeTilInstitusjon,
+        pakrevdGodkjenningskurs = pakrevdGodkjenningskurs,
+        produkttype = produkttype,
         tenderId = tenderId,
         hasTender = hasTender,
         compatibleWith = compatibleWidth

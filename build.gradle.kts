@@ -12,14 +12,14 @@ val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
 val openSearchRestClientVersion = "2.4.1"
 val rapidsRiversVersion = "202401101532"
-val grunndataDtoVersion = "202401121147"
+val grunndataDtoVersion = "202401171556"
 
 group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
 
 plugins {
-    kotlin("jvm") version "1.8.22"
-    kotlin("kapt") version "1.8.22"
+    kotlin("jvm") version "1.9.21"
+    kotlin("kapt") version "1.9.21"
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.0"
     id("io.micronaut.application") version "4.2.1"
