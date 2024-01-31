@@ -6,23 +6,24 @@ import no.nav.hm.grunndata.index.agreement.AgreementLabels
 import java.time.LocalDateTime
 import java.util.*
 
-data class ProductDoc (
+data class ProductDoc(
     override val id: String,
     val supplier: ProductSupplier,
     val title: String,
-    val articleName:String,
+    val articleName: String,
     val attributes: AttributesDoc,
     val status: ProductStatus,
-    val hmsArtNr: String?=null,
+    val hmsArtNr: String? = null,
     val identifier: String,
     val supplierRef: String,
     val isoCategory: String,
     val isoCategoryTitle: String?,
     val isoCategoryText: String?,
     val isoCategoryTextShort: String?,
+    val isoSearchTag: List<String>?,
     val accessory: Boolean = false,
     val sparePart: Boolean = false,
-    val seriesId: String?=null,
+    val seriesId: String? = null,
     val data: List<TechData> = emptyList(),
     val media: List<MediaDoc> = emptyList(),
     val created: LocalDateTime,
@@ -34,23 +35,23 @@ data class ProductDoc (
     val agreementInfo: AgreementInfoDoc?,
     val agreements: List<AgreementInfoDoc> = emptyList(),
     val hasAgreement: Boolean = false,
-): SearchDoc
+) : SearchDoc
 
 
-data class AgreementInfoDoc (
+data class AgreementInfoDoc(
     val id: UUID,
-    val identifier: String?=null,
-    val title: String?=null,
+    val identifier: String? = null,
+    val title: String? = null,
     val label: String,
     val rank: Int,
     val postNr: Int,
-    val postIdentifier: String?=null,
-    val postTitle: String?=null,
+    val postIdentifier: String? = null,
+    val postTitle: String? = null,
     val reference: String,
     val expired: LocalDateTime,
 )
 
-data class AttributesDoc (
+data class AttributesDoc(
     val manufacturer: String? = null,
     val compatibleWith: CompatibleWith? = null,
     val keywords: List<String>? = null,
@@ -66,63 +67,72 @@ data class AttributesDoc (
     val hasTender: Boolean? = null
 )
 
-data class MediaDoc (
-    val uri:    String,
+data class MediaDoc(
+    val uri: String,
     val priority: Int = 1,
     val type: MediaType = MediaType.IMAGE,
-    val text:   String?=null,
+    val text: String? = null,
     val source: MediaSourceType = MediaSourceType.HMDB
 )
 
-data class TechDataFilters(val fyllmateriale:String?, val setebreddeMaksCM: Int?, val setebreddeMinCM: Int?,
-                           val brukervektMinKG: Int?, val materialeTrekk:String?, val setedybdeMinCM:Int?,
-                           val setedybdeMaksCM: Int?, val setehoydeMaksCM:Int?, val setehoydeMinCM: Int?,
-                           val totalVektKG: Int?, val lengdeCM: Int?, val breddeCM: Int?, val beregnetBarn: String?,
-                           val brukervektMaksKG: Int?)
+data class TechDataFilters(
+    val fyllmateriale: String?, val setebreddeMaksCM: Int?, val setebreddeMinCM: Int?,
+    val brukervektMinKG: Int?, val materialeTrekk: String?, val setedybdeMinCM: Int?,
+    val setedybdeMaksCM: Int?, val setehoydeMaksCM: Int?, val setehoydeMinCM: Int?,
+    val totalVektKG: Int?, val lengdeCM: Int?, val breddeCM: Int?, val beregnetBarn: String?,
+    val brukervektMaksKG: Int?
+)
 
 data class ProductSupplier(val id: String, val identifier: String, val name: String)
 
-fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService) : ProductDoc = try {
-    val onlyActiveAgreements = agreements.filter { it.published!!.isBefore(LocalDateTime.now()) && it.expired.isAfter(LocalDateTime.now()) }
-    ProductDoc (
-    id = id.toString(),
-    supplier = ProductSupplier(id = supplier.id.toString(), identifier = supplier.identifier,
-        name = supplier.name),
-    title = title,
-    articleName = articleName,
-    attributes = attributes.toDoc(),
-    status = status,
-    hmsArtNr = hmsArtNr,
-    identifier = identifier,
-    supplierRef = supplierRef,
-    isoCategory = isoCategory,
-    isoCategoryTitle = isoCategoryService.lookUpCode(isoCategory)?.isoTitle,
-    isoCategoryText = isoCategoryService.lookUpCode(isoCategory)?.isoText,
-    isoCategoryTextShort = isoCategoryService.lookUpCode(isoCategory)?.isoTextShort,
-    accessory = accessory,
-    sparePart = sparePart,
-    seriesId = seriesIdentifier ?: seriesId, // backovercompatible with hmdbIdentifier
-    data = techData,
-    media = media.map { it.toDoc() }.sortedBy { it.priority },
-    created = created,
-    updated = updated,
-    expired = expired,
-    createdBy = createdBy,
-    updatedBy = updatedBy,
-    agreementInfo = onlyActiveAgreements.firstOrNull()?.toDoc(),
-    agreements =  onlyActiveAgreements.map { it.toDoc()},
-    hasAgreement = onlyActiveAgreements.isNotEmpty(),
-    filters = mapTechDataFilters(techData)) }
-    catch (e: Exception) {
-        println(isoCategory)
-        throw e
-    }
+fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = try {
+    val onlyActiveAgreements =
+        agreements.filter { it.published!!.isBefore(LocalDateTime.now()) && it.expired.isAfter(LocalDateTime.now()) }
+    val iso =  isoCategoryService.lookUpCode(isoCategory)
+    ProductDoc(
+        id = id.toString(),
+        supplier = ProductSupplier(
+            id = supplier.id.toString(), identifier = supplier.identifier,
+            name = supplier.name
+        ),
+        title = title,
+        articleName = articleName,
+        attributes = attributes.toDoc(),
+        status = status,
+        hmsArtNr = hmsArtNr,
+        identifier = identifier,
+        supplierRef = supplierRef,
+        isoCategory = isoCategory,
+        isoCategoryTitle = iso?.isoTitle,
+        isoCategoryText = iso?.isoText,
+        isoCategoryTextShort = iso?.isoTextShort,
+        isoSearchTag = isoCategoryService.getHigherLevelsInBranch(isoCategory).map { it.searchWords }.flatten(),
+        accessory = accessory,
+        sparePart = sparePart,
+        seriesId = seriesIdentifier ?: seriesId, // backovercompatible with hmdbIdentifier
+        data = techData,
+        media = media.map { it.toDoc() }.sortedBy { it.priority },
+        created = created,
+        updated = updated,
+        expired = expired,
+        createdBy = createdBy,
+        updatedBy = updatedBy,
+        agreementInfo = onlyActiveAgreements.firstOrNull()?.toDoc(),
+        agreements = onlyActiveAgreements.map { it.toDoc() },
+        hasAgreement = onlyActiveAgreements.isNotEmpty(),
+        filters = mapTechDataFilters(techData)
+    )
+} catch (e: Exception) {
+    println(isoCategory)
+    throw e
+}
 
 private fun AgreementInfo.toDoc(): AgreementInfoDoc = AgreementInfoDoc(
-    id = id, identifier = identifier, title= title, label = AgreementLabels.matchTitleToLabel(title?:"Annet"),
-    rank= rank, postNr = postNr, postIdentifier = postIdentifier, postTitle = postTitle, reference = reference,
+    id = id, identifier = identifier, title = title, label = AgreementLabels.matchTitleToLabel(title ?: "Annet"),
+    rank = rank, postNr = postNr, postIdentifier = postIdentifier, postTitle = postTitle, reference = reference,
     expired = expired
 )
+
 private fun Attributes.toDoc(): AttributesDoc {
     return AttributesDoc(
         manufacturer = manufacturer,
@@ -142,7 +152,7 @@ private fun Attributes.toDoc(): AttributesDoc {
 }
 
 
-fun MediaInfo.toDoc() : MediaDoc = MediaDoc (
+fun MediaInfo.toDoc(): MediaDoc = MediaDoc(
     uri = uri,
     priority = priority,
     type = type,
@@ -151,14 +161,14 @@ fun MediaInfo.toDoc() : MediaDoc = MediaDoc (
 )
 
 fun mapTechDataFilters(data: List<TechData>): TechDataFilters {
-    var fyllmateriale:String? = null
+    var fyllmateriale: String? = null
     var setebreddeMaksCM: Int? = null
     var setebreddeMinCM: Int? = null
     var brukervektMinKG: Int? = null
-    var materialeTrekk:String? = null
-    var setedybdeMinCM:Int? = null
+    var materialeTrekk: String? = null
+    var setedybdeMinCM: Int? = null
     var setedybdeMaksCM: Int? = null
-    var setehoydeMaksCM:Int? = null
+    var setehoydeMaksCM: Int? = null
     var setehoydeMinCM: Int? = null
     var totalVektKG: Int? = null
     var lengdeCM: Int? = null
@@ -183,13 +193,14 @@ fun mapTechDataFilters(data: List<TechData>): TechDataFilters {
             "Brukervekt maks" -> brukervektMaksKG = it.value.decimalToInt()
         }
     }
-    return TechDataFilters(fyllmateriale = fyllmateriale, setebreddeMaksCM = setebreddeMaksCM,
+    return TechDataFilters(
+        fyllmateriale = fyllmateriale, setebreddeMaksCM = setebreddeMaksCM,
         setebreddeMinCM = setebreddeMinCM, brukervektMinKG = brukervektMinKG, materialeTrekk = materialeTrekk,
         setedybdeMinCM = setedybdeMinCM, setedybdeMaksCM = setedybdeMaksCM, setehoydeMaksCM = setehoydeMaksCM,
         setehoydeMinCM = setehoydeMinCM, totalVektKG = totalVektKG, lengdeCM = lengdeCM, breddeCM = breddeCM,
-        beregnetBarn = beregnetBarn, brukervektMaksKG = brukervektMaksKG)
+        beregnetBarn = beregnetBarn, brukervektMaksKG = brukervektMaksKG
+    )
 }
-
 
 
 private fun String.decimalToInt(): Int? = substringBeforeLast(".").toInt()

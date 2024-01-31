@@ -43,14 +43,14 @@
         }
       }
     },
-    "agreements" : {
-      "properties" : {
-        "expired" : {
+    "agreements": {
+      "properties": {
+        "expired": {
           "type": "date",
           "format": "strict_date_optional_time"
         },
-        "id" : {
-          "type" : "keyword"
+        "id": {
+          "type": "keyword"
         },
         "label": {
           "type": "keyword",
@@ -59,23 +59,23 @@
             "keywords_bag"
           ]
         },
-        "identifier" : {
-          "type" : "keyword"
+        "identifier": {
+          "type": "keyword"
         },
-        "postIdentifier" : {
-          "type" : "keyword"
+        "postIdentifier": {
+          "type": "keyword"
         },
-        "postNr" : {
-          "type" : "long"
+        "postNr": {
+          "type": "long"
         },
-        "postTitle" : {
-          "type" : "keyword"
+        "postTitle": {
+          "type": "keyword"
         },
-        "rank" : {
-          "type" : "long"
+        "rank": {
+          "type": "long"
         },
-        "reference" : {
-          "type" : "keyword",
+        "reference": {
+          "type": "keyword",
           "copy_to": [
             "keywords_bag"
           ]
@@ -100,7 +100,7 @@
           ]
         },
         "compatibleWith": {
-          "properties":  {
+          "properties": {
             "seriesIds": {
               "type": "keyword"
             }
@@ -113,7 +113,7 @@
           "type": "boolean"
         },
         "pakrevdGodkjenningskurs": {
-          "properties":  {
+          "properties": {
             "tittel": {
               "enabled": false
             },
@@ -240,6 +240,13 @@
     "isoCategoryName": {
       "type": "keyword"
     },
+    "isoSearchTag": {
+      "type": "keyword",
+      "copy_to": [
+        "keywords_suggest",
+        "keywords_bag"
+      ]
+    },
     "media": {
       "enabled": false
     },
@@ -278,9 +285,9 @@
     "title": {
       "type": "text",
       "analyzer": "norwegian",
-        "copy_to": [
-            "keywords_suggest"
-        ]
+      "copy_to": [
+        "keywords_suggest"
+      ]
     },
     "articleName": {
       "type": "text",
