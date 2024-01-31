@@ -116,7 +116,8 @@
           "properties":  {
             "tittel": {
               "type": "text",
-              "analyzer": "norwegian"
+              "analyzer": "norwegian",
+              "enabled": false
             },
             "isokode": {
               "type": "keyword"
