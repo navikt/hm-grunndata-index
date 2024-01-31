@@ -115,8 +115,6 @@
         "pakrevdGodkjenningskurs": {
           "properties":  {
             "tittel": {
-              "type": "text",
-              "analyzer": "norwegian",
               "enabled": false
             },
             "isokode": {
