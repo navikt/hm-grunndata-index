@@ -35,6 +35,7 @@ data class IsoCategoryDTO(
     val id: UUID,
     val isoCode: String,
     val isoTitle: String,
+    val isoTitleShort: String?=null,
     val isoText: String,
     val isoTextShort: String?=null,
     val isoTranslations: IsoTranslationsDTO?=null,

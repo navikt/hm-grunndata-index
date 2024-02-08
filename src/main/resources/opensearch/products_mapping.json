@@ -233,6 +233,10 @@
         "isoCategoryName"
       ]
     },
+    "isoCategoryTitleShort": {
+      "type": "text",
+      "analyzer": "norwegian"
+    },
     "isoCategoryText": {
       "type": "text",
       "analyzer": "norwegian"
