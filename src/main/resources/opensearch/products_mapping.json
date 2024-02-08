@@ -235,9 +235,16 @@
     },
     "isoCategoryTitleShort": {
       "type": "text",
-      "analyzer": "norwegian"
+      "analyzer": "norwegian",
+      "copy_to": [
+        "keywords_suggest"
+      ]
     },
     "isoCategoryText": {
+      "type": "text",
+      "analyzer": "norwegian"
+    },
+    "isoCategoryTextShort": {
       "type": "text",
       "analyzer": "norwegian"
     },
