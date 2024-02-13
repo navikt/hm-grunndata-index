@@ -328,6 +328,11 @@
           "name": "status",
           "type": "category",
           "path": "status"
+        },
+        {
+          "name": "agreements.id",
+          "type": "category",
+          "path": "agreements.id"
         }
       ]
     }
