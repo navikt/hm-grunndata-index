@@ -86,6 +86,8 @@ suppliers:
   aliasName: ${SUPPLIERS_ALIASNAME:suppliers}
 products:
   aliasName: ${PRODUCTS_ALIASNAME:products}
+news:
+  aliasName: ${NEWS_ALIASNAME:news}
 
 grunndata:
   db:

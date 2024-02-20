@@ -1,6 +1,7 @@
 package no.nav.hm.grunndata.index.news
 
 import io.micronaut.context.annotation.Value
+import jakarta.inject.Singleton
 import no.nav.hm.grunndata.index.IndexType
 import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.index.createIndexName
@@ -8,6 +9,7 @@ import org.opensearch.action.bulk.BulkResponse
 import org.opensearch.action.delete.DeleteResponse
 import java.util.*
 
+@Singleton
 class NewsIndexer(private val indexer: Indexer,
                   @Value("\${news.aliasName}") private val aliasName: String,
                   private val newsGdbApiClient: NewsGDBApiClient) {
