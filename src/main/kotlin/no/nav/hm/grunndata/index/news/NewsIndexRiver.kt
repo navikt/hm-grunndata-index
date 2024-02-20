@@ -11,6 +11,7 @@ import no.nav.hm.grunndata.rapid.dto.NewsDTO
 import no.nav.hm.grunndata.rapid.dto.NewsStatus
 import no.nav.hm.grunndata.rapid.dto.rapidDTOVersion
 import no.nav.hm.grunndata.rapid.event.EventName
+import no.nav.hm.grunndata.rapid.event.RapidApp
 import no.nav.hm.rapids_rivers.micronaut.RiverHead
 import org.slf4j.LoggerFactory
 
@@ -27,8 +28,8 @@ class NewsIndexRiver(river: RiverHead,
     init {
         LOG.info("Using Rapid DTO version $rapidDTOVersion")
         river
-            .validate{ it.demandValue("createdBy", "grunndata_db") }
-            .validate{ it.demandAny("eventName", listOf(EventName.hmdbseriessyncV1)) }
+            .validate{ it.demandValue("createdBy", RapidApp.grunndata_db ) }
+            .validate{ it.demandAny("eventName", listOf(EventName.hmdbnewsyncV1)) }
             .validate{ it.demandKey("payload") }
             .validate{ it.demandKey("dtoVersion") }
         river.register(this)
