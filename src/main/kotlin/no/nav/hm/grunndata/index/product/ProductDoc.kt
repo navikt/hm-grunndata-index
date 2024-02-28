@@ -79,20 +79,20 @@ data class MediaDoc(
 )
 
 data class TechDataFilters(
-    val fyllmateriale: String?,
-    val setebreddeMaksCM: Int?,
-    val setebreddeMinCM: Int?,
-    val brukervektMinKG: Int?,
-    val materialeTrekk: String?,
-    val setedybdeMinCM: Int?,
-    val setedybdeMaksCM: Int?,
-    val setehoydeMaksCM: Int?,
-    val setehoydeMinCM: Int?,
-    val totalVektKG: Int?,
-    val lengdeCM: Int?,
-    val breddeCM: Int?,
-    val beregnetBarn: String?,
-    val brukervektMaksKG: Int?
+    val fyllmateriale: String?=null,
+    val setebreddeMaksCM: Int??=null,
+    val setebreddeMinCM: Int??=null,
+    val brukervektMinKG: Int??=null,
+    val materialeTrekk: String??=null,
+    val setedybdeMinCM: Int??=null,
+    val setedybdeMaksCM: Int??=null,
+    val setehoydeMaksCM: Int??=null,
+    val setehoydeMinCM: Int??=null,
+    val totalVektKG: Int??=null,
+    val lengdeCM: Int??=null,
+    val breddeCM: Int??=null,
+    val beregnetBarn: String??=null,
+    val brukervektMaksKG: Int??=null
 )
 
 data class ProductSupplier(val id: String, val identifier: String, val name: String)
@@ -132,7 +132,8 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
         agreements = onlyActiveAgreements.map { it.toDoc() },
         hasAgreement = onlyActiveAgreements.isNotEmpty(),
         filters = mapTechDataFilters(techData)
-    )
+
+
 } catch (e: Exception) {
     println(isoCategory)
     throw e
@@ -177,54 +178,61 @@ fun MediaInfo.toDoc(): MediaDoc = MediaDoc(
 )
 
 fun mapTechDataFilters(data: List<TechData>): TechDataFilters {
-    var fyllmateriale: String? = null
-    var setebreddeMaksCM: Int? = null
-    var setebreddeMinCM: Int? = null
-    var brukervektMinKG: Int? = null
-    var materialeTrekk: String? = null
-    var setedybdeMinCM: Int? = null
-    var setedybdeMaksCM: Int? = null
-    var setehoydeMaksCM: Int? = null
-    var setehoydeMinCM: Int? = null
-    var totalVektKG: Int? = null
-    var lengdeCM: Int? = null
-    var breddeCM: Int? = null
-    var beregnetBarn: String? = null
-    var brukervektMaksKG: Int? = null
-    data.forEach {
-        when (it.key) {
-            "Fyllmateriale" -> fyllmateriale = it.value
-            "Setebredde maks" -> setebreddeMaksCM = it.value.decimalToInt()
-            "Setebredde min" -> setebreddeMinCM = it.value.decimalToInt()
-            "Brukervekt min" -> brukervektMinKG = it.value.decimalToInt()
-            "Materiale i trekk" -> materialeTrekk = it.value
-            "Setedybde min" -> setedybdeMinCM = it.value.decimalToInt()
-            "Setedybde maks" -> setedybdeMaksCM = it.value.decimalToInt()
-            "Setehøyde maks" -> setehoydeMaksCM = it.value.decimalToInt()
-            "Setehøyde min" -> setehoydeMinCM = it.value.decimalToInt()
-            "Totalvekt" -> totalVektKG = it.value.decimalToInt()
-            "Lengde" -> lengdeCM = it.value.decimalToInt()
-            "Bredde" -> breddeCM = it.value.decimalToInt()
-            "Beregnet på barn" -> beregnetBarn = it.value
-            "Brukervekt maks" -> brukervektMaksKG = it.value.decimalToInt()
+    try {
+
+        var fyllmateriale: String? = null
+        var setebreddeMaksCM: Int? = null
+        var setebreddeMinCM: Int? = null
+        var brukervektMinKG: Int? = null
+        var materialeTrekk: String? = null
+        var setedybdeMinCM: Int? = null
+        var setedybdeMaksCM: Int? = null
+        var setehoydeMaksCM: Int? = null
+        var setehoydeMinCM: Int? = null
+        var totalVektKG: Int? = null
+        var lengdeCM: Int? = null
+        var breddeCM: Int? = null
+        var beregnetBarn: String? = null
+        var brukervektMaksKG: Int? = null
+        data.forEach {
+            when (it.key) {
+                "Fyllmateriale" -> fyllmateriale = it.value
+                "Setebredde maks" -> setebreddeMaksCM = it.value.decimalToInt()
+                "Setebredde min" -> setebreddeMinCM = it.value.decimalToInt()
+                "Brukervekt min" -> brukervektMinKG = it.value.decimalToInt()
+                "Materiale i trekk" -> materialeTrekk = it.value
+                "Setedybde min" -> setedybdeMinCM = it.value.decimalToInt()
+                "Setedybde maks" -> setedybdeMaksCM = it.value.decimalToInt()
+                "Setehøyde maks" -> setehoydeMaksCM = it.value.decimalToInt()
+                "Setehøyde min" -> setehoydeMinCM = it.value.decimalToInt()
+                "Totalvekt" -> totalVektKG = it.value.decimalToInt()
+                "Lengde" -> lengdeCM = it.value.decimalToInt()
+                "Bredde" -> breddeCM = it.value.decimalToInt()
+                "Beregnet på barn" -> beregnetBarn = it.value
+                "Brukervekt maks" -> brukervektMaksKG = it.value.decimalToInt()
+            }
         }
+        return TechDataFilters(
+            fyllmateriale = fyllmateriale,
+            setebreddeMaksCM = setebreddeMaksCM,
+            setebreddeMinCM = setebreddeMinCM,
+            brukervektMinKG = brukervektMinKG,
+            materialeTrekk = materialeTrekk,
+            setedybdeMinCM = setedybdeMinCM,
+            setedybdeMaksCM = setedybdeMaksCM,
+            setehoydeMaksCM = setehoydeMaksCM,
+            setehoydeMinCM = setehoydeMinCM,
+            totalVektKG = totalVektKG,
+            lengdeCM = lengdeCM,
+            breddeCM = breddeCM,
+            beregnetBarn = beregnetBarn,
+            brukervektMaksKG = brukervektMaksKG
+        )
     }
-    return TechDataFilters(
-        fyllmateriale = fyllmateriale,
-        setebreddeMaksCM = setebreddeMaksCM,
-        setebreddeMinCM = setebreddeMinCM,
-        brukervektMinKG = brukervektMinKG,
-        materialeTrekk = materialeTrekk,
-        setedybdeMinCM = setedybdeMinCM,
-        setedybdeMaksCM = setedybdeMaksCM,
-        setehoydeMaksCM = setehoydeMaksCM,
-        setehoydeMinCM = setehoydeMinCM,
-        totalVektKG = totalVektKG,
-        lengdeCM = lengdeCM,
-        breddeCM = breddeCM,
-        beregnetBarn = beregnetBarn,
-        brukervektMaksKG = brukervektMaksKG
-    )
+    catch (e: Exception) {
+        println("Error mapping techdatafilters ${e.message}")
+        return TechDataFilters()
+    }
 }
 
 
