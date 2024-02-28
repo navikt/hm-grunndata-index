@@ -131,7 +131,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
         agreementInfo = onlyActiveAgreements.firstOrNull()?.toDoc(),
         agreements = onlyActiveAgreements.map { it.toDoc() },
         hasAgreement = onlyActiveAgreements.isNotEmpty(),
-        filters = mapTechDataFilters(techData)
+        filters = mapTechDataFilters(techData))
 
 
 } catch (e: Exception) {
