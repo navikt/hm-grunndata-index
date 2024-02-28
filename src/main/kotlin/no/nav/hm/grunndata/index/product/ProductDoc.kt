@@ -48,6 +48,8 @@ data class AgreementInfoDoc(
     val postNr: Int,
     val postIdentifier: String? = null,
     val postTitle: String? = null,
+    val postId: UUID? = null,
+    val refNr: String? = null,
     val reference: String,
     val expired: LocalDateTime,
 )
@@ -77,10 +79,19 @@ data class MediaDoc(
 )
 
 data class TechDataFilters(
-    val fyllmateriale: String?, val setebreddeMaksCM: Int?, val setebreddeMinCM: Int?,
-    val brukervektMinKG: Int?, val materialeTrekk: String?, val setedybdeMinCM: Int?,
-    val setedybdeMaksCM: Int?, val setehoydeMaksCM: Int?, val setehoydeMinCM: Int?,
-    val totalVektKG: Int?, val lengdeCM: Int?, val breddeCM: Int?, val beregnetBarn: String?,
+    val fyllmateriale: String?,
+    val setebreddeMaksCM: Int?,
+    val setebreddeMinCM: Int?,
+    val brukervektMinKG: Int?,
+    val materialeTrekk: String?,
+    val setedybdeMinCM: Int?,
+    val setedybdeMaksCM: Int?,
+    val setehoydeMaksCM: Int?,
+    val setehoydeMinCM: Int?,
+    val totalVektKG: Int?,
+    val lengdeCM: Int?,
+    val breddeCM: Int?,
+    val beregnetBarn: String?,
     val brukervektMaksKG: Int?
 )
 
@@ -89,12 +100,10 @@ data class ProductSupplier(val id: String, val identifier: String, val name: Str
 fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = try {
     val onlyActiveAgreements =
         agreements.filter { it.published!!.isBefore(LocalDateTime.now()) && it.expired.isAfter(LocalDateTime.now()) }
-    val iso =  isoCategoryService.lookUpCode(isoCategory)
-    ProductDoc(
-        id = id.toString(),
+    val iso = isoCategoryService.lookUpCode(isoCategory)
+    ProductDoc(id = id.toString(),
         supplier = ProductSupplier(
-            id = supplier.id.toString(), identifier = supplier.identifier,
-            name = supplier.name
+            id = supplier.id.toString(), identifier = supplier.identifier, name = supplier.name
         ),
         title = title,
         articleName = articleName,
@@ -130,8 +139,17 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
 }
 
 private fun AgreementInfo.toDoc(): AgreementInfoDoc = AgreementInfoDoc(
-    id = id, identifier = identifier, title = title, label = AgreementLabels.matchTitleToLabel(title ?: "Annet"),
-    rank = rank, postNr = postNr, postIdentifier = postIdentifier, postTitle = postTitle, reference = reference,
+    id = id,
+    identifier = identifier,
+    title = title,
+    label = AgreementLabels.matchTitleToLabel(title ?: "Annet"),
+    rank = rank,
+    postNr = postNr,
+    postIdentifier = postIdentifier,
+    postTitle = postTitle,
+    postId = postId,
+    refNr = refNr,
+    reference = reference,
     expired = expired
 )
 
@@ -155,11 +173,7 @@ private fun Attributes.toDoc(): AttributesDoc {
 
 
 fun MediaInfo.toDoc(): MediaDoc = MediaDoc(
-    uri = uri,
-    priority = priority,
-    type = type,
-    text = text,
-    source = source
+    uri = uri, priority = priority, type = type, text = text, source = source
 )
 
 fun mapTechDataFilters(data: List<TechData>): TechDataFilters {
@@ -196,11 +210,20 @@ fun mapTechDataFilters(data: List<TechData>): TechDataFilters {
         }
     }
     return TechDataFilters(
-        fyllmateriale = fyllmateriale, setebreddeMaksCM = setebreddeMaksCM,
-        setebreddeMinCM = setebreddeMinCM, brukervektMinKG = brukervektMinKG, materialeTrekk = materialeTrekk,
-        setedybdeMinCM = setedybdeMinCM, setedybdeMaksCM = setedybdeMaksCM, setehoydeMaksCM = setehoydeMaksCM,
-        setehoydeMinCM = setehoydeMinCM, totalVektKG = totalVektKG, lengdeCM = lengdeCM, breddeCM = breddeCM,
-        beregnetBarn = beregnetBarn, brukervektMaksKG = brukervektMaksKG
+        fyllmateriale = fyllmateriale,
+        setebreddeMaksCM = setebreddeMaksCM,
+        setebreddeMinCM = setebreddeMinCM,
+        brukervektMinKG = brukervektMinKG,
+        materialeTrekk = materialeTrekk,
+        setedybdeMinCM = setedybdeMinCM,
+        setedybdeMaksCM = setedybdeMaksCM,
+        setehoydeMaksCM = setehoydeMaksCM,
+        setehoydeMinCM = setehoydeMinCM,
+        totalVektKG = totalVektKG,
+        lengdeCM = lengdeCM,
+        breddeCM = breddeCM,
+        beregnetBarn = beregnetBarn,
+        brukervektMaksKG = brukervektMaksKG
     )
 }
 
