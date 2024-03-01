@@ -11,7 +11,7 @@ class AgreementLabels {
         }
 
         private val labels = listOf(
-            AgreementLabel("Manuelle rullestoler", "Manuelle rullestoler, drivhjul med elektrisk motor og drivaggregat."),
+            AgreementLabel("Manuelle rullestoler", "Manuelle rullestoler og drivaggregat"),
             AgreementLabel("Elektriske rullestoler", "Elektriske rullestoler"),
             AgreementLabel("Hygienehjelpemidler", "Hygienehjelpemidler og støttestang"),
             AgreementLabel("Sitteputer", "Sitteputer - trykksårforebyggende"),
