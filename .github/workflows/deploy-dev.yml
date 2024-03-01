@@ -29,5 +29,6 @@ jobs:
       TEAM: "teamdigihot"
       CODEQL_ENABLED: true
       DRAFTS_MAX: 50
+      SKIP_DRAFT_RELEASE: ${{ github.ref_name != 'main' }}
     secrets:
       NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
