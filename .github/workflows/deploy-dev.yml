@@ -6,8 +6,12 @@ on:
       - ".gitignore"
       - "LICENCE"
       - "CODEOWNERS"
+      - ".github/workflows/deploy-rollback.yml"
+      - ".github/workflows/deploy-prod.yml"
+      - ".github/workflows/deploy-dev.yml"
     branches:
       - main
+      - 'hotfix/**'
 
 jobs:
   call-workflow:
@@ -20,7 +24,7 @@ jobs:
     uses: navikt/pam-deploy/.github/workflows/deploy-dev.yml@v7
     with:
       NAIS_RESOURCE: ".nais/nais.yml"
-      NAIS_VARS: ".nais/nais-dev.json"
+      NAIS_VARS: ".nais/nais_dev-gcp.json"
       JAVA_VERSION: 17
       TEAM: "teamdigihot"
       CODEQL_ENABLED: true
