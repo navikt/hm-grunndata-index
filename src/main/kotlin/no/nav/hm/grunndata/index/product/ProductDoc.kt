@@ -33,7 +33,6 @@ data class ProductDoc(
     val createdBy: String,
     val updatedBy: String,
     val filters: TechDataFilters,
-    val agreementInfo: AgreementInfoDoc?,
     val agreements: List<AgreementInfoDoc> = emptyList(),
     val hasAgreement: Boolean = false,
 ) : SearchDoc
@@ -128,7 +127,6 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
         expired = expired,
         createdBy = createdBy,
         updatedBy = updatedBy,
-        agreementInfo = onlyActiveAgreements.firstOrNull()?.toDoc(),
         agreements = onlyActiveAgreements.map { it.toDoc() },
         hasAgreement = onlyActiveAgreements.isNotEmpty(),
         filters = mapTechDataFilters(techData))
