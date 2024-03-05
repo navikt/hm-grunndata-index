@@ -14,10 +14,15 @@ on:
         description: 'What version?'
         required: true
         type: string
+      team:
+        description: 'What team?'
+        required: true
+        default: teamdigihot
+        type: string
 env:
   VERSION_TAG: ${{ inputs.version }}
   CLUSTER: ${{ inputs.cluster }}
-  IMAGE: europe-north1-docker.pkg.dev/${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}/teamdigihot/${{ github.event.repository.name }}:${{ inputs.version }}
+  IMAGE: europe-north1-docker.pkg.dev/${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}/${{inputs.team}}/${{ github.event.repository.name }}:${{ inputs.version }}
 jobs:
   deploy-direct:
     permissions:

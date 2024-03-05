@@ -8,41 +8,6 @@
     "accessory": {
       "type": "boolean"
     },
-    "agreementInfo": {
-      "properties": {
-        "id": {
-          "type": "keyword"
-        },
-        "label": {
-          "type": "keyword"
-        },
-        "identifier": {
-          "type": "keyword"
-        },
-        "postIdentifier": {
-          "type": "keyword"
-        },
-        "postTitle": {
-          "type": "text"
-        },
-        "postNr": {
-          "type": "long"
-        },
-        "rank": {
-          "type": "long"
-        },
-        "reference": {
-          "type": "keyword",
-          "copy_to": [
-            "keywords_bag"
-          ]
-        },
-        "expired": {
-          "type": "date",
-          "format": "strict_date_optional_time"
-        }
-      }
-    },
     "agreements": {
       "properties": {
         "expired": {
@@ -69,6 +34,9 @@
           "type": "long"
         },
         "postTitle": {
+          "type": "keyword"
+        },
+        "postId": {
           "type": "keyword"
         },
         "rank": {
