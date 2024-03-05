@@ -20,7 +20,7 @@ class AgreementLabels {
             AgreementLabel("Senger", "Senger, sengebunner, madrasser, hjertebrett og sengebord"),
             AgreementLabel("Stoler med oppreisingsfunksjon", "Stoler med oppreisingsfunksjon"),
             AgreementLabel("Kalendere", "Kalendere, dagsplanleggere og tidtakere"),
-            AgreementLabel("Sykler", "Sykler, sykkelfronter og støttehjul"),
+            AgreementLabel("Sykler", "Sykler og støttehjul"),
             AgreementLabel("overflytting, vending og posisjonering", "Overflytting, vending og posisjonering"),
             AgreementLabel("kjøkken og bad", "Elektrisk hev- og senkfunksjon til innredning på kjøkken og bad"),
             AgreementLabel("Omgivelseskontroll", "Omgivelseskontroll"),
