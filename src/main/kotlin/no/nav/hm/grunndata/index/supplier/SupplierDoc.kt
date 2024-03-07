@@ -9,6 +9,9 @@ data class SupplierDoc(
     val identifier: String,
     val name: String,
     val address: String?,
+    val postNr: String?,
+    val postLocation: String?,
+    val countryCode: String?,
     val email: String?,
     val phone: String?,
     val homepage: String?,
@@ -18,7 +21,8 @@ data class SupplierDoc(
     val updated: LocalDateTime) : SearchDoc
 
 fun SupplierDTO.toDoc(): SupplierDoc = SupplierDoc(
-    id = id.toString(), identifier = identifier, name = name, address = info.address, email = info.email,
+    id = id.toString(), identifier = identifier, name = name, address = info.address, postNr = info.postNr,
+    postLocation = info.postLocation, countryCode = info.countryCode, email = info.email,
     phone = info.phone, homepage = info.homepage, createdBy = createdBy, updatedBy = updatedBy,
     created = created, updated = updated
 )

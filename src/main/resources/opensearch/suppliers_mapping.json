@@ -4,6 +4,15 @@
     "address": {
       "type": "text"
     },
+    "postNr": {
+      "type": "keyword"
+    },
+    "postLocation": {
+      "type": "keyword"
+    },
+    "countryCode": {
+      "type": "keyword"
+    },
     "created": {
       "type": "date",
       "format": "strict_date_optional_time"
