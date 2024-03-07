@@ -29,6 +29,9 @@
     "id": {
       "type": "keyword"
     },
+    "status": {
+      "type": "keyword"
+    },
     "identifier": {
       "type": "keyword"
     },
