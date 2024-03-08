@@ -1,8 +1,10 @@
 package no.nav.hm.grunndata.index.product
 
+import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.rapid.dto.*
 import no.nav.hm.grunndata.index.SearchDoc
 import no.nav.hm.grunndata.index.agreement.AgreementLabels
+import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.*
 
@@ -63,6 +65,7 @@ data class AttributesDoc(
     val url: String? = null,
     val bestillingsordning: Boolean? = null,
     val digitalSoknad: Boolean? = null,
+    val sortimentKategori: String? = null,
     val pakrevdGodkjenningskurs: PakrevdGodkjenningskurs? = null,
     val produkttype: Produkttype? = null,
     val tenderId: String? = null,
@@ -162,6 +165,7 @@ private fun Attributes.toDoc(): AttributesDoc {
         url = url,
         bestillingsordning = bestillingsordning,
         digitalSoknad = digitalSoknad,
+        sortimentKategori = sortimentKategori,
         pakrevdGodkjenningskurs = pakrevdGodkjenningskurs,
         produkttype = produkttype,
         tenderId = tenderId,
