@@ -36,7 +36,7 @@
       "type": "keyword"
     },
     "name": {
-      "type": "text",
+      "type": "keyword",
       "index_prefixes": {
         "min_chars" : 1,
         "max_chars" : 5
