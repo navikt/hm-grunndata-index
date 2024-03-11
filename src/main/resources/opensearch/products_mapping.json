@@ -39,6 +39,9 @@
         "postId": {
           "type": "keyword"
         },
+        "refNr": {
+          "type": "keyword"
+        },
         "rank": {
           "type": "long"
         },
