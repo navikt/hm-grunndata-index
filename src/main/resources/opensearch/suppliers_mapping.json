@@ -36,7 +36,11 @@
       "type": "keyword"
     },
     "name": {
-      "type": "text"
+      "type": "text",
+      "index_prefixes": {
+        "min_chars" : 1,
+        "max_chars" : 5
+      }
     },
     "phone": {
       "enabled": false
