@@ -49,6 +49,10 @@
           "char_filter": [
             "html_strip"
           ]
+        },
+        "analyzer_startswith": {
+          "tokenizer": "keyword",
+          "filter": "uppercase"
         }
       }
     }

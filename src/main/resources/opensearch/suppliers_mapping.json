@@ -36,11 +36,15 @@
       "type": "keyword"
     },
     "name": {
-      "type": "keyword",
-      "index_prefixes": {
-        "min_chars" : 1,
-        "max_chars" : 5
-      }
+      "type": "text",
+      "copy_to": [
+        "name_startswith"
+      ]
+    },
+    "name_startswith": {
+      "type": "text",
+      "search_analyzer": "analyzer_startswith",
+      "index_analyzer": "analyzer_startswith"
     },
     "phone": {
       "enabled": false
