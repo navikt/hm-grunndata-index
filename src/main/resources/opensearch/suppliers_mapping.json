@@ -43,8 +43,7 @@
     },
     "name_startswith": {
       "type": "text",
-      "search_analyzer": "analyzer_startswith",
-      "index_analyzer": "analyzer_startswith"
+      "analyzer": "analyzer_startswith"
     },
     "phone": {
       "enabled": false
