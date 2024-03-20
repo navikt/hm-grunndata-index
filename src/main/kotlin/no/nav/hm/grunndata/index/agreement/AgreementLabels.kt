@@ -17,7 +17,7 @@ class AgreementLabels {
             AgreementLabel("Sitteputer", "Sitteputer - trykksårforebyggende"),
             AgreementLabel("Arbeidsstoler", "Arbeidsstoler, arbeidsbord, trillebord og spesielle sittemøbler"),
             AgreementLabel("Ganghjelpemidler", "Ganghjelpemidler"),
-            AgreementLabel("Senger", "Senger, sengebunner, madrasser, hjertebrett og sengebord"),
+            AgreementLabel("Senger", "Senger, sengebunner, skummadrasser, hjertebrett og sengebord"),
             AgreementLabel("Stoler med oppreisingsfunksjon", "Stoler med oppreisingsfunksjon"),
             AgreementLabel("Kalendere", "Kalendere, dagsplanleggere og tidtakere"),
             AgreementLabel("Sykler", "Sykler og støttehjul"),
