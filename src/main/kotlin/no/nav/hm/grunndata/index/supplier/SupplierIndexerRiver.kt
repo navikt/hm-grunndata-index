@@ -38,7 +38,7 @@ class SupplierIndexerRiver(river: RiverHead, private val objectMapper: ObjectMap
         val dtoVersion = packet["dtoVersion"].asLong()
         if (dtoVersion > rapidDTOVersion) LOG.warn("this event dto version $dtoVersion is newer than our version: $rapidDTOVersion")
         val dto = objectMapper.treeToValue(packet["payload"], SupplierDTO::class.java)
-        LOG.info("indexing supplier id: ${dto.id} name: ${dto.name}")
+        LOG.info("indexing supplier id: ${dto.id} name: ${dto.name} with status ${dto.status}")
         supplierIndexer.index(dto.toDoc())
     }
 }
