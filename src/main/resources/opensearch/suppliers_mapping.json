@@ -38,7 +38,8 @@
     "name": {
       "type": "text",
       "copy_to": [
-        "name_startswith"
+        "name_startswith",
+        "name_keyword"
       ]
     },
     "name_startswith": {
@@ -54,6 +55,9 @@
     },
     "updatedBy": {
       "enabled": false
+    },
+    "name_keyword": {
+      "type": "keyword"
     }
   }
 }
