@@ -57,7 +57,8 @@
       "enabled": false
     },
     "name_keyword": {
-      "type": "keyword"
+      "type": "keyword",
+      "normalizer": "lowercase_normalizer"
     }
   }
 }
