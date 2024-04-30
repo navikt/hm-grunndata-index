@@ -30,7 +30,6 @@ class ExternalProductIndexer(
     }
 
     init {
-
         try {
             initAlias()
         } catch (e: Exception) {
@@ -41,7 +40,7 @@ class ExternalProductIndexer(
     }
 
     fun reIndex(alias: Boolean) {
-        val indexName = createIndexName(IndexType.external_product)
+        val indexName = createIndexName(IndexType.external_products)
         if (!indexExists(indexName)) {
             LOG.info("creating index $indexName")
             createIndex(indexName)
