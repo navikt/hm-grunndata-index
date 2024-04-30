@@ -82,6 +82,8 @@ kafka:
 
 agreements:
   aliasName: ${AGREEMENTS_ALIASNAME:agreements}
+external_products:
+  aliasName: ${EXTERNAL_PRODUCTS_ALIASNAME:external_products}
 suppliers:
   aliasName: ${SUPPLIERS_ALIASNAME:suppliers}
 products:
@@ -92,4 +94,3 @@ news:
 grunndata:
   db:
     url: ${GRUNNDATA_DB_URL:`http://localhost:8888`}
-
