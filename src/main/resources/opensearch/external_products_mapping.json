@@ -77,32 +77,6 @@
             }
           }
         },
-        "bestillingsordning": {
-          "type": "boolean"
-        },
-        "digitalSoknad": {
-          "type": "boolean"
-        },
-        "sortimentKategori": {
-          "type": "text",
-          "analyzer": "norwegian"
-        },
-        "pakrevdGodkjenningskurs": {
-          "properties": {
-            "tittel": {
-              "enabled": false
-            },
-            "isokode": {
-              "type": "keyword"
-            },
-            "kursId": {
-              "type": "long"
-            }
-          }
-        },
-        "produkttype": {
-          "type": "keyword"
-        },
         "series": {
           "type": "keyword",
           "copy_to": [
