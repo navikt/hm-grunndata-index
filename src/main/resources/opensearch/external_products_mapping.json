@@ -5,9 +5,6 @@
       "type": "keyword",
       "copy_to": "keywords"
     },
-    "accessory": {
-      "type": "boolean"
-    },
     "agreements": {
       "properties": {
         "expired": {
@@ -70,13 +67,6 @@
             "keywords_bag"
           ]
         },
-        "compatibleWith": {
-          "properties": {
-            "seriesIds": {
-              "type": "keyword"
-            }
-          }
-        },
         "series": {
           "type": "keyword",
           "copy_to": [
@@ -88,9 +78,6 @@
     "created": {
       "type": "date",
       "format": "strict_date_optional_time"
-    },
-    "createdBy": {
-      "type": "keyword"
     },
     "data": {
       "properties": {
@@ -108,55 +95,6 @@
     "expired": {
       "type": "date",
       "format": "strict_date_optional_time"
-    },
-    "filters": {
-      "properties": {
-        "beregnetBarn": {
-          "type": "keyword"
-        },
-        "breddeCM": {
-          "type": "long"
-        },
-        "brukervektMaksKG": {
-          "type": "long"
-        },
-        "brukervektMinKG": {
-          "type": "long"
-        },
-        "fyllmateriale": {
-          "type": "keyword"
-        },
-        "lengdeCM": {
-          "type": "long"
-        },
-        "materialeTrekk": {
-          "type": "keyword"
-        },
-        "setebreddeMaksCM": {
-          "type": "long"
-        },
-        "setebreddeMinCM": {
-          "type": "long"
-        },
-        "setedybdeMaksCM": {
-          "type": "long"
-        },
-        "setedybdeMinCM": {
-          "type": "long"
-        },
-        "setehoydeMaksCM": {
-          "type": "long"
-        },
-        "setehoydeMinCM": {
-          "type": "long"
-        },
-        "totalVektKG": {
-          "type": "long"
-        },
-        "iso": {
-          "type": "keyword"
-        }
-      }
     },
     "hasAgreement": {
       "type": "boolean"
@@ -213,9 +151,6 @@
     "seriesId": {
       "type": "keyword"
     },
-    "sparePart": {
-      "type": "boolean"
-    },
     "status": {
       "type": "keyword"
     },
@@ -262,9 +197,6 @@
     "updated": {
       "type": "date",
       "format": "strict_date_optional_time"
-    },
-    "updatedBy": {
-      "type": "keyword"
     },
     "keywords_bag": {
       "type": "text",
