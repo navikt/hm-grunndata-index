@@ -23,17 +23,17 @@ data class ExternalProductDoc(
     val isoCategoryText: String?,
     val isoCategoryTextShort: String?,
     val isoSearchTag: List<String>?,
-    val accessory: Boolean = false,
-    val sparePart: Boolean = false,
+    // FILTERED: val accessory: Boolean = false,
+    // FILTERED: val sparePart: Boolean = false,
     val seriesId: String? = null,
     val data: List<TechData> = emptyList(),
     val media: List<ExternalMediaDoc> = emptyList(),
     val created: LocalDateTime,
     val updated: LocalDateTime,
     val expired: LocalDateTime,
-    val createdBy: String,
-    val updatedBy: String,
-    val filters: ExternalTechDataFilters,
+    // FILTERED: val createdBy: String,
+    // FILTERED: val updatedBy: String,
+    // FILTERED: val filters: ExternalTechDataFilters,
     val agreements: List<ExternalAgreementInfoDoc> = emptyList(),
     val hasAgreement: Boolean = false,
 ) : SearchDoc
@@ -54,8 +54,8 @@ data class ExternalAgreementInfoDoc(
 )
 
 data class ExternalAttributesDoc(
-    val manufacturer: String? = null,
-    val compatibleWith: CompatibleWith? = null,
+    // FILTERED: val manufacturer: String? = null,
+    // FILTERED: val compatibleWith: CompatibleWith? = null,
     val keywords: List<String>? = null,
     val series: String? = null,
     val shortdescription: String? = null,
@@ -66,8 +66,8 @@ data class ExternalAttributesDoc(
     // FILTERED: val sortimentKategori: String? = null,
     // FILTERED: val pakrevdGodkjenningskurs: PakrevdGodkjenningskurs? = null,
     // FILTERED: val produkttype: Produkttype? = null,
-    val tenderId: String? = null,
-    val hasTender: Boolean? = null
+    // FILTERED: val tenderId: String? = null,
+    // FILTERED: val hasTender: Boolean? = null
 )
 
 data class ExternalMediaDoc(
@@ -76,23 +76,6 @@ data class ExternalMediaDoc(
     val type: MediaType = MediaType.IMAGE,
     val text: String? = null,
     val source: MediaSourceType = MediaSourceType.HMDB
-)
-
-data class ExternalTechDataFilters(
-    val fyllmateriale: String?=null,
-    val setebreddeMaksCM: Int??=null,
-    val setebreddeMinCM: Int??=null,
-    val brukervektMinKG: Int??=null,
-    val materialeTrekk: String??=null,
-    val setedybdeMinCM: Int??=null,
-    val setedybdeMaksCM: Int??=null,
-    val setehoydeMaksCM: Int??=null,
-    val setehoydeMinCM: Int??=null,
-    val totalVektKG: Int??=null,
-    val lengdeCM: Int??=null,
-    val breddeCM: Int??=null,
-    val beregnetBarn: String??=null,
-    val brukervektMaksKG: Int??=null
 )
 
 data class ExternalProductSupplier(val id: String, val identifier: String, val name: String)
@@ -118,21 +101,20 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ExternalProdu
         isoCategoryText = iso?.isoText,
         isoCategoryTextShort = iso?.isoTextShort,
         isoSearchTag = isoCategoryService.getHigherLevelsInBranch(isoCategory).map { it.searchWords }.flatten(),
-        accessory = accessory,
-        sparePart = sparePart,
+        // FILTERED: accessory = accessory,
+        // FILTERED: sparePart = sparePart,
         seriesId = seriesIdentifier ?: seriesId, // backovercompatible with hmdbIdentifier
         data = techData,
         media = media.map { it.toDoc() }.sortedBy { it.priority },
         created = created,
         updated = updated,
         expired = expired,
-        createdBy = createdBy,
-        updatedBy = updatedBy,
+        // FILTERED: createdBy = createdBy,
+        // FILTERED: updatedBy = updatedBy,
         agreements = onlyActiveAgreements.map { it.toDoc() },
         hasAgreement = onlyActiveAgreements.isNotEmpty(),
-        filters = mapExternalTechDataFilters(techData))
-
-
+        // FILTERED: filters = mapExternalTechDataFilters(techData))
+    )
 } catch (e: Exception) {
     println(isoCategory)
     throw e
@@ -155,7 +137,7 @@ private fun AgreementInfo.toDoc(): ExternalAgreementInfoDoc = ExternalAgreementI
 
 private fun Attributes.toDoc(): ExternalAttributesDoc {
     return ExternalAttributesDoc(
-        manufacturer = manufacturer,
+        // FILTERED: manufacturer = manufacturer,
         keywords = keywords,
         series = series,
         shortdescription = shortdescription,
@@ -166,72 +148,14 @@ private fun Attributes.toDoc(): ExternalAttributesDoc {
         // FILTERED: sortimentKategori = sortimentKategori,
         // FILTERED: pakrevdGodkjenningskurs = pakrevdGodkjenningskurs,
         // FILTERED: produkttype = produkttype,
-        tenderId = tenderId,
-        hasTender = hasTender,
-        compatibleWith = compatibleWidth
+        // FILTERED: tenderId = tenderId,
+        // FILTERED: hasTender = hasTender,
+        // FILTERED: compatibleWith = compatibleWidth
     )
 }
 
 fun MediaInfo.toDoc(): ExternalMediaDoc = ExternalMediaDoc(
     uri = uri, priority = priority, type = type, text = text, source = source
 )
-
-fun mapExternalTechDataFilters(data: List<TechData>): ExternalTechDataFilters {
-    try {
-
-        var fyllmateriale: String? = null
-        var setebreddeMaksCM: Int? = null
-        var setebreddeMinCM: Int? = null
-        var brukervektMinKG: Int? = null
-        var materialeTrekk: String? = null
-        var setedybdeMinCM: Int? = null
-        var setedybdeMaksCM: Int? = null
-        var setehoydeMaksCM: Int? = null
-        var setehoydeMinCM: Int? = null
-        var totalVektKG: Int? = null
-        var lengdeCM: Int? = null
-        var breddeCM: Int? = null
-        var beregnetBarn: String? = null
-        var brukervektMaksKG: Int? = null
-        data.forEach {
-            when (it.key) {
-                "Fyllmateriale" -> fyllmateriale = it.value
-                "Setebredde maks" -> setebreddeMaksCM = it.value.decimalToInt()
-                "Setebredde min" -> setebreddeMinCM = it.value.decimalToInt()
-                "Brukervekt min" -> brukervektMinKG = it.value.decimalToInt()
-                "Materiale i trekk" -> materialeTrekk = it.value
-                "Setedybde min" -> setedybdeMinCM = it.value.decimalToInt()
-                "Setedybde maks" -> setedybdeMaksCM = it.value.decimalToInt()
-                "Setehøyde maks" -> setehoydeMaksCM = it.value.decimalToInt()
-                "Setehøyde min" -> setehoydeMinCM = it.value.decimalToInt()
-                "Totalvekt" -> totalVektKG = it.value.decimalToInt()
-                "Lengde" -> lengdeCM = it.value.decimalToInt()
-                "Bredde" -> breddeCM = it.value.decimalToInt()
-                "Beregnet på barn" -> beregnetBarn = it.value
-                "Brukervekt maks" -> brukervektMaksKG = it.value.decimalToInt()
-            }
-        }
-        return ExternalTechDataFilters(
-            fyllmateriale = fyllmateriale,
-            setebreddeMaksCM = setebreddeMaksCM,
-            setebreddeMinCM = setebreddeMinCM,
-            brukervektMinKG = brukervektMinKG,
-            materialeTrekk = materialeTrekk,
-            setedybdeMinCM = setedybdeMinCM,
-            setedybdeMaksCM = setedybdeMaksCM,
-            setehoydeMaksCM = setehoydeMaksCM,
-            setehoydeMinCM = setehoydeMinCM,
-            totalVektKG = totalVektKG,
-            lengdeCM = lengdeCM,
-            breddeCM = breddeCM,
-            beregnetBarn = beregnetBarn,
-            brukervektMaksKG = brukervektMaksKG
-        )
-    }
-    catch (e: Exception) {
-        println("Error mapping techdatafilters ${e.message}")
-        return ExternalTechDataFilters()
-    }
-}
 
 private fun String.decimalToInt(): Int? = substringBeforeLast(".").toInt()

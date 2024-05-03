@@ -1,10 +1,8 @@
 package no.nav.hm.grunndata.index.product
 
-import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.rapid.dto.*
 import no.nav.hm.grunndata.index.SearchDoc
 import no.nav.hm.grunndata.index.agreement.AgreementLabels
-import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.*
 
@@ -82,19 +80,19 @@ data class MediaDoc(
 
 data class TechDataFilters(
     val fyllmateriale: String?=null,
-    val setebreddeMaksCM: Int??=null,
-    val setebreddeMinCM: Int??=null,
-    val brukervektMinKG: Int??=null,
-    val materialeTrekk: String??=null,
-    val setedybdeMinCM: Int??=null,
-    val setedybdeMaksCM: Int??=null,
-    val setehoydeMaksCM: Int??=null,
-    val setehoydeMinCM: Int??=null,
-    val totalVektKG: Int??=null,
-    val lengdeCM: Int??=null,
-    val breddeCM: Int??=null,
-    val beregnetBarn: String??=null,
-    val brukervektMaksKG: Int??=null
+    val setebreddeMaksCM: Int?=null,
+    val setebreddeMinCM: Int?=null,
+    val brukervektMinKG: Int?=null,
+    val materialeTrekk: String?=null,
+    val setedybdeMinCM: Int?=null,
+    val setedybdeMaksCM: Int?=null,
+    val setehoydeMaksCM: Int?=null,
+    val setehoydeMinCM: Int?=null,
+    val totalVektKG: Int?=null,
+    val lengdeCM: Int?=null,
+    val breddeCM: Int?=null,
+    val beregnetBarn: String?=null,
+    val brukervektMaksKG: Int?=null
 )
 
 data class ProductSupplier(val id: String, val identifier: String, val name: String)
@@ -236,6 +234,5 @@ fun mapTechDataFilters(data: List<TechData>): TechDataFilters {
         return TechDataFilters()
     }
 }
-
 
 private fun String.decimalToInt(): Int? = substringBeforeLast(".").toInt()
