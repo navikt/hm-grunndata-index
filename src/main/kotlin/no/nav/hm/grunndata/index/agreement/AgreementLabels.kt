@@ -30,7 +30,7 @@ class AgreementLabels {
             AgreementLabel("hjelpemidler til trapp", "Løfteplattformer og hjelpemidler til trapp"),
             AgreementLabel("Varsling", "Varsling"),
             AgreementLabel("Kommunikasjon", "Kommunikasjon"),
-            AgreementLabel("Kjøreposer", "Kjøreposer, varmeposer og regncape"),
+            AgreementLabel("Kjøreposer", "Kjøreposer og regncape"),
             AgreementLabel("Ståstativ", "Ståstativ og arm- kropps- og bentreningshjelpemidler"),
             AgreementLabel("Hørsel", "Hørsel"),
             AgreementLabel("Syn", "Syn"),
