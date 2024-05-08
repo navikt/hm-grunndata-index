@@ -2,8 +2,7 @@
   "date_detection": false,
   "properties": {
     "id": {
-      "type": "keyword",
-      "copy_to": "keywords"
+      "type": "keyword"
     },
     "agreements": {
       "properties": {
@@ -15,11 +14,7 @@
           "type": "keyword"
         },
         "label": {
-          "type": "keyword",
-          "copy_to": [
-            "keywords_suggest",
-            "keywords_bag"
-          ]
+          "type": "keyword"
         },
         "identifier": {
           "type": "keyword"
@@ -43,10 +38,7 @@
           "type": "long"
         },
         "reference": {
-          "type": "keyword",
-          "copy_to": [
-            "keywords_bag"
-          ]
+          "type": "keyword"
         }
       }
     },
@@ -60,18 +52,8 @@
           "type": "text",
           "analyzer": "norwegian_html"
         },
-        "keywords": {
-          "type": "keyword",
-          "copy_to": [
-            "keywords_suggest",
-            "keywords_bag"
-          ]
-        },
         "series": {
-          "type": "keyword",
-          "copy_to": [
-            "keywords_bag"
-          ]
+          "type": "keyword"
         }
       }
     },
@@ -100,32 +82,21 @@
       "type": "boolean"
     },
     "hmsArtNr": {
-      "type": "keyword",
-      "copy_to": [
-        "keywords_bag"
-      ]
+      "type": "keyword"
     },
     "identifier": {
       "type": "keyword"
     },
     "isoCategory": {
-      "type": "keyword",
-      "copy_to": "keywords_suggest"
+      "type": "keyword"
     },
     "isoCategoryTitle": {
       "type": "text",
-      "analyzer": "norwegian",
-      "copy_to": [
-        "keywords_suggest",
-        "isoCategoryName"
-      ]
+      "analyzer": "norwegian"
     },
     "isoCategoryTitleShort": {
       "type": "text",
-      "analyzer": "norwegian",
-      "copy_to": [
-        "keywords_suggest"
-      ]
+      "analyzer": "norwegian"
     },
     "isoCategoryText": {
       "type": "text",
@@ -134,16 +105,6 @@
     "isoCategoryTextShort": {
       "type": "text",
       "analyzer": "norwegian"
-    },
-    "isoCategoryName": {
-      "type": "keyword"
-    },
-    "isoSearchTag": {
-      "type": "keyword",
-      "copy_to": [
-        "keywords_suggest",
-        "keywords_bag"
-      ]
     },
     "media": {
       "enabled": false
@@ -163,59 +124,24 @@
           "type": "keyword"
         },
         "name": {
-          "type": "keyword",
-          "copy_to": [
-            "keywords_suggest",
-            "keywords_bag"
-          ]
+          "type": "keyword"
         }
       }
     },
     "supplierRef": {
-      "type": "keyword",
-      "copy_to": [
-        "keywords_bag"
-      ]
+      "type": "keyword"
     },
     "title": {
       "type": "text",
-      "analyzer": "norwegian",
-      "copy_to": [
-        "keywords_suggest"
-      ]
+      "analyzer": "norwegian"
     },
     "articleName": {
       "type": "text",
-      "analyzer": "norwegian",
-      "copy_to": [
-        "articleName_keyword"
-      ]
-    },
-    "articleName_keyword": {
-      "type": "keyword"
+      "analyzer": "norwegian"
     },
     "updated": {
       "type": "date",
       "format": "strict_date_optional_time"
-    },
-    "keywords_bag": {
-      "type": "text",
-      "analyzer": "norwegian"
-    },
-    "keywords_suggest": {
-      "type": "completion",
-      "contexts": [
-        {
-          "name": "status",
-          "type": "category",
-          "path": "status"
-        },
-        {
-          "name": "agreements.id",
-          "type": "category",
-          "path": "agreements.id"
-        }
-      ]
     }
   }
 }

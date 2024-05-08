@@ -22,7 +22,7 @@ data class ExternalProductDoc(
     val isoCategoryTitleShort: String?,
     val isoCategoryText: String?,
     val isoCategoryTextShort: String?,
-    val isoSearchTag: List<String>?,
+    // FILTERED: val isoSearchTag: List<String>?,
     // FILTERED: val accessory: Boolean = false,
     // FILTERED: val sparePart: Boolean = false,
     val seriesId: String? = null,
@@ -100,7 +100,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ExternalProdu
         isoCategoryTitleShort = iso?.isoTitleShort,
         isoCategoryText = iso?.isoText,
         isoCategoryTextShort = iso?.isoTextShort,
-        isoSearchTag = isoCategoryService.getHigherLevelsInBranch(isoCategory).map { it.searchWords }.flatten(),
+        // FILTERED: isoSearchTag = isoCategoryService.getHigherLevelsInBranch(isoCategory).map { it.searchWords }.flatten(),
         // FILTERED: accessory = accessory,
         // FILTERED: sparePart = sparePart,
         seriesId = seriesIdentifier ?: seriesId, // backovercompatible with hmdbIdentifier
@@ -138,7 +138,7 @@ private fun AgreementInfo.toDoc(): ExternalAgreementInfoDoc = ExternalAgreementI
 private fun Attributes.toDoc(): ExternalAttributesDoc {
     return ExternalAttributesDoc(
         // FILTERED: manufacturer = manufacturer,
-        keywords = keywords,
+        // FILTERED: keywords = keywords,
         series = series,
         shortdescription = shortdescription,
         text = text,
