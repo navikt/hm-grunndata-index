@@ -56,7 +56,7 @@ data class ExternalAgreementInfoDoc(
 data class ExternalAttributesDoc(
     // FILTERED: val manufacturer: String? = null,
     // FILTERED: val compatibleWith: CompatibleWith? = null,
-    val keywords: List<String>? = null,
+    // FILTERED: val keywords: List<String>? = null,
     val series: String? = null,
     val shortdescription: String? = null,
     val text: String? = null,
