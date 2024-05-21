@@ -82,7 +82,8 @@ data class ExternalProductSupplier(val id: String, val identifier: String, val n
 
 fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ExternalProductDoc = try {
     val onlyActiveAgreements =
-        agreements.filter { it.published!!.isBefore(LocalDateTime.now()) && it.expired.isAfter(LocalDateTime.now()) }
+        agreements.filter { it.published!!.isBefore(LocalDateTime.now())
+                && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE}
     val iso = isoCategoryService.lookUpCode(isoCategory)
     ExternalProductDoc(id = id.toString(),
         supplier = ExternalProductSupplier(
