@@ -177,7 +177,7 @@
           "type": "long"
         },
         "totalVektKG": {
-          "type": "long"
+          "type": "float"
         },
         "iso": {
           "type": "keyword"

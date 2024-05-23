@@ -88,7 +88,7 @@ data class TechDataFilters(
     val setedybdeMaksCM: Int?=null,
     val setehoydeMaksCM: Int?=null,
     val setehoydeMinCM: Int?=null,
-    val totalVektKG: Int?=null,
+    val totalVektKG: Float?=null,
     val lengdeCM: Int?=null,
     val breddeCM: Int?=null,
     val beregnetBarn: String?=null,
@@ -190,7 +190,7 @@ fun mapTechDataFilters(data: List<TechData>): TechDataFilters {
         var setedybdeMaksCM: Int? = null
         var setehoydeMaksCM: Int? = null
         var setehoydeMinCM: Int? = null
-        var totalVektKG: Int? = null
+        var totalVektKG: Float? = null
         var lengdeCM: Int? = null
         var breddeCM: Int? = null
         var beregnetBarn: String? = null
@@ -206,7 +206,7 @@ fun mapTechDataFilters(data: List<TechData>): TechDataFilters {
                 "Setedybde maks" -> setedybdeMaksCM = it.value.decimalToInt()
                 "Setehøyde maks" -> setehoydeMaksCM = it.value.decimalToInt()
                 "Setehøyde min" -> setehoydeMinCM = it.value.decimalToInt()
-                "Totalvekt" -> totalVektKG = it.value.decimalToInt()
+                "Totalvekt" -> totalVektKG = it.value.decimalToFloat()
                 "Lengde" -> lengdeCM = it.value.decimalToInt()
                 "Bredde" -> breddeCM = it.value.decimalToInt()
                 "Beregnet på barn" -> beregnetBarn = it.value
@@ -236,4 +236,5 @@ fun mapTechDataFilters(data: List<TechData>): TechDataFilters {
     }
 }
 
-private fun String.decimalToInt(): Int? = substringBeforeLast(".").toInt()
+private fun String.decimalToInt(): Int = substringBeforeLast(".").toInt()
+private fun String.decimalToFloat(): Float = this.toFloat()
