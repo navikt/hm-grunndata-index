@@ -236,5 +236,5 @@ fun mapTechDataFilters(data: List<TechData>): TechDataFilters {
     }
 }
 
-private fun String.decimalToInt(): Int = substringBeforeLast(".").toInt()
-private fun String.decimalToFloat(): Float = this.toFloat()
+private fun String.decimalToInt(): Int = if (this.isNotEmpty()) substringBeforeLast(".").toInt() else 0
+private fun String.decimalToFloat(): Float = if (this.isNotEmpty()) this.toFloat() else 0.0F
