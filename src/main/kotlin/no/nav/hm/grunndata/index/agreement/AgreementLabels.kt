@@ -27,7 +27,7 @@ class AgreementLabels {
             AgreementLabel("Vogner", "Vogner og aktivitetshjelpemidler"),
             AgreementLabel("Høreapparater", "Høreapparater"),
             AgreementLabel("Madrasser med trykksårforebyggende egenskaper", "Madrasser - trykksårforebyggende"),
-            AgreementLabel("Løfteplattformer og hjelpemidler i trapp", "Løfteplattformer og hjelpemidler i trappå"),
+            AgreementLabel("Løfteplattformer og hjelpemidler i trapp", "Løfteplattformer og hjelpemidler i trapp"),
             AgreementLabel("Varsling", "Varsling"),
             AgreementLabel("Kommunikasjon", "Kommunikasjon"),
             AgreementLabel("Kjøreposer", "Kjøreposer og regncape"),
