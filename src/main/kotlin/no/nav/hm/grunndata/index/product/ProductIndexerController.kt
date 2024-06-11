@@ -3,6 +3,7 @@ package no.nav.hm.grunndata.index.product
 import io.micronaut.http.annotation.*
 import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
+import java.util.UUID
 import org.slf4j.LoggerFactory
 
 @Controller("/internal/index/products")
@@ -17,6 +18,11 @@ class ProductIndexerController(private val productIndexer: ProductIndexer) {
         productIndexer.reIndex(alias)
     }
 
+    @Post("/supplier/{supplierId}")
+    fun indexProductsBySupplierId(supplierId: UUID) {
+        productIndexer.reIndexBySupplierId(supplierId)
+    }
+
     @Put("/alias/{indexName}")
     fun aliasProducts(indexName: String) {
         productIndexer.updateAlias(indexName)
@@ -24,6 +30,7 @@ class ProductIndexerController(private val productIndexer: ProductIndexer) {
 
     @Get("/alias")
     fun getAlias() = productIndexer.getAlias()
+
 
 
 }

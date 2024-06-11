@@ -79,6 +79,18 @@ class ProductIndexer(private val indexer: Indexer,
         }
     }
 
+    fun reIndexBySupplierId(supplierId: UUID) {
+        val page = gdbApiClient.findProductsBySupplierId(supplierId = supplierId,
+            size=3000, page = 0, sort="updated,asc")
+        if (page.numberOfElements>0) {
+            val products = page.content.map { it.toDoc(isoCategoryService)}.filter {
+                it.status != ProductStatus.DELETED
+            }
+            LOG.info("indexing ${products.size} products to $aliasName")
+            index(products)
+        }
+    }
+
     fun index(docs: List<ProductDoc>): BulkResponse = indexer.index(docs, aliasName)
 
 
