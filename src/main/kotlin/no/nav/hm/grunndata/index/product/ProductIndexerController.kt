@@ -23,6 +23,10 @@ class ProductIndexerController(private val productIndexer: ProductIndexer) {
         productIndexer.reIndexBySupplierId(supplierId)
     }
 
+    @Post("/series/{seriesId}")
+    fun indexProductsBySeriesId(seriesId: UUID) {
+        productIndexer.reIndexBySeriesId(seriesId)
+    }
     @Put("/alias/{indexName}")
     fun aliasProducts(indexName: String) {
         productIndexer.updateAlias(indexName)

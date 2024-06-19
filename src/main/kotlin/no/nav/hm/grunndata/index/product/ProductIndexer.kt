@@ -91,6 +91,19 @@ class ProductIndexer(private val indexer: Indexer,
         }
     }
 
+    fun reIndexBySeriesId(seriesId: UUID) {
+        val page = gdbApiClient.findProductsBySeriesId(seriesUUID = seriesId,
+            size=3000, page = 0, sort="updated,asc")
+        if (page.numberOfElements>0) {
+            val products = page.content.map { it.toDoc(isoCategoryService)}.filter {
+                it.status != ProductStatus.DELETED
+            }
+            LOG.info("indexing ${products.size} products to $aliasName")
+            index(products)
+        }
+    }
+
+
     fun index(docs: List<ProductDoc>): BulkResponse = indexer.index(docs, aliasName)
 
 
@@ -115,5 +128,7 @@ class ProductIndexer(private val indexer: Indexer,
     fun indexExists(indexName: String): Boolean = indexer.indexExists(indexName)
 
     fun initAlias() = indexer.initAlias(aliasName, settings, mapping)
+
+
 
 }

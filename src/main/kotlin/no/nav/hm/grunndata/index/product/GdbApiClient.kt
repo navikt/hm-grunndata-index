@@ -11,20 +11,32 @@ import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
 @Client("\${grunndata.db.url}")
 interface GdbApiClient {
 
-    @Get(uri="/api/v1/products", consumes = [APPLICATION_JSON])
-    fun findProducts(@QueryValue("updated") updated: String? = null,
-                     @QueryValue("size") size: Int? = null,
-                     @QueryValue("page") page: Int?=null,
-                     @QueryValue("sort") sort: String? = null): Page<ProductRapidDTO>
+    @Get(uri = "/api/v1/products", consumes = [APPLICATION_JSON])
+    fun findProducts(
+        @QueryValue("updated") updated: String? = null,
+        @QueryValue("size") size: Int? = null,
+        @QueryValue("page") page: Int? = null,
+        @QueryValue("sort") sort: String? = null
+    ): Page<ProductRapidDTO>
 
-    @Get(uri="/api/v1/products", consumes = [APPLICATION_JSON])
-    fun findProductsBySupplierId(@QueryValue("supplierId") supplierId: UUID? = null,
-                                 @QueryValue("size") size: Int? = null,
-                                 @QueryValue("page") page: Int?=null,
-                                 @QueryValue("sort") sort: String? = null): Page<ProductRapidDTO>
+    @Get(uri = "/api/v1/products", consumes = [APPLICATION_JSON])
+    fun findProductsBySupplierId(
+        @QueryValue("supplierId") supplierId: UUID? = null,
+        @QueryValue("size") size: Int? = null,
+        @QueryValue("page") page: Int? = null,
+        @QueryValue("sort") sort: String? = null
+    ): Page<ProductRapidDTO>
 
 
-    @Get(uri="/api/v1/isocategories", consumes = [APPLICATION_JSON])
+    @Get(uri = "/api/v1/products", consumes = [APPLICATION_JSON])
+    fun findProductsBySeriesId(
+        @QueryValue("seriesUUID") seriesUUID: UUID? = null,
+        @QueryValue("size") size: Int? = null,
+        @QueryValue("page") page: Int? = null,
+        @QueryValue("sort") sort: String? = null
+    ): Page<ProductRapidDTO>
+
+    @Get(uri = "/api/v1/isocategories", consumes = [APPLICATION_JSON])
     fun retrieveIsoCategories(): List<IsoCategoryDTO>
 
 }
