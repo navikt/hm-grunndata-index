@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 val jvmTarget = "17"
-val micronautVersion="4.4.2"
+val micronautVersion="4.5.0"
 val junitJupiterVersion = "5.9.0"
 val logbackClassicVersion = "1.4.12"
 val logbackEncoderVersion = "7.3"
@@ -23,7 +23,7 @@ plugins {
     kotlin("kapt") version "1.9.21"
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "4.2.1"
+    id("io.micronaut.application") version "4.4.0"
 }
 
 configurations.all {
@@ -113,7 +113,7 @@ tasks.withType<Test> {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "8.0.1"
+    gradleVersion = "8.5"
 }
 
 repositories {
