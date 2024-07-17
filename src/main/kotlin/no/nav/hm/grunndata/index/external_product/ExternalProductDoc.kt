@@ -16,7 +16,7 @@ data class ExternalProductDoc(
     val status: ProductStatus,
     val hmsArtNr: String? = null,
     val identifier: String,
-    val supplierRef: String,
+    // FILTERED: val supplierRef: String,
     val isoCategory: String,
     val isoCategoryTitle: String?,
     val isoCategoryTitleShort: String?,
@@ -48,8 +48,8 @@ data class ExternalAgreementInfoDoc(
     val postIdentifier: String? = null,
     val postTitle: String? = null,
     val postId: UUID? = null,
-    val refNr: String? = null,
-    val reference: String,
+    // FILTERED: val refNr: String? = null,
+    // FILTERED: val reference: String,
     val expired: LocalDateTime,
 )
 
@@ -95,7 +95,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ExternalProdu
         status = status,
         hmsArtNr = hmsArtNr,
         identifier = identifier,
-        supplierRef = supplierRef,
+        // FILTERED: supplierRef = supplierRef,
         isoCategory = isoCategory,
         isoCategoryTitle = iso?.isoTitle,
         isoCategoryTitleShort = iso?.isoTitleShort,
@@ -131,8 +131,8 @@ private fun AgreementInfo.toDoc(): ExternalAgreementInfoDoc = ExternalAgreementI
     postIdentifier = postIdentifier,
     postTitle = postTitle,
     postId = postId,
-    refNr = refNr,
-    reference = reference,
+    // FILTERED: refNr = refNr,
+    // FILTERED: reference = reference,
     expired = expired
 )
 
