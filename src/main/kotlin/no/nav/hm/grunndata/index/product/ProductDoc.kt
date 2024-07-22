@@ -24,6 +24,7 @@ data class ProductDoc(
     val isoSearchTag: List<String>?,
     val accessory: Boolean = false,
     val sparePart: Boolean = false,
+    val main: Boolean = !(accessory || sparePart),
     val seriesId: String? = null,
     val data: List<TechData> = emptyList(),
     val media: List<MediaDoc> = emptyList(),

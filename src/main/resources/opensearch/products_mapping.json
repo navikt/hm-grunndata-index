@@ -242,6 +242,9 @@
     "sparePart": {
       "type": "boolean"
     },
+    "main": {
+      "type": "boolean"
+    },
     "status": {
       "type": "keyword"
     },
