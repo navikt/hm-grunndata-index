@@ -74,6 +74,9 @@
           "properties": {
             "seriesIds": {
               "type": "keyword"
+            },
+            "productIds": {
+              "type": "keyword"
             }
           }
         },
