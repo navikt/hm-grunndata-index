@@ -102,7 +102,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
     val onlyActiveAgreements =
         agreements.filter { it.published!!.isBefore(LocalDateTime.now())
                 && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE }
-    val iso = isoCategoryService.lookUpCode(isoCategory)
+    val iso = isoCategoryService.lookUpCode(isoCategory) ?: isoCategoryService.getClosestLevelInBranch(isoCategory)
     ProductDoc(id = id.toString(),
         supplier = ProductSupplier(
             id = supplier.id.toString(), identifier = supplier.identifier, name = supplier.name

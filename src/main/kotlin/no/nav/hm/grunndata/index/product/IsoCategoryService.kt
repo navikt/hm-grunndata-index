@@ -29,6 +29,16 @@ class IsoCategoryService(gdbApiClient: GdbApiClient) {
         return isoCategories.values.filter { isoCode.startsWith(it.isoCode) }
     }
 
+    fun getClosestLevelInBranch(isoCode: String): IsoCategoryDTO? {
+        isoCategories.values.sortedByDescending { it.isoLevel }.forEach {
+            if (isoCode.startsWith(it.isoCode)) {
+                LOG.info("matched $isoCode with: ${it.isoCode} ${it.isoTitle} ${it.isoLevel}")
+                return it
+            }
+        }
+        return null
+    }
+
 }
 
 data class IsoCategoryDTO(
