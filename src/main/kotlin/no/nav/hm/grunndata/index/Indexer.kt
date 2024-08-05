@@ -2,9 +2,10 @@ package no.nav.hm.grunndata.index
 
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.micronaut.http.annotation.Delete
 import jakarta.inject.Singleton
-import no.nav.hm.grunndata.index.product.ProductIndexer
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import org.opensearch.action.admin.indices.alias.IndicesAliasesRequest
 import org.opensearch.action.admin.indices.alias.get.GetAliasesRequest
 import org.opensearch.action.bulk.BulkRequest
@@ -12,18 +13,13 @@ import org.opensearch.action.bulk.BulkResponse
 import org.opensearch.action.delete.DeleteRequest
 import org.opensearch.action.delete.DeleteResponse
 import org.opensearch.action.index.IndexRequest
-import org.opensearch.action.index.IndexResponse
 import org.opensearch.client.RequestOptions
 import org.opensearch.client.RestHighLevelClient
 import org.opensearch.client.indices.CreateIndexRequest
 import org.opensearch.client.indices.GetIndexRequest
 import org.opensearch.cluster.metadata.AliasMetadata
 import org.opensearch.common.xcontent.XContentType
-import org.opensearch.rest.RestStatus
 import org.slf4j.LoggerFactory
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Singleton
 class Indexer(private val client: RestHighLevelClient,

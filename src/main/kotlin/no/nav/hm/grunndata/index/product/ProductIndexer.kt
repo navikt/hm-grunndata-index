@@ -2,22 +2,15 @@ package no.nav.hm.grunndata.index.product
 
 import io.micronaut.context.annotation.Value
 import jakarta.inject.Singleton
+import java.time.LocalDateTime
+import java.util.UUID
 import no.nav.hm.grunndata.index.IndexType
 import no.nav.hm.grunndata.index.Indexer
-import no.nav.hm.grunndata.index.agreement.AgreementLabels
 import no.nav.hm.grunndata.index.createIndexName
-import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
-import org.opensearch.action.admin.indices.alias.get.GetAliasesRequest
 import org.opensearch.action.bulk.BulkResponse
 import org.opensearch.action.delete.DeleteResponse
-import org.opensearch.client.RequestOptions
-import org.opensearch.rest.RestStatus
 import org.slf4j.LoggerFactory
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 @Singleton
 class ProductIndexer(private val indexer: Indexer,

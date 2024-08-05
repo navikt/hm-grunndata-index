@@ -1,7 +1,7 @@
 version: '3'
 services:
   opensearchgrunndatadb:
-    image: opensearchproject/opensearch:2.8.0
+    image: opensearchproject/opensearch:2.11.1
     hostname: opensearchgrunndatadb
     container_name: opensearchgrunndatadb
     ports:
@@ -17,7 +17,7 @@ services:
   dashboardsgrunndatadb:
     depends_on:
       - opensearchgrunndatadb
-    image: opensearchproject/opensearch-dashboards:2.8.0
+    image: opensearchproject/opensearch-dashboards:2.11.1
     ports:
       - 5601:5601
     environment:
