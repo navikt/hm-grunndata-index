@@ -6,6 +6,7 @@ import no.nav.hm.grunndata.rapid.dto.AgreementPost
 import no.nav.hm.grunndata.index.SearchDoc
 import no.nav.hm.grunndata.rapid.dto.AgreementStatus
 import java.time.LocalDateTime
+import java.util.UUID
 
 data class AgreementDoc(
     override val id: String,
@@ -24,7 +25,8 @@ data class AgreementDoc(
     val createdBy: String,
     val updatedBy: String,
     val created: LocalDateTime,
-    val updated: LocalDateTime
+    val updated: LocalDateTime,
+    val pastAgreement: UUID? = null,
 ) : SearchDoc
 
 fun AgreementDTO.toDoc() : AgreementDoc = AgreementDoc (
@@ -32,4 +34,4 @@ fun AgreementDTO.toDoc() : AgreementDoc = AgreementDoc (
     title = title, label = AgreementLabels.matchTitleToLabel(title), resume = resume, text = text,
     reference = reference, published = published, expired = expired, attachments = attachments,
     createdBy = createdBy, updatedBy = updatedBy, created = created, updated = updated,
-    posts =  posts, isoCategory = isoCategory)
+    posts =  posts, isoCategory = isoCategory, pastAgreement = pastAgreement)

@@ -78,6 +78,9 @@
     },
     "updatedBy": {
       "enabled": false
+    },
+    "pastAgreement" : {
+      "type": "keyword"
     }
   }
 }
