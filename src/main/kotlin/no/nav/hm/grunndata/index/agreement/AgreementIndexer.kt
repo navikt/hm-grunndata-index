@@ -9,6 +9,8 @@ import org.opensearch.action.bulk.BulkResponse
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.UUID
+import no.nav.hm.grunndata.rapid.dto.AgreementStatus
 
 @Singleton
 class AgreementIndexer(private val indexer: Indexer,
@@ -39,17 +41,25 @@ class AgreementIndexer(private val indexer: Indexer,
             LOG.info("creating index $indexName")
             createIndex(indexName)
         }
-        val dateString =  LocalDateTime.now().minusYears(30).toString()
-        var page = agreementGdbApiClient.findAgreements(params = mapOf("updated" to dateString),
+        var updated =  LocalDateTime.now().minusYears(30)
+        var page = agreementGdbApiClient.findAgreements(params = mapOf("updatedAfter" to updated.toString()),
             size=1000, page = 0, sort="updated,asc")
-        while(page.pageNumber<page.totalPages) {
-            if (page.numberOfElements>0) {
-                val agreements = page.content.map { it.toDoc() }
-                LOG.info("indexing ${agreements.size} agreements to $indexName")
-                index(agreements, indexName)
+        var lastId: UUID? = null
+        while(page.numberOfElements>0) {
+            val agreements = page.content.map { it.toDoc() }.filter {  it.status != AgreementStatus.DELETED }
+            LOG.info("indexing ${agreements.size} agreements to $indexName")
+            if (agreements.isNotEmpty()) index(agreements, indexName)
+            val last = page.last()
+            if (updated.equals(last.updated) && last.id == lastId) {
+                LOG.info("Last updated ${last.updated} ${last.id} is the same, increasing last updated")
+                updated = updated.plusNanos(1000000)
             }
-            page = agreementGdbApiClient.findAgreements(params = mapOf("updated" to dateString),
-                size=1000, page = page.pageNumber+1, sort="updated,asc")
+            else {
+                lastId = last.id
+                updated = last.updated
+            }
+            page = agreementGdbApiClient.findAgreements(params = mapOf("updatedAfter" to updated.toString()),
+                size=1000, page = 0, sort="updated,asc")
         }
         if (alias) {
            updateAlias(indexName)

@@ -35,7 +35,9 @@ data class ProductDoc(
     val updatedBy: String,
     val filters: TechDataFilters,
     val agreements: List<AgreementInfoDoc> = emptyList(),
+    val previousAgreements: List<AgreementInfoDoc> = emptyList(),
     val hasAgreement: Boolean = false,
+    val hasPreviousAgreement: Boolean = false
 ) : SearchDoc
 
 
@@ -99,9 +101,10 @@ data class TechDataFilters(
 data class ProductSupplier(val id: String, val identifier: String, val name: String)
 
 fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = try {
-    val onlyActiveAgreements =
-        agreements.filter { it.published!!.isBefore(LocalDateTime.now())
+    val (onlyActiveAgreements, previousAgreements) =
+        agreements.partition { it.published!!.isBefore(LocalDateTime.now())
                 && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE }
+
     val iso = isoCategoryService.lookUpCode(isoCategory) ?: isoCategoryService.getClosestLevelInBranch(isoCategory)
     ProductDoc(id = id.toString(),
         supplier = ProductSupplier(
@@ -132,6 +135,8 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
         updatedBy = updatedBy,
         agreements = onlyActiveAgreements.map { it.toDoc() },
         hasAgreement = onlyActiveAgreements.isNotEmpty(),
+        previousAgreements = previousAgreements.map { it.toDoc() },
+        hasPreviousAgreement = previousAgreements.isNotEmpty(),
         filters = mapTechDataFilters(techData))
 
 

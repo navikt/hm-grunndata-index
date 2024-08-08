@@ -53,6 +53,51 @@
         }
       }
     },
+    "previousAgreements": {
+      "properties": {
+        "expired": {
+          "type": "date",
+          "format": "strict_date_optional_time"
+        },
+        "id": {
+          "type": "keyword"
+        },
+        "label": {
+          "type": "keyword",
+          "copy_to": [
+            "keywords_suggest",
+            "keywords_bag"
+          ]
+        },
+        "identifier": {
+          "type": "keyword"
+        },
+        "postIdentifier": {
+          "type": "keyword"
+        },
+        "postNr": {
+          "type": "long"
+        },
+        "postTitle": {
+          "type": "keyword"
+        },
+        "postId": {
+          "type": "keyword"
+        },
+        "refNr": {
+          "type": "keyword"
+        },
+        "rank": {
+          "type": "long"
+        },
+        "reference": {
+          "type": "keyword",
+          "copy_to": [
+            "keywords_bag"
+          ]
+        }
+      }
+    },
     "attributes": {
       "properties": {
         "shortdescription": {
@@ -188,6 +233,9 @@
       }
     },
     "hasAgreement": {
+      "type": "boolean"
+    },
+    "hasPreviousAgreement": {
       "type": "boolean"
     },
     "hmsArtNr": {
