@@ -79,7 +79,7 @@
     "updatedBy": {
       "enabled": false
     },
-    "pastAgreement" : {
+    "previousAgreement" : {
       "type": "keyword"
     }
   }

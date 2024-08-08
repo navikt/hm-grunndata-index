@@ -26,7 +26,7 @@ data class AgreementDoc(
     val updatedBy: String,
     val created: LocalDateTime,
     val updated: LocalDateTime,
-    val pastAgreement: UUID? = null,
+    val previousAgreement: UUID? = null,
 ) : SearchDoc
 
 fun AgreementDTO.toDoc() : AgreementDoc = AgreementDoc (
@@ -34,4 +34,4 @@ fun AgreementDTO.toDoc() : AgreementDoc = AgreementDoc (
     title = title, label = AgreementLabels.matchTitleToLabel(title), resume = resume, text = text,
     reference = reference, published = published, expired = expired, attachments = attachments,
     createdBy = createdBy, updatedBy = updatedBy, created = created, updated = updated,
-    posts =  posts, isoCategory = isoCategory, pastAgreement = pastAgreement)
+    posts =  posts, isoCategory = isoCategory, previousAgreement = previousAgreement)
