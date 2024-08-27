@@ -6,10 +6,9 @@ import no.nav.hm.grunndata.index.IndexType
 import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.index.createIndexName
 import no.nav.hm.grunndata.index.product.ProductIndexer
-import org.opensearch.action.bulk.BulkResponse
+import org.opensearch.client.opensearch.core.BulkResponse
+
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Singleton
 class SupplierIndexer(private val indexer: Indexer,

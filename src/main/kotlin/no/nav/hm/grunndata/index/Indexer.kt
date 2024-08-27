@@ -3,26 +3,27 @@ package no.nav.hm.grunndata.index
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.inject.Singleton
+import java.io.StringReader
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import org.opensearch.action.admin.indices.alias.IndicesAliasesRequest
-import org.opensearch.action.admin.indices.alias.get.GetAliasesRequest
-import org.opensearch.action.bulk.BulkRequest
-import org.opensearch.action.bulk.BulkResponse
-import org.opensearch.action.delete.DeleteRequest
-import org.opensearch.action.delete.DeleteResponse
-import org.opensearch.action.index.IndexRequest
-import org.opensearch.client.RequestOptions
-import org.opensearch.client.RestHighLevelClient
-import org.opensearch.client.indices.CreateIndexRequest
-import org.opensearch.client.indices.GetIndexRequest
-import org.opensearch.cluster.metadata.AliasMetadata
-import org.opensearch.common.xcontent.XContentType
+import org.opensearch.client.opensearch.OpenSearchClient
+import org.opensearch.client.opensearch._types.mapping.TypeMapping
+import org.opensearch.client.opensearch.core.BulkRequest
+import org.opensearch.client.opensearch.core.BulkResponse
+import org.opensearch.client.opensearch.core.DeleteRequest
+import org.opensearch.client.opensearch.core.DeleteResponse
+import org.opensearch.client.opensearch.indices.CreateIndexRequest
+import org.opensearch.client.opensearch.indices.ExistsRequest
+import org.opensearch.client.opensearch.indices.GetAliasRequest
+import org.opensearch.client.opensearch.indices.IndexSettings
+import org.opensearch.client.opensearch.indices.UpdateAliasesRequest
+import org.opensearch.client.opensearch.indices.update_aliases.ActionBuilders.add
 import org.slf4j.LoggerFactory
 
+
 @Singleton
-class Indexer(private val client: RestHighLevelClient,
+class Indexer(private val client: OpenSearchClient,
               private val objectMapper: ObjectMapper) {
 
     companion object {
@@ -30,7 +31,8 @@ class Indexer(private val client: RestHighLevelClient,
     }
 
     fun initIndex(indexName: String, settings: String?=null, mapping: String?=null) {
-        if (!client.indices().exists(GetIndexRequest(indexName), RequestOptions.DEFAULT)) {
+        val request = ExistsRequest.Builder().index(indexName).build()
+        if (!client.indices().exists(request).value()) {
             if (createIndex(indexName, settings, mapping))
                 LOG.info("$indexName has been created")
             else
@@ -39,28 +41,31 @@ class Indexer(private val client: RestHighLevelClient,
     }
 
     fun updateAlias(indexName: String, aliasName: String): Boolean {
-        val remove = IndicesAliasesRequest.AliasActions(IndicesAliasesRequest.AliasActions.Type.REMOVE)
-            .index("$aliasName*")
-            .alias(aliasName)
-        val add = IndicesAliasesRequest.AliasActions(IndicesAliasesRequest.AliasActions.Type.ADD)
-            .index(indexName)
-            .alias(aliasName)
-        val request = IndicesAliasesRequest().apply {
-            addAliasAction(remove)
-            addAliasAction(add)
-        }
+        val request = UpdateAliasesRequest.Builder().apply {
+            add().alias(aliasName).index(indexName)
+        }.build()
         LOG.info("updateAlias for alias $aliasName and pointing to $indexName ")
-        return client.indices().updateAliases(request, RequestOptions.DEFAULT).isAcknowledged
+        return client.indices().updateAliases(request).acknowledged()
     }
 
-    fun getAlias(aliasName: String): Map<String, MutableSet<AliasMetadata>> =
-        client.indices().getAlias(GetAliasesRequest(aliasName), RequestOptions.DEFAULT).aliases
+    fun getAlias(aliasName: String)
+        = client.indices().getAlias(GetAliasRequest.Builder().name(aliasName).build()).result().keys
+
 
     fun createIndex(indexName: String, settings: String?=null, mapping: String?=null): Boolean {
-        val createIndexRequest = CreateIndexRequest(indexName)
-        settings?.let { createIndexRequest.source(settings, XContentType.JSON) }
-        mapping?.let { createIndexRequest.mapping(mapping, XContentType.JSON) }
-        return client.indices().create(createIndexRequest, RequestOptions.DEFAULT).isAcknowledged
+        val mapper = client._transport().jsonpMapper()
+        val createIndexRequest = CreateIndexRequest.Builder().index(indexName)
+        settings?.let {
+            val settingsParser = mapper.jsonProvider().createParser(StringReader(settings))
+            val indexSettings = IndexSettings._DESERIALIZER.deserialize(settingsParser, mapper)
+            createIndexRequest.settings(indexSettings)
+        }
+        mapping?.let {
+            val mappingsParser = mapper.jsonProvider().createParser(StringReader(mapping))
+            val typeMapping = TypeMapping._DESERIALIZER.deserialize(mappingsParser, mapper)
+            createIndexRequest.mappings(typeMapping)
+        }
+        return client.indices().create(createIndexRequest.build()).acknowledged()!!
     }
 
     fun index(doc: SearchDoc, indexName: String): BulkResponse {
@@ -68,24 +73,24 @@ class Indexer(private val client: RestHighLevelClient,
     }
 
     fun index(docs: List<SearchDoc>, indexName: String): BulkResponse {
-        val bulkRequest = BulkRequest()
-        docs.forEach {
-            bulkRequest.add(
-                IndexRequest(indexName)
-                    .id(it.id)
-                    .source(objectMapper.writeValueAsString(it), XContentType.JSON)
-            )
+        val bulkRequest = BulkRequest.Builder().index(indexName)
+        docs.forEach { doc ->
+            bulkRequest.operations {
+                op -> op.index {
+                    index -> index.index(indexName).id(doc.id).document(doc)
+                }
+            }
         }
-        return client.bulk(bulkRequest, RequestOptions.DEFAULT)
+        return client.bulk(bulkRequest.build())
     }
 
     fun delete(id: String, indexName: String): DeleteResponse {
-        val request = DeleteRequest(indexName).id(id)
-        return client.delete(request, RequestOptions.DEFAULT)
+        val request = DeleteRequest.Builder().index(indexName).id(id)
+        return client.delete(request.build())
     }
 
-    fun indexExists(indexName: String):Boolean = client.indices()
-        .exists(GetIndexRequest(indexName), RequestOptions.DEFAULT)
+    fun indexExists(indexName: String):Boolean =
+        client.indices().exists(ExistsRequest.Builder().index(indexName).build()).value()
 
     fun initAlias(aliasName: String, settings: String?=null, mapping: String?=null) {
         val alias = getAlias(aliasName)
@@ -97,7 +102,7 @@ class Indexer(private val client: RestHighLevelClient,
             updateAlias(indexName, aliasName)
         }
         else
-           LOG.info("alias $aliasName is pointing to ${alias.keys.elementAt(0)}")
+           LOG.info("alias $aliasName is pointing to ${alias.elementAt(0)}")
     }
 
 }

@@ -8,8 +8,9 @@ import no.nav.hm.grunndata.index.IndexType
 import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.index.createIndexName
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
-import org.opensearch.action.bulk.BulkResponse
-import org.opensearch.action.delete.DeleteResponse
+import org.opensearch.client.opensearch.core.BulkResponse
+import org.opensearch.client.opensearch.core.DeleteResponse
+
 import org.slf4j.LoggerFactory
 
 @Singleton

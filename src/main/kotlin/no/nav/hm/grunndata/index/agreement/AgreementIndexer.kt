@@ -5,12 +5,11 @@ import jakarta.inject.Singleton
 import no.nav.hm.grunndata.index.IndexType
 import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.index.createIndexName
-import org.opensearch.action.bulk.BulkResponse
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.UUID
 import no.nav.hm.grunndata.rapid.dto.AgreementStatus
+import org.opensearch.client.opensearch.core.BulkResponse
 
 @Singleton
 class AgreementIndexer(private val indexer: Indexer,

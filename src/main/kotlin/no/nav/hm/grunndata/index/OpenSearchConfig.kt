@@ -3,6 +3,10 @@ package no.nav.hm.grunndata.index
 import io.micronaut.context.annotation.ConfigurationProperties
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
+import javax.net.ssl.X509TrustManager
 import org.apache.http.HttpHost
 import org.apache.http.auth.AuthScope
 import org.apache.http.auth.UsernamePasswordCredentials
@@ -10,12 +14,12 @@ import org.apache.http.client.CredentialsProvider
 import org.apache.http.impl.client.BasicCredentialsProvider
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder
 import org.opensearch.client.RestClient
-import org.opensearch.client.RestHighLevelClient
+import org.opensearch.client.json.jackson.JacksonJsonpMapper
+import org.opensearch.client.opensearch.OpenSearchClient
+import org.opensearch.client.transport.OpenSearchTransport
+import org.opensearch.client.transport.rest_client.RestClientTransport
 import org.slf4j.LoggerFactory
-import java.security.SecureRandom
-import java.security.cert.X509Certificate
-import javax.net.ssl.SSLContext
-import javax.net.ssl.X509TrustManager
+
 
 @Factory
 class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv) {
@@ -24,13 +28,13 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv) {
         private val LOG = LoggerFactory.getLogger(OpenSearchConfig::class.java)
     }
     @Singleton
-    fun buildOpenSearchClient(): RestHighLevelClient {
+    fun buildOpenSearchRestClient(): RestClient {
         val credentialsProvider: CredentialsProvider = BasicCredentialsProvider()
         credentialsProvider.setCredentials(
             AuthScope.ANY,
             UsernamePasswordCredentials(openSearchEnv.user, openSearchEnv.password)
         )
-        val builder = RestClient.builder(HttpHost.create(openSearchEnv.url))
+        val client = RestClient.builder(HttpHost.create(openSearchEnv.url))
             .setHttpClientConfigCallback {
                     httpClientBuilder -> httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider)
                 if ("https://localhost:9200" == openSearchEnv.url && "admin" == openSearchEnv.password) {
@@ -39,10 +43,16 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv) {
                 }
 
                 httpClientBuilder
-            }
+            }.build()
         LOG.info("Opensearch client using ${openSearchEnv.user} and url ${openSearchEnv.url}")
-        return RestHighLevelClient(builder)
+        return client
     }
+
+    @Singleton
+    fun buildOpenSearchClient(restClient: RestClient): OpenSearchClient =
+        OpenSearchClient(RestClientTransport(restClient, JacksonJsonpMapper()))
+
+
 
     private fun devAndTestSettings(httpClientBuilder: HttpAsyncClientBuilder) {
         httpClientBuilder.setSSLHostnameVerifier { _, _ -> true }

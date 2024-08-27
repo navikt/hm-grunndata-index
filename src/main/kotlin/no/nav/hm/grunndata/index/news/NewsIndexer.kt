@@ -5,9 +5,9 @@ import jakarta.inject.Singleton
 import no.nav.hm.grunndata.index.IndexType
 import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.index.createIndexName
-import org.opensearch.action.bulk.BulkResponse
-import org.opensearch.action.delete.DeleteResponse
 import java.util.*
+import org.opensearch.client.opensearch.core.BulkResponse
+import org.opensearch.client.opensearch.core.DeleteResponse
 
 @Singleton
 class NewsIndexer(private val indexer: Indexer,

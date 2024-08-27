@@ -8,11 +8,12 @@ import no.nav.hm.grunndata.index.createIndexName
 import no.nav.hm.grunndata.index.product.GdbApiClient
 import no.nav.hm.grunndata.index.product.IsoCategoryService
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
-import org.opensearch.action.bulk.BulkResponse
-import org.opensearch.action.delete.DeleteResponse
+
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.*
+import org.opensearch.client.opensearch.core.BulkResponse
+import org.opensearch.client.opensearch.core.DeleteResponse
 
 @Singleton
 class ExternalProductIndexer(
