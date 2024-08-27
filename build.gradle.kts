@@ -17,6 +17,8 @@ val rapidsRiversVersion = "202408280906"
 val grunndataDtoVersion = "202408281041"
 
 
+
+
 group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
 
