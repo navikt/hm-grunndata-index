@@ -14,7 +14,7 @@ val kotestVersion = "5.5.5"
 val openSearchJavaClientVersion = "2.8.1"
 val openSearchRestClientVersion = "2.8.1"
 val rapidsRiversVersion = "202408280906"
-val grunndataDtoVersion = "202408280834"
+val grunndataDtoVersion = "202408281041"
 
 
 group = "no.nav.hm"
