@@ -13,7 +13,7 @@ val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
 val openSearchRestClientVersion = "2.11.1"
 val rapidsRiversVersion = "202408280906"
-val grunndataDtoVersion = "202408280834"
+val grunndataDtoVersion = "202408281041"
 
 
 group = "no.nav.hm"
