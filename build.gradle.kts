@@ -13,8 +13,8 @@ val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
 val openSearchJavaClientVersion = "2.8.1"
 val openSearchRestClientVersion = "2.8.1"
-val rapidsRiversVersion = "202408230837"
-val grunndataDtoVersion = "202408151452"
+val rapidsRiversVersion = "202408280906"
+val grunndataDtoVersion = "202408280834"
 
 
 group = "no.nav.hm"
@@ -54,8 +54,7 @@ dependencies {
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-http-client")
-    implementation("org.opensearch.client:opensearch-java:$openSearchJavaClientVersion")
-    implementation("org.opensearch.client:opensearch-rest-client:$openSearchRestClientVersion")
+    implementation("org.opensearch.client:opensearch-rest-high-level-client:${openSearchRestClientVersion}")
 
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
