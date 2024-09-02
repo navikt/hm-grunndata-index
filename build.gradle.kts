@@ -56,7 +56,8 @@ dependencies {
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-http-client")
-    implementation("org.opensearch.client:opensearch-rest-high-level-client:${openSearchRestClientVersion}")
+    implementation("org.opensearch.client:opensearch-java:$openSearchJavaClientVersion")
+    implementation("org.opensearch.client:opensearch-rest-client:$openSearchRestClientVersion")
 
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
