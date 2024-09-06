@@ -1,5 +1,4 @@
 {
-  "settings": {
     "index": {
       "number_of_shards": 1,
       "number_of_replicas": 1
@@ -40,6 +39,7 @@
       },
       "analyzer": {
         "norwegian_html": {
+          "type": "custom",
           "tokenizer":  "standard",
           "filter": [
             "lowercase",
@@ -51,10 +51,11 @@
           ]
         },
         "analyzer_startswith": {
+          "type": "custom",
           "tokenizer": "keyword",
           "filter": "uppercase"
         }
       }
     }
-  }
+
 }

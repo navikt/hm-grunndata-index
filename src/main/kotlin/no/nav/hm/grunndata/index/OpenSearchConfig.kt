@@ -1,5 +1,7 @@
 package no.nav.hm.grunndata.index
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.micronaut.context.annotation.ConfigurationProperties
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
@@ -22,7 +24,7 @@ import org.slf4j.LoggerFactory
 
 
 @Factory
-class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv) {
+class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv, private val objectMapper: ObjectMapper) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(OpenSearchConfig::class.java)
@@ -50,7 +52,7 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv) {
 
     @Singleton
     fun buildOpenSearchClient(restClient: RestClient): OpenSearchClient =
-        OpenSearchClient(RestClientTransport(restClient, JacksonJsonpMapper()))
+        OpenSearchClient(RestClientTransport(restClient, JacksonJsonpMapper(ObjectMapper().registerModule(JavaTimeModule()))))
 
 
 

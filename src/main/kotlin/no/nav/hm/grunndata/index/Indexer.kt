@@ -73,7 +73,7 @@ class Indexer(private val client: OpenSearchClient,
     }
 
     fun index(docs: List<SearchDoc>, indexName: String): BulkResponse {
-        val bulkRequest = BulkRequest.Builder().index(indexName)
+        val bulkRequest = BulkRequest.Builder()
         docs.forEach { doc ->
             bulkRequest.operations {
                 op -> op.index {
@@ -81,7 +81,13 @@ class Indexer(private val client: OpenSearchClient,
                 }
             }
         }
-        return client.bulk(bulkRequest.build())
+        return try {
+            client.bulk(bulkRequest.build())
+        }
+        catch (e: Exception) {
+            LOG.error("Failed to index $docs to $indexName", e)
+            throw e
+        }
     }
 
     fun delete(id: String, indexName: String): DeleteResponse {
