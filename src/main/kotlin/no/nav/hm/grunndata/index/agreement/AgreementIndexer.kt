@@ -81,5 +81,5 @@ class AgreementIndexer(private val indexer: Indexer,
 
     fun initAlias() = indexer.initAlias(aliasName, settings, mapping)
 
-    fun getAlias() = indexer.getAlias(aliasName)
+    fun getAlias() = indexer.existsAlias(aliasName)
 }

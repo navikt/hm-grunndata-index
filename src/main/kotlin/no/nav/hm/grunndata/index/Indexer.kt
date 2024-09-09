@@ -14,8 +14,8 @@ import org.opensearch.client.opensearch.core.BulkResponse
 import org.opensearch.client.opensearch.core.DeleteRequest
 import org.opensearch.client.opensearch.core.DeleteResponse
 import org.opensearch.client.opensearch.indices.CreateIndexRequest
+import org.opensearch.client.opensearch.indices.ExistsAliasRequest
 import org.opensearch.client.opensearch.indices.ExistsRequest
-import org.opensearch.client.opensearch.indices.GetAliasRequest
 import org.opensearch.client.opensearch.indices.IndexSettings
 import org.opensearch.client.opensearch.indices.UpdateAliasesRequest
 import org.opensearch.client.opensearch.indices.update_aliases.ActionBuilders.add
@@ -42,14 +42,16 @@ class Indexer(private val client: OpenSearchClient,
 
     fun updateAlias(indexName: String, aliasName: String): Boolean {
         val request = UpdateAliasesRequest.Builder().apply {
-            add().alias(aliasName).index(indexName)
+            add().alias(aliasName).index(indexName).
         }.build()
         LOG.info("updateAlias for alias $aliasName and pointing to $indexName ")
-        return client.indices().updateAliases(request).acknowledged()
+        val ack =  client.indices().updateAliases(request).acknowledged()
+        LOG.info("FINISHED updateAlias for alias $aliasName and pointing to $indexName with $ack")
+        return ack
     }
 
-    fun getAlias(aliasName: String)
-        = client.indices().getAlias(GetAliasRequest.Builder().name(aliasName).build()).result().keys
+    fun existsAlias(aliasName: String)
+        = client.indices().existsAlias(ExistsAliasRequest.Builder().name(aliasName).build()).value()
 
 
     fun createIndex(indexName: String, settings: String?=null, mapping: String?=null): Boolean {
@@ -65,7 +67,9 @@ class Indexer(private val client: OpenSearchClient,
             val typeMapping = TypeMapping._DESERIALIZER.deserialize(mappingsParser, mapper)
             createIndexRequest.mappings(typeMapping)
         }
-        return client.indices().create(createIndexRequest.build()).acknowledged()!!
+        val ack = client.indices().create(createIndexRequest.build()).acknowledged()!!
+        LOG.info("FINISH createIndex for $indexName with $ack")
+        return ack
     }
 
     fun index(doc: SearchDoc, indexName: String): BulkResponse {
@@ -99,16 +103,18 @@ class Indexer(private val client: OpenSearchClient,
         client.indices().exists(ExistsRequest.Builder().index(indexName).build()).value()
 
     fun initAlias(aliasName: String, settings: String?=null, mapping: String?=null) {
-        val alias = getAlias(aliasName)
-        if (alias.isEmpty()) {
+        val alias = existsAlias(aliasName)
+        if (!alias) {
             LOG.warn("alias $aliasName is not pointing any index")
             val indexName = "${aliasName}_${LocalDate.now()}"
             LOG.warn("Creating index $indexName")
             createIndex(indexName,settings, mapping)
             updateAlias(indexName, aliasName)
         }
-        else
-           LOG.info("alias $aliasName is pointing to ${alias.elementAt(0)}")
+        else {
+
+           //LOG.info("alias $aliasName is pointing to ${alias.elementAt(0)}")
+        }
     }
 
 }

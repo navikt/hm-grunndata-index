@@ -41,6 +41,7 @@ class SupplierIndexer(private val indexer: Indexer,
         }
         val page = supplierGdbApiClient.findSuppliers(size=5000, page = 0, sort="updated,asc")
         val suppliers = page.content.map { it.toDoc() }
+        println("WE ARE HERE!!")
         LOG.info("indexing ${suppliers.size} suppliers to $indexName")
         index(suppliers, indexName)
         if (alias) {
@@ -66,5 +67,5 @@ class SupplierIndexer(private val indexer: Indexer,
 
     fun initAlias() = indexer.initAlias(aliasName, settings, mapping)
 
-    fun getAlias() = indexer.getAlias(aliasName)
+    fun getAlias() = indexer.existsAlias(aliasName)
 }

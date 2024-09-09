@@ -91,7 +91,7 @@ class ExternalProductIndexer(
 
     fun updateAlias(indexName: String): Boolean = indexer.updateAlias(indexName,aliasName)
 
-    fun getAlias() = indexer.getAlias(aliasName)
+    fun getAlias() = indexer.existsAlias(aliasName)
 
     fun indexExists(indexName: String): Boolean = indexer.indexExists(indexName)
 
