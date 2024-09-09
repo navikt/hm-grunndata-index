@@ -14,11 +14,15 @@ import org.opensearch.client.opensearch.core.BulkResponse
 import org.opensearch.client.opensearch.core.DeleteRequest
 import org.opensearch.client.opensearch.core.DeleteResponse
 import org.opensearch.client.opensearch.indices.CreateIndexRequest
+import org.opensearch.client.opensearch.indices.DeleteAliasRequest
 import org.opensearch.client.opensearch.indices.ExistsAliasRequest
 import org.opensearch.client.opensearch.indices.ExistsRequest
 import org.opensearch.client.opensearch.indices.IndexSettings
 import org.opensearch.client.opensearch.indices.UpdateAliasesRequest
+import org.opensearch.client.opensearch.indices.update_aliases.Action
+import org.opensearch.client.opensearch.indices.update_aliases.ActionBuilders
 import org.opensearch.client.opensearch.indices.update_aliases.ActionBuilders.add
+import org.opensearch.client.opensearch.indices.update_aliases.ActionBuilders.remove
 import org.slf4j.LoggerFactory
 
 
@@ -41,12 +45,15 @@ class Indexer(private val client: OpenSearchClient,
     }
 
     fun updateAlias(indexName: String, aliasName: String): Boolean {
-        val request = UpdateAliasesRequest.Builder().apply {
-            add().alias(aliasName).index(indexName).
-        }.build()
+
+        val deleteAliasesRequest = DeleteAliasRequest.Builder().index(indexName).name(aliasName).build()
         LOG.info("updateAlias for alias $aliasName and pointing to $indexName ")
-        val ack =  client.indices().updateAliases(request).acknowledged()
-        LOG.info("FINISHED updateAlias for alias $aliasName and pointing to $indexName with $ack")
+        val addAction = ActionBuilders.add().index(indexName).alias(aliasName).build()
+        val updateAliasesRequest = UpdateAliasesRequest.Builder().actions {
+            it.add(addAction)
+        }.build()
+        val ack =  client.indices().updateAliases(updateAliasesRequest).acknowledged()
+        LOG.info("FINISHED delete for alias $aliasName and pointing to $indexName with $ack")
         return ack
     }
 
