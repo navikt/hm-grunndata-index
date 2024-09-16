@@ -145,7 +145,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
     throw e
 }
 
-private fun AgreementInfo.toDoc(): AgreementInfoDoc = AgreementInfoDoc(
+fun AgreementInfo.toDoc(): AgreementInfoDoc = AgreementInfoDoc(
     id = id,
     identifier = identifier,
     title = title,
@@ -160,7 +160,7 @@ private fun AgreementInfo.toDoc(): AgreementInfoDoc = AgreementInfoDoc(
     expired = expired
 )
 
-private fun Attributes.toDoc(): AttributesDoc {
+fun Attributes.toDoc(): AttributesDoc {
     return AttributesDoc(
         manufacturer = manufacturer,
         keywords = keywords,
