@@ -5,7 +5,7 @@ import io.micronaut.scheduling.TaskExecutors
 import io.micronaut.scheduling.annotation.ExecuteOn
 import org.slf4j.LoggerFactory
 
-@Controller("/internal/index/alternative-products")
+@Controller("/internal/index/alternative_products")
 @ExecuteOn(TaskExecutors.BLOCKING)
 class AlternativeProductIndexerController(private val alternativeProductIndexer: AlternativeProductIndexer) {
     companion object {
