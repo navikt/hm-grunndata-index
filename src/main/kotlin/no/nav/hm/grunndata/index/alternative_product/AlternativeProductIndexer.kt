@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.*
 
+
 @Singleton
 class AlternativeProductIndexer(
     private val indexer: Indexer,
@@ -23,10 +24,12 @@ class AlternativeProductIndexer(
 ) {
     companion object {
         private val LOG = LoggerFactory.getLogger(AlternativeProductIndexer::class.java)
-        private val settings = AlternativeProductIndexer::class.java
-            .getResource("/opensearch/alternative_products_settings.json")?.readText()
-        private val mapping = AlternativeProductIndexer::class.java
-            .getResource("/opensearch/alternative_products_mapping.json")?.readText()
+        private val settings = null
+        private val mapping = null
+//        private val settings = AlternativeProductIndexer::class.java
+//            .getResource("/opensearch/alternative_products_settings.json")?.readText()
+//        private val mapping = AlternativeProductIndexer::class.java
+//            .getResource("/opensearch/alternative_products_mapping.json")?.readText()
     }
 
     init {
@@ -71,6 +74,18 @@ class AlternativeProductIndexer(
         }
         if (alias) {
             updateAlias(indexName)
+        }
+    }
+
+    fun reIndexByIsoCategory(isoCategory: String) {
+        val page = gdbApiClient.findProductsByIsoCategory(isoCategory = isoCategory,
+            size=3000, page = 0, sort="updated,asc")
+        if (page.numberOfElements>0) {
+            val products = page.content.map { it.toDoc(isoCategoryService)}.filter {
+                it.status != ProductStatus.DELETED
+            }
+            LOG.info("indexing ${products.size} products to $aliasName")
+            index(products)
         }
     }
 

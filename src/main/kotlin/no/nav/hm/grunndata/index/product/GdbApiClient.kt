@@ -35,6 +35,13 @@ interface GdbApiClient {
         @QueryValue("sort") sort: String? = null
     ): Page<ProductRapidDTO>
 
+    @Get(uri="/api/v1/products", consumes = [APPLICATION_JSON])
+    fun findProductsByIsoCategory(
+        @QueryValue("isoCategory") isoCategory: String? = null,
+        @QueryValue("size") size: Int? = null,
+        @QueryValue("page") page: Int? = null,
+        @QueryValue("sort") sort: String? = null
+    ): Page<ProductRapidDTO>
 
     @Get(uri = "/api/v1/products", consumes = [APPLICATION_JSON])
     fun findProductsBySeriesId(
