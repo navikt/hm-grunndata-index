@@ -17,6 +17,12 @@ class AlternativeProductIndexerController(private val alternativeProductIndexer:
         alternativeProductIndexer.reIndex(alias)
     }
 
+    @Post("/isoCategory/{isoCategory}")
+    fun indexProductsByCategory(isoCategory:String) {
+        alternativeProductIndexer.reIndexByIsoCategory(isoCategory)
+    }
+
+    @Post("/")
     @Put("/alias/{indexName}")
     fun aliasProducts(indexName: String) {
         alternativeProductIndexer.updateAlias(indexName)
@@ -24,4 +30,6 @@ class AlternativeProductIndexerController(private val alternativeProductIndexer:
 
     @Get("/alias")
     fun getAlias() = alternativeProductIndexer.getAlias()
+
+
 }

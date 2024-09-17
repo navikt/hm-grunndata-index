@@ -90,6 +90,8 @@ products:
   aliasName: ${PRODUCTS_ALIASNAME:products}
 news:
   aliasName: ${NEWS_ALIASNAME:news}
+alternative_products:
+  aliasName: ${ALTERNATIVE_PRODUCTS_ALIASNAME:alternative_products}
 
 grunndata:
   db:
