@@ -20,12 +20,6 @@ class TechLabelService(
     init {
         runBlocking {
             techLabelsByIso = techLabelClient.fetchAllTechLabel()
-            techLabelsByIso.values.forEach {
-                it.forEach { label ->
-                    if (label.systemLabel == null )
-                        LOG.info("TechLabel: ${label.label} ${label.isocode} ${label.id} is null system label")
-                }
-            }
             LOG.info("Init techLabels: ${techLabelsByIso.values.size}")
         }
     }
@@ -40,11 +34,12 @@ class TechLabelService(
         return techLabels.distinctBy { it.id }
     }
 
-    fun fetchLabelByIsoCodeLabel(isocode: String, label: String): TechLabelDTO {
-        fetchLabelsByIsoCode(isocode).find { it.label == label }?.let {
-            return it
+    fun fetchLabelByIsoCodeLabel(isocode: String, label: String): TechLabelDTO? {
+        val labelsByIso =  fetchLabelsByIsoCode(isocode)
+        labelsByIso.forEach {
+            if (it.label == label) return it
         }
-        throw IllegalArgumentException("TechLabel with isocode $isocode and label $label not found")
+        return null
     }
 
     fun fetchAllLabels(): Map<String, List<TechLabelDTO>> = techLabelsByIso

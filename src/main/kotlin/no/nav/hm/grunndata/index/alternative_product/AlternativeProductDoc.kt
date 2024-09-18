@@ -33,7 +33,7 @@ data class AlternativeProductDoc(
     val expired: LocalDateTime,
     val agreements: List<AgreementInfoDoc> = emptyList(),
     val hasAgreement: Boolean = false,
-    val techDataFilters: Map<String, Any> = emptyMap()
+    val filters: Map<String, Any> = emptyMap()
 ) : SearchDoc
 
 
@@ -66,18 +66,12 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService, techLabelServi
         expired = expired,
         agreements = onlyActiveAgreements.map { it.toDoc() },
         hasAgreement = onlyActiveAgreements.isNotEmpty(),
-        techDataFilters = techData.associate {
-            techLabelService.fetchLabelByIsoCodeLabel(
-                isoCategory,
-                it.key
-            ).systemLabel to it.value
-        }
+        filters = techData.mapNotNull { data -> techLabelService.fetchLabelByIsoCodeLabel(isoCategory, data.key)?.let {
+            it.systemLabel to data.value
+        }}.toMap()
     )
 } catch (e: Exception) {
     println(isoCategory)
     throw e
 }
 
-
-
-private fun String.decimalToInt(): Int? = substringBeforeLast(".").toInt()
