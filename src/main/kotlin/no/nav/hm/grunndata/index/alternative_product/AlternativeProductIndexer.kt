@@ -20,7 +20,8 @@ class AlternativeProductIndexer(
     private val indexer: Indexer,
     @Value("\${alternative_products.aliasName}") private val aliasName: String,
     private val gdbApiClient: GdbApiClient,
-    private val isoCategoryService: IsoCategoryService
+    private val isoCategoryService: IsoCategoryService,
+    private val techLabelService: TechLabelService
 ) {
     companion object {
         private val LOG = LoggerFactory.getLogger(AlternativeProductIndexer::class.java)
@@ -54,7 +55,7 @@ class AlternativeProductIndexer(
         var lastId: UUID? = null
         while(page.numberOfElements>0) {
             val products = page.content
-                .map { it.toDoc(isoCategoryService) }.filter {
+                .map { it.toDoc(isoCategoryService, techLabelService) }.filter {
                     it.status != ProductStatus.DELETED
                 }
             LOG.info("indexing ${products.size} products to $indexName")
@@ -81,7 +82,7 @@ class AlternativeProductIndexer(
         val page = gdbApiClient.findProductsByIsoCategory(isoCategory = isoCategory,
             size=3000, page = 0, sort="updated,asc")
         if (page.numberOfElements>0) {
-            val products = page.content.map { it.toDoc(isoCategoryService)}.filter {
+            val products = page.content.map { it.toDoc(isoCategoryService, techLabelService)}.filter {
                 it.status != ProductStatus.DELETED
             }
             LOG.info("indexing ${products.size} products to $aliasName")
