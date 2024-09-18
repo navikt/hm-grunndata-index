@@ -11,7 +11,7 @@ import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
 @Client("\${grunndata.register.url}")
 interface TechLabelApiClient {
 
-    @Get(uri = "/api/v1/products", consumes = [APPLICATION_JSON])
+    @Get(uri = "/api/v1/techlabels", consumes = [APPLICATION_JSON])
     fun fetchAllTechLabel(): Map<String, List<TechLabelDTO>>
 
 }

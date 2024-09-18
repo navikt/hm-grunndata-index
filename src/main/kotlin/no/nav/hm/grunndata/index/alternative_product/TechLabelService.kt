@@ -3,8 +3,6 @@ package no.nav.hm.grunndata.index.alternative_product
 import jakarta.inject.Singleton
 import java.time.LocalDateTime
 import java.util.UUID
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 
@@ -22,6 +20,12 @@ class TechLabelService(
     init {
         runBlocking {
             techLabelsByIso = techLabelClient.fetchAllTechLabel()
+            techLabelsByIso.values.forEach {
+                it.forEach { label ->
+                    if (label.systemLabel == null )
+                        LOG.info("TechLabel: ${label.label} ${label.isocode} ${label.id} is null system label")
+                }
+            }
             LOG.info("Init techLabels: ${techLabelsByIso.values.size}")
         }
     }
@@ -34,6 +38,13 @@ class TechLabelService(
             techLabels.addAll(techLabelsByIso[iso] ?: emptyList())
         }
         return techLabels.distinctBy { it.id }
+    }
+
+    fun fetchLabelByIsoCodeLabel(isocode: String, label: String): TechLabelDTO {
+        fetchLabelsByIsoCode(isocode).find { it.label == label }?.let {
+            return it
+        }
+        throw IllegalArgumentException("TechLabel with isocode $isocode and label $label not found")
     }
 
     fun fetchAllLabels(): Map<String, List<TechLabelDTO>> = techLabelsByIso
