@@ -35,6 +35,9 @@ class ProductIndexerController(private val productIndexer: ProductIndexer) {
     @Get("/alias")
     fun getAlias() = productIndexer.getAlias()
 
-
+    @Delete("{uuid}")
+    fun deleteProductById(uuid: UUID) {
+        productIndexer.delete(uuid)
+    }
 
 }
