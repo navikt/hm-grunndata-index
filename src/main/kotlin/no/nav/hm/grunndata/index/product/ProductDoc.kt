@@ -70,7 +70,8 @@ data class AttributesDoc(
     val pakrevdGodkjenningskurs: PakrevdGodkjenningskurs? = null,
     val produkttype: Produkttype? = null,
     val tenderId: String? = null,
-    val hasTender: Boolean? = null
+    val hasTender: Boolean? = null,
+    val alternativeFor: AlternativeFor? = null
 )
 
 data class MediaDoc(
@@ -175,7 +176,8 @@ fun Attributes.toDoc(): AttributesDoc {
         produkttype = produkttype,
         tenderId = tenderId,
         hasTender = hasTender,
-        compatibleWith = compatibleWidth
+        compatibleWith = compatibleWidth,
+        alternativeFor = alternativeFor
     )
 }
 

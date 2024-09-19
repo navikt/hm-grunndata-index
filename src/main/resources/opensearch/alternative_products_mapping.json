@@ -18,11 +18,7 @@
           "type": "keyword"
         },
         "label": {
-          "type": "keyword",
-          "copy_to": [
-            "keywords_suggest",
-            "keywords_bag"
-          ]
+          "type": "keyword"
         },
         "identifier": {
           "type": "keyword"
@@ -64,14 +60,17 @@
           "analyzer": "norwegian_html"
         },
         "keywords": {
-          "type": "keyword",
-          "copy_to": [
-            "keywords_suggest",
-            "keywords_bag"
-          ]
+          "type": "keyword"
         },
         "produkttype": {
           "type": "keyword"
+        },
+        "alternativeFor": {
+          "properties": {
+            "hmsArtNrs": {
+              "type": "keyword"
+            }
+          }
         }
       }
     },
@@ -586,8 +585,7 @@
       ]
     },
     "isoCategory": {
-      "type": "keyword",
-      "copy_to": "keywords_suggest"
+      "type": "keyword"
     },
     "media": {
       "enabled": false
@@ -613,11 +611,7 @@
           "type": "keyword"
         },
         "name": {
-          "type": "keyword",
-          "copy_to": [
-            "keywords_suggest",
-            "keywords_bag"
-          ]
+          "type": "keyword"
         }
       }
     },
