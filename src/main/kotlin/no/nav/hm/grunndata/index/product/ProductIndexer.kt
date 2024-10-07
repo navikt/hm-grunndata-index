@@ -55,8 +55,10 @@ class ProductIndexer(
             val response = indexer.delete(it.id.toString(), aliasName)
             if (response.status().equals("DELETED")) {
                 noActualDeleted++
+            } else if (response.status().equals("NOT_FOUND")) {
+                LOG.info("Product ${it.id} not found in index")
             } else {
-                LOG.error("Failed to delete product ${it.id} from index")
+                LOG.error("Failed to delete product ${it.id} from index, status: ${response.status()}")
             }
         }
 
