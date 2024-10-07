@@ -53,7 +53,7 @@ class ProductIndexer(
 
         page.content.forEach {
             val response = indexer.delete(it.id.toString(), aliasName)
-            if (response.status().equals("DELETED")) {
+            if (response.status().equals("OK")) {
                 noActualDeleted++
             } else if (response.status().equals("NOT_FOUND")) {
                 LOG.info("Product ${it.id} not found in index")
