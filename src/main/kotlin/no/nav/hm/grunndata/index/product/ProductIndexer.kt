@@ -45,19 +45,23 @@ class ProductIndexer(
             status = ProductStatus.DELETED.name,
             size = 3000, page = 0, sort = "updated,asc"
         )
-        while (page.numberOfElements > 0) {
-            val noDeleted = page.content.size
-            LOG.info("Found $noDeleted products to remove from index")
 
-            page.content.forEach {
-                indexer.delete(it.id.toString(), aliasName)
+        val noDeleted = page.content.size
+        LOG.info("Found $noDeleted products to remove from index")
+
+        var noActualDeleted = 0;
+
+        page.content.forEach {
+            val response = indexer.delete(it.id.toString(), aliasName)
+            if (response.status().equals("DELETED")) {
+                noActualDeleted++
+            } else {
+                LOG.error("Failed to delete product ${it.id} from index")
             }
-
-            page = gdbApiClient.findDeletedProducts(
-                status = ProductStatus.DELETED.name,
-                size = 3000, page = 0, sort = "updated,asc"
-            )
         }
+
+        LOG.info("Deleted $noActualDeleted products from index")
+
     }
 
 
