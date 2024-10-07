@@ -2,8 +2,6 @@ package no.nav.hm.grunndata.index.product
 
 import io.micronaut.context.annotation.Value
 import jakarta.inject.Singleton
-import java.time.LocalDateTime
-import java.util.UUID
 import no.nav.hm.grunndata.index.IndexType
 import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.index.createIndexName
@@ -11,12 +9,16 @@ import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import org.opensearch.action.bulk.BulkResponse
 import org.opensearch.action.delete.DeleteResponse
 import org.slf4j.LoggerFactory
+import java.time.LocalDateTime
+import java.util.UUID
 
 @Singleton
-class ProductIndexer(private val indexer: Indexer,
-                     @Value("\${products.aliasName}") private val aliasName: String,
-                     private val gdbApiClient: GdbApiClient,
-                     private val isoCategoryService: IsoCategoryService) {
+class ProductIndexer(
+    private val indexer: Indexer,
+    @Value("\${products.aliasName}") private val aliasName: String,
+    private val gdbApiClient: GdbApiClient,
+    private val isoCategoryService: IsoCategoryService
+) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(ProductIndexer::class.java)
@@ -37,17 +39,41 @@ class ProductIndexer(private val indexer: Indexer,
         }
     }
 
+
+    fun deleteProducts() {
+        var page = gdbApiClient.findDeletedProducts(
+            status = ProductStatus.DELETED.name,
+            size = 3000, page = 0, sort = "updated,asc"
+        )
+        while (page.numberOfElements > 0) {
+            val noDeleted = page.content.size
+            LOG.info("Found $noDeleted products to remove from index")
+
+            page.content.forEach {
+                indexer.delete(it.id.toString(), aliasName)
+            }
+
+            page = gdbApiClient.findDeletedProducts(
+                status = ProductStatus.DELETED.name,
+                size = 3000, page = 0, sort = "updated,asc"
+            )
+        }
+    }
+
+
     fun reIndex(alias: Boolean) {
         val indexName = createIndexName(IndexType.products)
         if (!indexExists(indexName)) {
             LOG.info("creating index $indexName")
             createIndex(indexName)
         }
-        var updated =  LocalDateTime.now().minusYears(30)
-        var page = gdbApiClient.findProducts(updated = updated.toString(),
-            size=3000, page = 0, sort="updated,asc")
+        var updated = LocalDateTime.now().minusYears(30)
+        var page = gdbApiClient.findProducts(
+            updated = updated.toString(),
+            size = 3000, page = 0, sort = "updated,asc"
+        )
         var lastId: UUID? = null
-        while(page.numberOfElements>0) {
+        while (page.numberOfElements > 0) {
             val products = page.content
                 .map { it.toDoc(isoCategoryService) }.filter {
                     it.status != ProductStatus.DELETED
@@ -58,14 +84,15 @@ class ProductIndexer(private val indexer: Indexer,
             if (updated.equals(last.updated) && last.id == lastId) {
                 LOG.info("Last updated ${last.updated} ${last.id} is the same, increasing last updated")
                 updated = updated.plusNanos(1000000)
-            }
-            else {
+            } else {
                 lastId = last.id
                 updated = last.updated
             }
             LOG.info("updated is now: $updated")
-            page = gdbApiClient.findProducts(updated=updated.toString(),
-                size=3000, page = 0, sort="updated,asc")
+            page = gdbApiClient.findProducts(
+                updated = updated.toString(),
+                size = 3000, page = 0, sort = "updated,asc"
+            )
         }
         if (alias) {
             updateAlias(indexName)
@@ -73,10 +100,12 @@ class ProductIndexer(private val indexer: Indexer,
     }
 
     fun reIndexBySupplierId(supplierId: UUID) {
-        val page = gdbApiClient.findProductsBySupplierId(supplierId = supplierId,
-            size=3000, page = 0, sort="updated,asc")
-        if (page.numberOfElements>0) {
-            val products = page.content.map { it.toDoc(isoCategoryService)}.filter {
+        val page = gdbApiClient.findProductsBySupplierId(
+            supplierId = supplierId,
+            size = 3000, page = 0, sort = "updated,asc"
+        )
+        if (page.numberOfElements > 0) {
+            val products = page.content.map { it.toDoc(isoCategoryService) }.filter {
                 it.status != ProductStatus.DELETED
             }
             LOG.info("indexing ${products.size} products to $aliasName")
@@ -85,10 +114,12 @@ class ProductIndexer(private val indexer: Indexer,
     }
 
     fun reIndexBySeriesId(seriesId: UUID) {
-        val page = gdbApiClient.findProductsBySeriesId(seriesUUID = seriesId,
-            size=3000, page = 0, sort="updated,asc")
-        if (page.numberOfElements>0) {
-            val products = page.content.map { it.toDoc(isoCategoryService)}.filter {
+        val page = gdbApiClient.findProductsBySeriesId(
+            seriesUUID = seriesId,
+            size = 3000, page = 0, sort = "updated,asc"
+        )
+        if (page.numberOfElements > 0) {
+            val products = page.content.map { it.toDoc(isoCategoryService) }.filter {
                 it.status != ProductStatus.DELETED
             }
             LOG.info("indexing ${products.size} products to $aliasName")
@@ -108,20 +139,19 @@ class ProductIndexer(private val indexer: Indexer,
 
 
     fun index(docs: List<ProductDoc>, indexName: String): BulkResponse =
-        indexer.index(docs,indexName)
+        indexer.index(docs, indexName)
 
     fun delete(uuid: UUID): DeleteResponse = indexer.delete(uuid.toString(), aliasName)
 
     fun createIndex(indexName: String): Boolean = indexer.createIndex(indexName, settings, mapping)
 
-    fun updateAlias(indexName: String): Boolean = indexer.updateAlias(indexName,aliasName)
+    fun updateAlias(indexName: String): Boolean = indexer.updateAlias(indexName, aliasName)
 
     fun getAlias() = indexer.getAlias(aliasName)
 
     fun indexExists(indexName: String): Boolean = indexer.indexExists(indexName)
 
     fun initAlias() = indexer.initAlias(aliasName, settings, mapping)
-
 
 
 }
