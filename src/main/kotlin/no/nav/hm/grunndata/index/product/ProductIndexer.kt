@@ -52,7 +52,7 @@ class ProductIndexer(
         var noActualDeleted = 0;
 
         page.content.forEach {
-            val response = indexer.delete(it.seriesUUID.toString(), aliasName)
+            val response = indexer.delete(it.id.toString(), aliasName)
             if (response.status().equals("OK")) {
                 noActualDeleted++
             } else if (response.status().equals("NOT_FOUND")) {
