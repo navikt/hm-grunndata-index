@@ -52,13 +52,13 @@ class ProductIndexer(
         var noActualDeleted = 0;
 
         page.content.forEach {
-            val response = indexer.delete(it.id.toString(), aliasName)
+            val response = indexer.delete(it.seriesUUID.toString(), aliasName)
             if (response.status().equals("OK")) {
                 noActualDeleted++
             } else if (response.status().equals("NOT_FOUND")) {
                 LOG.info("Product ${it.id} not found in index")
             } else {
-                LOG.error("Failed to delete product ${it.id} from index, status: ${response.status()}")
+                LOG.error("Failed to delete product ${it.seriesUUID} from index, status: ${response.status()}")
             }
         }
 
