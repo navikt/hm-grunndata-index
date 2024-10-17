@@ -70,7 +70,8 @@ data class AttributesDoc(
     val pakrevdGodkjenningskurs: PakrevdGodkjenningskurs? = null,
     val produkttype: Produkttype? = null,
     val tenderId: String? = null,
-    val hasTender: Boolean? = null
+    val hasTender: Boolean? = null,
+    val alternativeFor: AlternativeFor? = null
 )
 
 data class MediaDoc(
@@ -145,7 +146,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
     throw e
 }
 
-private fun AgreementInfo.toDoc(): AgreementInfoDoc = AgreementInfoDoc(
+fun AgreementInfo.toDoc(): AgreementInfoDoc = AgreementInfoDoc(
     id = id,
     identifier = identifier,
     title = title,
@@ -160,7 +161,7 @@ private fun AgreementInfo.toDoc(): AgreementInfoDoc = AgreementInfoDoc(
     expired = expired
 )
 
-private fun Attributes.toDoc(): AttributesDoc {
+fun Attributes.toDoc(): AttributesDoc {
     return AttributesDoc(
         manufacturer = manufacturer,
         keywords = keywords,
@@ -175,7 +176,8 @@ private fun Attributes.toDoc(): AttributesDoc {
         produkttype = produkttype,
         tenderId = tenderId,
         hasTender = hasTender,
-        compatibleWith = compatibleWidth
+        compatibleWith = compatibleWidth,
+        alternativeFor = alternativeFor
     )
 }
 

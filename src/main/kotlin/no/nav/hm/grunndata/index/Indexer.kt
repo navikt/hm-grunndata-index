@@ -105,5 +105,5 @@ class Indexer(private val client: RestHighLevelClient,
 fun createIndexName(type: IndexType): String = "${type.name}_${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"))}"
 
 enum class IndexType {
-    products, external_products, suppliers, agreements, news
+    products, alternative_products, external_products, suppliers, agreements, news
 }
