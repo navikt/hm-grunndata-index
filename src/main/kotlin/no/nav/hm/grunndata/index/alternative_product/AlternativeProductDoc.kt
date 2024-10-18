@@ -32,14 +32,55 @@ data class AlternativeProductDoc(
     val expired: LocalDateTime,
     val agreements: List<AgreementInfoDoc> = emptyList(),
     val hasAgreement: Boolean = false,
+    val wareHouseStock: List<WareHouseStockDoc> = emptyList(),
     val filters: Map<String, Any> = emptyMap()
 ) : SearchDoc
 
+data class WareHouseStock(
+    val erPåLager: Boolean,
+    val organisasjons_id: Long,
+    val organisasjons_navn: String,
+    val artikkelnummer: String,
+    val artikkelid: Long,
+    val fysisk: Int,
+    val tilgjengeligatt: Int,
+    val tilgjengeligroo: Int,
+    val tilgjengelig: Int,
+    val behovsmeldt: Int,
+    val reservert: Int,
+    val restordre: Int,
+    val bestillinger: Int,
+    val anmodning: Int,
+    val intanmodning: Int,
+    val forsyning: Int,
+    val sortiment: Boolean,
+    val lagervare: Boolean,
+    val minmax: Boolean
+)
 
-fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService, techLabelService: TechLabelService): AlternativeProductDoc = try {
+data class WareHouseStockDoc(
+    val organisasjons_navn: String,
+    val fysisk: Int,
+    val tilgjengelig: Int,
+    val minmax: Boolean
+)
+
+fun WareHouseStock.toDoc(): WareHouseStockDoc = WareHouseStockDoc(
+    organisasjons_navn = organisasjons_navn.substring(3),
+    fysisk = fysisk,
+    tilgjengelig = tilgjengelig,
+    minmax = minmax
+)
+
+fun ProductRapidDTO.toDoc(
+    isoCategoryService: IsoCategoryService,
+    techLabelService: TechLabelService
+): AlternativeProductDoc = try {
     val (onlyActiveAgreements, previousAgreements) =
-        agreements.partition { it.published!!.isBefore(LocalDateTime.now())
-                && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE }
+        agreements.partition {
+            it.published!!.isBefore(LocalDateTime.now())
+                    && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE
+        }
 
     val iso = isoCategoryService.lookUpCode(isoCategory)
     AlternativeProductDoc(id = id.toString(),
@@ -65,9 +106,11 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService, techLabelServi
         expired = expired,
         agreements = onlyActiveAgreements.map { it.toDoc() },
         hasAgreement = onlyActiveAgreements.isNotEmpty(),
-        filters = techData.mapNotNull { data -> techLabelService.fetchLabelByIsoCodeLabel(isoCategory, data.key)?.let {
-            it.systemLabel to data.value
-        }}.toMap()
+        filters = techData.mapNotNull { data ->
+            techLabelService.fetchLabelByIsoCodeLabel(isoCategory, data.key)?.let {
+                it.systemLabel to data.value
+            }
+        }.toMap()
     )
 } catch (e: Exception) {
     println(isoCategory)

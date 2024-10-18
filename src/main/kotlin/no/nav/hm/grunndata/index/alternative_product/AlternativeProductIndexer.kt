@@ -81,7 +81,7 @@ class AlternativeProductIndexer(
             size=3000, page = 0, sort="updated,asc")
         if (page.numberOfElements>0) {
             val products = page.content.map { it.toDoc(isoCategoryService, techLabelService)}.filter {
-                it.status != ProductStatus.DELETED
+                it.status != ProductStatus.DELETED && it.hmsArtNr != null
             }
             LOG.info("indexing ${products.size} products to $aliasName")
             index(products)
