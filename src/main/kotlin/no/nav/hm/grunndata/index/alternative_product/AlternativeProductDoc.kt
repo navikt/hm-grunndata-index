@@ -59,16 +59,14 @@ data class WareHouseStock(
 )
 
 data class WareHouseStockDoc(
-    val organisasjons_navn: String,
-    val fysisk: Int,
-    val tilgjengelig: Int,
+    val location: String,
+    val available: Int,
     val minmax: Boolean
 )
 
 fun WareHouseStock.toDoc(): WareHouseStockDoc = WareHouseStockDoc(
-    organisasjons_navn = organisasjons_navn.substring(3),
-    fysisk = fysisk,
-    tilgjengelig = tilgjengelig,
+    location = organisasjons_navn.substring(3),
+    available = tilgjengelig,
     minmax = minmax
 )
 
