@@ -18,7 +18,6 @@ data class AlternativeProductDoc(
     val attributes: AttributesDoc,
     val status: ProductStatus,
     val hmsArtNr: String? = null,
-    val identifier: String,
     val supplierRef: String,
     val isoCategory: String,
     val isoCategoryTitle: String? = null,
@@ -38,9 +37,10 @@ data class AlternativeProductDoc(
 
 
 fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService, techLabelService: TechLabelService): AlternativeProductDoc = try {
-    val onlyActiveAgreements =
-        agreements.filter { it.published!!.isBefore(LocalDateTime.now())
-                && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE}
+    val (onlyActiveAgreements, previousAgreements) =
+        agreements.partition { it.published!!.isBefore(LocalDateTime.now())
+                && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE }
+
     val iso = isoCategoryService.lookUpCode(isoCategory)
     AlternativeProductDoc(id = id.toString(),
         supplier = ProductSupplier(
@@ -51,7 +51,6 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService, techLabelServi
         attributes = attributes.toDoc(),
         status = status,
         hmsArtNr = hmsArtNr,
-        identifier = identifier,
         supplierRef = supplierRef,
         isoCategory = isoCategory,
         isoCategoryTitle = iso?.isoTitle,

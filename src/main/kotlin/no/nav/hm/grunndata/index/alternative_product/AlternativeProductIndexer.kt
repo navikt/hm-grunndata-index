@@ -25,12 +25,10 @@ class AlternativeProductIndexer(
 ) {
     companion object {
         private val LOG = LoggerFactory.getLogger(AlternativeProductIndexer::class.java)
-        private val settings = null
-        private val mapping = null
-//        private val settings = AlternativeProductIndexer::class.java
-//            .getResource("/opensearch/alternative_products_settings.json")?.readText()
-//        private val mapping = AlternativeProductIndexer::class.java
-//            .getResource("/opensearch/alternative_products_mapping.json")?.readText()
+        private val settings = AlternativeProductIndexer::class.java
+            .getResource("/opensearch/alternative_products_settings.json")?.readText()
+        private val mapping = AlternativeProductIndexer::class.java
+            .getResource("/opensearch/alternative_products_mapping.json")?.readText()
     }
 
     init {

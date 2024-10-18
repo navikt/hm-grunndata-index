@@ -97,4 +97,4 @@ grunndata:
   db:
     url: ${GRUNNDATA_DB_URL:`http://localhost:8888`}
   register:
-    url: ${GRUNNDATA_REGISTER_URL:`http://localhost:8080/admreg`}
+    url: ${GRUNNDATA_REGISTER_URL:`http://localhost:7777/admreg`}
