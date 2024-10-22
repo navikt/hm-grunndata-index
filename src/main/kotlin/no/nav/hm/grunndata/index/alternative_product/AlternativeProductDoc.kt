@@ -32,6 +32,7 @@ data class AlternativeProductDoc(
     val expired: LocalDateTime,
     val agreements: List<AgreementInfoDoc> = emptyList(),
     val hasAgreement: Boolean = false,
+    val alternativeFor: Set<String> = emptySet(),
     val wareHouseStock: List<WareHouseStockDoc> = emptyList(),
     val filters: Map<String, Any> = emptyMap()
 ) : SearchDoc
@@ -61,25 +62,30 @@ data class WareHouseStock(
 data class WareHouseStockDoc(
     val location: String,
     val available: Int,
+    val reserved: Int,
+    val needNotified: Int,
     val minmax: Boolean
 )
 
 fun WareHouseStock.toDoc(): WareHouseStockDoc = WareHouseStockDoc(
     location = organisasjons_navn.substring(3),
     available = tilgjengelig,
+    reserved = reservert,
+    needNotified = behovsmeldt,
     minmax = minmax
 )
 
 fun ProductRapidDTO.toDoc(
     isoCategoryService: IsoCategoryService,
-    techLabelService: TechLabelService
+    techLabelService: TechLabelService,
+    alternativProdukterClient: AlternativProdukterClient
 ): AlternativeProductDoc = try {
     val (onlyActiveAgreements, previousAgreements) =
         agreements.partition {
             it.published!!.isBefore(LocalDateTime.now())
                     && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE
         }
-
+    val alternativeProdukterResponse = alternativProdukterClient.fetchAlterntivProdukter(hmsArtNr!!)
     val iso = isoCategoryService.lookUpCode(isoCategory)
     AlternativeProductDoc(id = id.toString(),
         supplier = ProductSupplier(
@@ -104,6 +110,8 @@ fun ProductRapidDTO.toDoc(
         expired = expired,
         agreements = onlyActiveAgreements.map { it.toDoc() },
         hasAgreement = onlyActiveAgreements.isNotEmpty(),
+        alternativeFor = alternativeProdukterResponse.alternatives.map { it.hmsArtNr }.toSet(),
+        wareHouseStock = alternativeProdukterResponse.original.warehouseStock.map { it.toDoc()},
         filters = techData.mapNotNull { data ->
             techLabelService.fetchLabelByIsoCodeLabel(isoCategory, data.key)?.let {
                 it.systemLabel to data.value

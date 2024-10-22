@@ -23,7 +23,8 @@ class AlternativeProductIndexerRiver(
     private val objectMapper: ObjectMapper,
     private val alternativeProductIndexer: AlternativeProductIndexer,
     private val isoCategoryService: IsoCategoryService,
-    private val techLabelService: TechLabelService
+    private val techLabelService: TechLabelService,
+    private val alternativeProduckterClient: AlternativProdukterClient
 ): River.PacketListener {
     companion object {
         private val LOG = LoggerFactory.getLogger(AlternativeProductIndexerRiver::class.java)
@@ -49,7 +50,15 @@ class AlternativeProductIndexerRiver(
         }
         else {
             LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr}")
-            alternativeProductIndexer.index(dto.toDoc(isoCategoryService, techLabelService ))
+            if (dto.hmsArtNr != null) {
+                alternativeProductIndexer.index(
+                    dto.toDoc(
+                        isoCategoryService,
+                        techLabelService,
+                        alternativeProduckterClient
+                    )
+                )
+            }
         }
     }
 }

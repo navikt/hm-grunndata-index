@@ -64,13 +64,6 @@
         },
         "produkttype": {
           "type": "keyword"
-        },
-        "alternativeFor": {
-          "properties": {
-            "hmsArtNrs": {
-              "type": "keyword"
-            }
-          }
         }
       }
     },
@@ -317,6 +310,28 @@
     "updated": {
       "type": "date",
       "format": "strict_date_optional_time"
+    },
+    "alternativeFor": {
+          "type": "keyword"
+    },
+    "warehouseStock": {
+      "properties": {
+        "location": {
+          "type": "keyword"
+        },
+        "available": {
+          "type": "long"
+        },
+        "reserved": {
+          "type": "long"
+        },
+        "needNotified": {
+          "type": "long"
+        },
+        "minmax": {
+          "type": "long"
+        }
+      }
     }
   }
 }

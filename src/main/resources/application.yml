@@ -98,3 +98,5 @@ grunndata:
     url: ${GRUNNDATA_DB_URL:`http://localhost:8888`}
   register:
     url: ${GRUNNDATA_REGISTER_URL:`http://localhost:7777/admreg`}
+  alternativprodukter:
+    url: ${GRUNNDATA_ALTERNATIVPRODUKTER_URL:`http://localhost:5555/`}
