@@ -104,7 +104,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ExternalProdu
         // FILTERED: isoSearchTag = isoCategoryService.getHigherLevelsInBranch(isoCategory).map { it.searchWords }.flatten(),
         // FILTERED: accessory = accessory,
         // FILTERED: sparePart = sparePart,
-        seriesId = seriesIdentifier ?: seriesId, // backovercompatible with hmdbIdentifier
+        seriesId = seriesUUID?.toString(),
         data = techData,
         media = media.map { it.toDoc() }.sortedBy { it.priority },
         created = created,
