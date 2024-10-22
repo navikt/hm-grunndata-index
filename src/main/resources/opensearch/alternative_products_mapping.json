@@ -315,6 +315,7 @@
           "type": "keyword"
     },
     "warehouseStock": {
+      "type": "nested",
       "properties": {
         "location": {
           "type": "keyword"
