@@ -8,13 +8,12 @@ import io.micronaut.http.client.annotation.Client
 @Client("\${grunndata.alternativprodukter.url}")
 interface AlternativProdukterClient {
 
-    @Get(uri = "/alternativ/{hmsNr}", consumes = [APPLICATION_JSON])
-    fun fetchAlterntivProdukter(hmsNr: String): AlternativeProductsResponse
+    @Get(uri = "/alternativ/stock-alternatives/{hmsNr}", consumes = [APPLICATION_JSON])
+    fun fetchAlterntivProdukter(hmsNr: String): ProductStockAlternatives
 
 }
 
-data class AlternativeProductsResponse(val original: ProductStock, val alternatives: List<ProductStock> = emptyList())
-
 data class ProductStock(val hmsArtNr: String, val warehouseStock: List<WareHouseStock> = emptyList())
 
+data class ProductStockAlternatives(val original: ProductStock, val alternatives: List<String> = emptyList())
 

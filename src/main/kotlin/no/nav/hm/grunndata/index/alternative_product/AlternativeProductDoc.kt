@@ -102,7 +102,7 @@ fun ProductRapidDTO.toDoc(
         isoCategoryTitleShort = iso?.isoTitleShort,
         isoCategoryText = iso?.isoText,
         isoCategoryTextShort = iso?.isoTextShort,
-        seriesId = seriesIdentifier ?: seriesUUID.toString(),
+        seriesId = seriesUUID.toString(),
         data = techData,
         media = media.map { it.toDoc() }.sortedBy { it.priority },
         created = created,
@@ -110,7 +110,7 @@ fun ProductRapidDTO.toDoc(
         expired = expired,
         agreements = onlyActiveAgreements.map { it.toDoc() },
         hasAgreement = onlyActiveAgreements.isNotEmpty(),
-        alternativeFor = alternativeProdukterResponse.alternatives.map { it.hmsArtNr }.toSet(),
+        alternativeFor = alternativeProdukterResponse.alternatives.map { it }.toSet(),
         wareHouseStock = alternativeProdukterResponse.original.warehouseStock.map { it.toDoc()},
         filters = techData.mapNotNull { data ->
             techLabelService.fetchLabelByIsoCodeLabel(isoCategory, data.key)?.let {
