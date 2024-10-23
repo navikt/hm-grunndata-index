@@ -314,7 +314,7 @@
     "alternativeFor": {
           "type": "keyword"
     },
-    "warehouseStock": {
+    "wareHouseStock": {
       "type": "nested",
       "properties": {
         "location": {
@@ -330,7 +330,7 @@
           "type": "long"
         },
         "minmax": {
-          "type": "long"
+          "type": "boolean"
         }
       }
     }

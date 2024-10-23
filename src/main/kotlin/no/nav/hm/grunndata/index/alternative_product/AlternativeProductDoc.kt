@@ -68,7 +68,7 @@ data class WareHouseStockDoc(
 )
 
 fun WareHouseStock.toDoc(): WareHouseStockDoc = WareHouseStockDoc(
-    location = organisasjons_navn.substring(3),
+    location = organisasjons_navn.substring(4),
     available = tilgjengelig,
     reserved = reservert,
     needNotified = behovsmeldt,
