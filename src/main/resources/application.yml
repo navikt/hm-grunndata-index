@@ -90,7 +90,13 @@ products:
   aliasName: ${PRODUCTS_ALIASNAME:products}
 news:
   aliasName: ${NEWS_ALIASNAME:news}
+alternative_products:
+  aliasName: ${ALTERNATIVE_PRODUCTS_ALIASNAME:alternative_products}
 
 grunndata:
   db:
     url: ${GRUNNDATA_DB_URL:`http://localhost:8888`}
+  register:
+    url: ${GRUNNDATA_REGISTER_URL:`http://localhost:7777/admreg`}
+  alternativprodukter:
+    url: ${GRUNNDATA_ALTERNATIVPRODUKTER_URL:`http://localhost:5555`}
