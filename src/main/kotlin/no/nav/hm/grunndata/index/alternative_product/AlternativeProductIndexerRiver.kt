@@ -24,7 +24,7 @@ class AlternativeProductIndexerRiver(
     private val alternativeProductIndexer: AlternativeProductIndexer,
     private val isoCategoryService: IsoCategoryService,
     private val techLabelService: TechLabelService,
-    private val alternativeProduckterClient: AlternativProdukterClient
+    private val alternativeProdukterClient: AlternativProdukterClient
 ): River.PacketListener {
     companion object {
         private val LOG = LoggerFactory.getLogger(AlternativeProductIndexerRiver::class.java)
@@ -34,7 +34,7 @@ class AlternativeProductIndexerRiver(
         LOG.info("Using Rapid DTO version $rapidDTOVersion")
         river
             .validate { it.demandValue("createdBy", RapidApp.grunndata_db)}
-            .validate { it.demandAny("eventName", listOf(EventName.hmdbproductsyncV1, EventName.syncedRegisterProductV1)) }
+            .validate { it.demandAny("eventName", listOf(EventName.syncedRegisterProductV1)) }
             .validate { it.demandKey("payload")}
             .validate { it.demandKey("dtoVersion")}
             .register(this)
@@ -55,7 +55,7 @@ class AlternativeProductIndexerRiver(
                     dto.toDoc(
                         isoCategoryService,
                         techLabelService,
-                        alternativeProduckterClient
+                        alternativeProdukterClient
                     )
                 )
             }

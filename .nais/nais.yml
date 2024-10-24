@@ -35,6 +35,8 @@ spec:
       value: "{{ rapidsandrivers_enabled }}"
     - name: GRUNNDATA_DB_URL
       value: "http://hm-grunndata-db"
+    - name: GRUNNDATA_ALTERNATIVPRODUKTER_URL
+      value: "http://hm-grunndata-alternativprodukter"
     - name: JAVA_OPTS
       value: "{{java_opts}}"
   kafka:
