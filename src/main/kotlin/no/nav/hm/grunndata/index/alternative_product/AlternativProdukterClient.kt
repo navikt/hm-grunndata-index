@@ -9,7 +9,7 @@ import io.micronaut.http.client.annotation.Client
 interface AlternativProdukterClient {
 
     @Get(uri = "/alternativ/stock-alternatives/{hmsNr}", consumes = [APPLICATION_JSON])
-    fun fetchAlterntivProdukter(hmsNr: String): ProductStockAlternatives
+    fun fetchAlternativProdukter(hmsNr: String): ProductStockAlternatives
 
 }
 

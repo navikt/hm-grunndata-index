@@ -85,7 +85,7 @@ fun ProductRapidDTO.toDoc(
             it.published!!.isBefore(LocalDateTime.now())
                     && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE
         }
-    val alternativeProdukterResponse = alternativProdukterClient.fetchAlterntivProdukter(hmsArtNr!!)
+    val alternativeProdukterResponse = alternativProdukterClient.fetchAlternativProdukter(hmsArtNr!!)
     val iso = isoCategoryService.lookUpCode(isoCategory)
     AlternativeProductDoc(id = id.toString(),
         supplier = ProductSupplier(
