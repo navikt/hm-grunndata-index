@@ -38,7 +38,7 @@ spec:
     - name: GRUNNDATA_ALTERNATIVPRODUKTER_URL
       value: "http://hm-grunndata-alternativprodukter"
     - name: GRUNNDATA_REGISTER_URL
-      value: "http://hm-grunndata-register"
+      value: "http://hm-grunndata-register/admreg"
     - name: JAVA_OPTS
       value: "{{java_opts}}"
   kafka:
