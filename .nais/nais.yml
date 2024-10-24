@@ -43,5 +43,6 @@ spec:
     outbound:
       rules:
         - application: hm-grunndata-db
+        - application: hm-grunndata-alternativprodukter
       external:
         - host: navikt.github.io
