@@ -37,6 +37,8 @@ spec:
       value: "http://hm-grunndata-db"
     - name: GRUNNDATA_ALTERNATIVPRODUKTER_URL
       value: "http://hm-grunndata-alternativprodukter"
+    - name: GRUNNDATA_REGISTER_URL
+      value: "http://hm-grunndata-register"
     - name: JAVA_OPTS
       value: "{{java_opts}}"
   kafka:
@@ -46,5 +48,6 @@ spec:
       rules:
         - application: hm-grunndata-db
         - application: hm-grunndata-alternativprodukter
+        - application: hm-grunndata-register
       external:
         - host: navikt.github.io
