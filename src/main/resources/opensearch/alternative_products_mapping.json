@@ -331,6 +331,10 @@
         },
         "minmax": {
           "type": "boolean"
+        },
+        "updated": {
+          "type": "date",
+          "format": "strict_date_optional_time"
         }
       }
     }

@@ -64,7 +64,8 @@ data class WareHouseStockDoc(
     val available: Int,
     val reserved: Int,
     val needNotified: Int,
-    val minmax: Boolean
+    val minmax: Boolean,
+    val updated: LocalDateTime = LocalDateTime.now()
 )
 
 fun WareHouseStock.toDoc(): WareHouseStockDoc = WareHouseStockDoc(
