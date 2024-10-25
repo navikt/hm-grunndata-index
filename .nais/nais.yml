@@ -43,6 +43,7 @@ spec:
       value: "{{java_opts}}"
   kafka:
     pool: {{ kafka_cluster }}
+  leaderElection: true
   accessPolicy:
     outbound:
       rules:

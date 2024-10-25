@@ -14,7 +14,7 @@ val kotestVersion = "5.5.5"
 val openSearchRestClientVersion = "2.11.1"
 val rapidsRiversVersion = "202410171601"
 val grunndataDtoVersion = "202409181446"
-
+val leaderElectionVersion = "202405151234"
 
 group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
@@ -62,6 +62,8 @@ dependencies {
     implementation("com.github.navikt:hm-rapids-and-rivers-v2-core:$rapidsRiversVersion")
     implementation("com.github.navikt:hm-rapids-and-rivers-v2-micronaut:$rapidsRiversVersion")
     implementation("no.nav.hm.grunndata:hm-grunndata-rapid-dto:$grunndataDtoVersion")
+
+    implementation("com.github.navikt:hm-micronaut-leaderelection:$leaderElectionVersion")
 
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.micronaut.test:micronaut-test-kotest5")

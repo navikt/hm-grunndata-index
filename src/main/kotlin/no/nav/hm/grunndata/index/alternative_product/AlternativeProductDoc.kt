@@ -73,7 +73,8 @@ fun WareHouseStock.toDoc(): WareHouseStockDoc = WareHouseStockDoc(
     available = tilgjengelig,
     reserved = reservert,
     needNotified = behovsmeldt,
-    minmax = minmax
+    minmax = minmax,
+    updated = LocalDateTime.now()
 )
 
 fun ProductRapidDTO.toDoc(
