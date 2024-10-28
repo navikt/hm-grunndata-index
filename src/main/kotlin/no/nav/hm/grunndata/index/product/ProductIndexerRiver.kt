@@ -42,11 +42,11 @@ class ProductIndexerRiver(river: RiverHead,
         if (dtoVersion > rapidDTOVersion) LOG.warn("this event dto version $dtoVersion is newer than our version: $rapidDTOVersion")
         val dto = objectMapper.treeToValue(packet["payload"], ProductRapidDTO::class.java)
         if (dto.status == ProductStatus.DELETED) {
-            LOG.info("deleting product id: ${dto.id} hmsnr: ${dto.hmsArtNr}")
+            LOG.info("deleting product id: ${dto.id} hmsnr: ${dto.hmsArtNr} for series ${dto.seriesUUID}")
             productIndexer.delete(dto.id)
         }
         else {
-            LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr}")
+            LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr} for series ${dto.seriesUUID}")
             productIndexer.index(dto.toDoc(isoCategoryService))
         }
     }
