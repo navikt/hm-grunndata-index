@@ -12,15 +12,25 @@ open class AlternativeProductScheduler(private val alternativeProductIndexer: Al
         private val LOG = LoggerFactory.getLogger(AlternativeProductScheduler::class.java)
     }
 
+    val isos = setOf(
+        // løfteplattform
+        "12360401",
+        "12360301",
+        "12361202",
+        "12361501",
+        // stoler med oppreisningsfunksjon
+        "18091501",
+        "18091502",
+    )
+
     @LeaderOnly
     @Scheduled(cron = "0 0 1 * * *")
     open fun runReIndexAlternativeProducts() {
         // temporary implementation for løfteplattform agreement
         LOG.info("Reindexing alternative products, to get updated warehouse stock")
-        alternativeProductIndexer.reIndexByIsoCategory("12312101")
-        alternativeProductIndexer.reIndexByIsoCategory("12360401")
-        alternativeProductIndexer.reIndexByIsoCategory("12360301")
-        alternativeProductIndexer.reIndexByIsoCategory("12361202")
-        alternativeProductIndexer.reIndexByIsoCategory("12361501")
+        isos.forEach {
+            LOG.info("reindexing alternative products for iso: $it")
+            alternativeProductIndexer.reIndexByIsoCategory(it)
+        }
     }
 }
