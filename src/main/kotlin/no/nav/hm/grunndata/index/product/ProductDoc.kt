@@ -104,7 +104,8 @@ data class ProductSupplier(val id: String, val identifier: String, val name: Str
 fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = try {
     val (onlyActiveAgreements, previousAgreements) =
         agreements.partition { it.published!!.isBefore(LocalDateTime.now())
-                && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE }
+                && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE
+                && this.status == ProductStatus.ACTIVE }
 
     val iso = isoCategoryService.lookUpCode(isoCategory) ?: isoCategoryService.getClosestLevelInBranch(isoCategory)
     ProductDoc(id = id.toString(),
