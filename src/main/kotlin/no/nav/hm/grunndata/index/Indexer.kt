@@ -8,11 +8,14 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import org.opensearch.client.opensearch.OpenSearchClient
+import org.opensearch.client.opensearch._types.Refresh
 import org.opensearch.client.opensearch._types.mapping.TypeMapping
 import org.opensearch.client.opensearch.core.BulkRequest
 import org.opensearch.client.opensearch.core.BulkResponse
 import org.opensearch.client.opensearch.core.DeleteRequest
 import org.opensearch.client.opensearch.core.DeleteResponse
+import org.opensearch.client.opensearch.core.bulk.BulkOperation
+import org.opensearch.client.opensearch.core.bulk.IndexOperation
 import org.opensearch.client.opensearch.indices.CreateIndexRequest
 import org.opensearch.client.opensearch.indices.DeleteAliasRequest
 import org.opensearch.client.opensearch.indices.ExistsAliasRequest
@@ -83,16 +86,18 @@ class Indexer(private val client: OpenSearchClient,
     }
 
     fun index(docs: List<SearchDoc>, indexName: String): BulkResponse {
-        val bulkRequest = BulkRequest.Builder()
-        docs.forEach { doc ->
-            bulkRequest.operations {
-                op -> op.index {
-                    index -> index.index(indexName).id(doc.id).document(doc)
-                }
-            }
+        val operations = docs.map { document ->
+            BulkOperation.Builder().index(
+                IndexOperation.of { it.index(indexName).id(document.id).document(document) }
+            ).build()
         }
+        val bulkRequest = BulkRequest.Builder()
+            .index(indexName)
+            .operations(operations)
+            .refresh(Refresh.WaitFor)
+            .build()
         return try {
-            client.bulk(bulkRequest.build())
+            client.bulk(bulkRequest)
         }
         catch (e: Exception) {
             LOG.error("Failed to index $docs to $indexName", e)

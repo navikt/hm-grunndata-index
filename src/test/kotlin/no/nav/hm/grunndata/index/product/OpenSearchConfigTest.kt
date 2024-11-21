@@ -1,10 +1,11 @@
-package no.nav.hm.grunndata.index
+package no.nav.hm.grunndata.index.product
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.micronaut.context.annotation.ConfigurationProperties
 import io.micronaut.context.annotation.Factory
+import io.micronaut.context.annotation.Replaces
 import jakarta.inject.Singleton
 import java.security.cert.X509Certificate
+import no.nav.hm.grunndata.index.OpenSearchConfig
 import org.apache.hc.client5.http.auth.AuthScope
 import org.apache.hc.client5.http.auth.UsernamePasswordCredentials
 import org.apache.hc.client5.http.impl.async.HttpAsyncClientBuilder
@@ -21,19 +22,21 @@ import org.slf4j.LoggerFactory
 
 
 @Factory
-class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv, private val objectMapper: ObjectMapper) {
+@Replaces(factory = OpenSearchConfig::class)
+class OpenSearchConfigTest(private val osContainer: OSContainer,
+                       private val objectMapper: ObjectMapper) {
 
     companion object {
-        private val LOG = LoggerFactory.getLogger(OpenSearchConfig::class.java)
+        private val LOG = LoggerFactory.getLogger(OpenSearchConfigTest::class.java)
     }
 
     @Singleton
     fun buildOpenSearchClient(): OpenSearchClient {
-        val host = HttpHost.create(openSearchEnv.url)
+        val host = HttpHost.create(osContainer.container.httpHostAddress)
         val credentialsProvider: BasicCredentialsProvider = BasicCredentialsProvider()
         credentialsProvider.setCredentials(
             AuthScope(host),
-            UsernamePasswordCredentials(openSearchEnv.user, openSearchEnv.password.toCharArray())
+            UsernamePasswordCredentials("admin", "admin".toCharArray())
         )
         val sslcontext = SSLContextBuilder
             .create()
@@ -59,15 +62,9 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv, private val obj
 
         val transport: OpenSearchTransport = builder.build()
         val client = OpenSearchClient(transport)
-        LOG.info("Opensearch client using ${openSearchEnv.user} and url ${openSearchEnv.url}")
+        LOG.info("Opensearch client using admin and url ${osContainer.container.httpHostAddress}")
         return client
     }
 
 }
 
-@ConfigurationProperties("opensearch")
-class OpenSearchEnv {
-    var user: String = "admin"
-    var password: String = "admin"
-    var url: String = "https://localhost:9200"
-}

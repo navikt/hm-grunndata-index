@@ -11,7 +11,7 @@ val logbackEncoderVersion = "7.3"
 val tcVersion= "1.20.4"
 val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
-val openSearchJavaClientVersion = "2.8.1"
+val openSearchJavaClientVersion = "2.18.0"
 val rapidsRiversVersion = "202410290928"
 val grunndataDtoVersion = "202409181446"
 val leaderElectionVersion = "202405151234"
@@ -56,8 +56,7 @@ dependencies {
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-http-client")
     implementation("org.opensearch.client:opensearch-java:$openSearchJavaClientVersion")
-    implementation("org.opensearch.client:opensearch-rest-client:$openSearchJavaClientVersion")
-
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.4.1")
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
     implementation("io.micronaut:micronaut-management")

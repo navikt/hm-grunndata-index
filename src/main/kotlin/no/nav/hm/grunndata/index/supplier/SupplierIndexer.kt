@@ -17,9 +17,9 @@ class SupplierIndexer(private val indexer: Indexer,
 
     companion object {
         private val LOG = LoggerFactory.getLogger(SupplierIndexer::class.java)
-        private val settings = ProductIndexer::class.java
+        private val settings = SupplierIndexer::class.java
             .getResource("/opensearch/suppliers_settings.json")?.readText()
-        private val mapping = ProductIndexer::class.java
+        private val mapping = SupplierIndexer::class.java
             .getResource("/opensearch/suppliers_mapping.json")?.readText()
     }
 

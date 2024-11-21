@@ -19,7 +19,7 @@ class JacksonConfig : BeanCreatedEventListener<ObjectMapper> {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
+                .configure(SerializationFeature.INDENT_OUTPUT, false)
         return objectMapper
     }
 }
