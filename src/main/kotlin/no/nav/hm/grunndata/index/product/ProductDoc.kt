@@ -70,7 +70,8 @@ data class AttributesDoc(
     val pakrevdGodkjenningskurs: PakrevdGodkjenningskurs? = null,
     val produkttype: Produkttype? = null,
     val tenderId: String? = null,
-    val hasTender: Boolean? = null
+    val hasTender: Boolean? = null,
+    val alternativeFor: AlternativeFor? = null
 )
 
 data class MediaDoc(
@@ -103,7 +104,8 @@ data class ProductSupplier(val id: String, val identifier: String, val name: Str
 fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = try {
     val (onlyActiveAgreements, previousAgreements) =
         agreements.partition { it.published!!.isBefore(LocalDateTime.now())
-                && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE }
+                && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE
+                && this.status == ProductStatus.ACTIVE }
 
     val iso = isoCategoryService.lookUpCode(isoCategory) ?: isoCategoryService.getClosestLevelInBranch(isoCategory)
     ProductDoc(id = id.toString(),
@@ -125,7 +127,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
         isoSearchTag = isoCategoryService.getHigherLevelsInBranch(isoCategory).map { it.searchWords }.flatten(),
         accessory = accessory,
         sparePart = sparePart,
-        seriesId = seriesIdentifier ?: seriesId, // backovercompatible with hmdbIdentifier
+        seriesId = seriesUUID?.toString(),
         data = techData,
         media = media.map { it.toDoc() }.sortedBy { it.priority },
         created = created,
@@ -145,7 +147,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
     throw e
 }
 
-private fun AgreementInfo.toDoc(): AgreementInfoDoc = AgreementInfoDoc(
+fun AgreementInfo.toDoc(): AgreementInfoDoc = AgreementInfoDoc(
     id = id,
     identifier = identifier,
     title = title,
@@ -160,7 +162,7 @@ private fun AgreementInfo.toDoc(): AgreementInfoDoc = AgreementInfoDoc(
     expired = expired
 )
 
-private fun Attributes.toDoc(): AttributesDoc {
+fun Attributes.toDoc(): AttributesDoc {
     return AttributesDoc(
         manufacturer = manufacturer,
         keywords = keywords,
@@ -175,7 +177,8 @@ private fun Attributes.toDoc(): AttributesDoc {
         produkttype = produkttype,
         tenderId = tenderId,
         hasTender = hasTender,
-        compatibleWith = compatibleWidth
+        compatibleWith = compatibleWidth,
+        alternativeFor = alternativeFor
     )
 }
 

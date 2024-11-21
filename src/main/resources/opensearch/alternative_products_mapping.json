@@ -1,0 +1,343 @@
+{
+  "date_detection": false,
+  "properties": {
+    "id": {
+      "type": "keyword",
+      "copy_to": "keywords"
+    },
+    "accessory": {
+      "type": "boolean"
+    },
+    "agreements": {
+      "properties": {
+        "expired": {
+          "type": "date",
+          "format": "strict_date_optional_time"
+        },
+        "id": {
+          "type": "keyword"
+        },
+        "label": {
+          "type": "keyword"
+        },
+        "identifier": {
+          "type": "keyword"
+        },
+        "postIdentifier": {
+          "type": "keyword"
+        },
+        "postNr": {
+          "type": "long"
+        },
+        "postTitle": {
+          "type": "keyword"
+        },
+        "postId": {
+          "type": "keyword"
+        },
+        "refNr": {
+          "type": "keyword"
+        },
+        "rank": {
+          "type": "long"
+        },
+        "reference": {
+          "type": "keyword",
+          "copy_to": [
+            "keywords_bag"
+          ]
+        }
+      }
+    },
+    "attributes": {
+      "properties": {
+        "shortdescription": {
+          "type": "text",
+          "analyzer": "norwegian_html"
+        },
+        "text": {
+          "type": "text",
+          "analyzer": "norwegian_html"
+        },
+        "keywords": {
+          "type": "keyword"
+        },
+        "produkttype": {
+          "type": "keyword"
+        }
+      }
+    },
+    "created": {
+      "type": "date",
+      "format": "strict_date_optional_time"
+    },
+    "data": {
+      "enabled": false
+    },
+    "expired": {
+      "type": "date",
+      "format": "strict_date_optional_time"
+    },
+    "filters": {
+      "properties": {
+        "antallhoydeposisjonermastn": {
+          "type": "long"
+        },
+        "antallopphengspunkterstdn": {
+          "type": "long"
+        },
+        "avstandskinnetilopphengspktseilmaksn": {
+          "type": "long"
+        },
+        "avstandskinnetilopphengspktseilminn": {
+          "type": "long"
+        },
+        "avstandunderkantskinnetilopphengspunktn": {
+          "type": "long"
+        },
+        "breddereguleringparallelll": {
+          "type": "keyword"
+        },
+        "breddereguleringvforml": {
+          "type": "keyword"
+        },
+        "breddesammenlagtn": {
+          "type": "long"
+        },
+        "breddeunderstellmaksn": {
+          "type": "long"
+        },
+        "breddeunderstellminn": {
+          "type": "long"
+        },
+        "brukerhoydemaksn": {
+          "type": "long"
+        },
+        "brukerhoydeminn": {
+          "type": "long"
+        },
+        "brukervektmaksn": {
+          "type": "long"
+        },
+        "bueformetloftebevegelsel": {
+          "type": "keyword"
+        },
+        "delbarl": {
+          "type": "keyword"
+        },
+        "delbarutenverktoyl": {
+          "type": "keyword"
+        },
+        "elektriskbreddereguleringl": {
+          "type": "keyword"
+        },
+        "framdriftelektriskl": {
+          "type": "keyword"
+        },
+        "framdriftmanuelll": {
+          "type": "keyword"
+        },
+        "hoydereguleringbatteridriftl": {
+          "type": "keyword"
+        },
+        "hoydesammenlagtn": {
+          "type": "long"
+        },
+        "hoydeunderstelln": {
+          "type": "long"
+        },
+        "integrertladerl": {
+          "type": "keyword"
+        },
+        "kantilpasseshjornebadekarl": {
+          "type": "keyword"
+        },
+        "kjorehastighetn": {
+          "type": "long"
+        },
+        "lengdesammenlagtn": {
+          "type": "long"
+        },
+        "loftebandlengden": {
+          "type": "long"
+        },
+        "loftehastighetn": {
+          "type": "long"
+        },
+        "loftehoydemaksn": {
+          "type": "long"
+        },
+        "loftehoydeminn": {
+          "type": "long"
+        },
+        "lofteomrademaksn": {
+          "type": "long"
+        },
+        "lofteomrademinn": {
+          "type": "long"
+        },
+        "lofterensbredden": {
+          "type": "long"
+        },
+        "lofterenshoyden": {
+          "type": "long"
+        },
+        "lofterenslengden": {
+          "type": "long"
+        },
+        "lofterensvektn": {
+          "type": "long"
+        },
+        "manuellbreddereguleringl": {
+          "type": "keyword"
+        },
+        "passertilflererektangulaerebadekarmodellerl": {
+          "type": "keyword"
+        },
+        "rettloftebevegelsel": {
+          "type": "keyword"
+        },
+        "ryggvinkelmaksn": {
+          "type": "long"
+        },
+        "ryggvinkelminn": {
+          "type": "long"
+        },
+        "sammenleggbarl": {
+          "type": "keyword"
+        },
+        "senkehastighetn": {
+          "type": "long"
+        },
+        "setebreddemedsideklaffern": {
+          "type": "long"
+        },
+        "setebreddeutensideklaffern": {
+          "type": "long"
+        },
+        "setedybden": {
+          "type": "long"
+        },
+        "setehoydemaksn": {
+          "type": "long"
+        },
+        "setehoydeminn": {
+          "type": "long"
+        },
+        "snudiametern": {
+          "type": "long"
+        },
+        "totalvektn": {
+          "type": "long"
+        },
+        "understellbreddemaksn": {
+          "type": "long"
+        },
+        "understellbreddeminn": {
+          "type": "long"
+        },
+        "understellhoyden": {
+          "type": "long"
+        },
+        "vektloftern": {
+          "type": "long"
+        }
+      }
+    },
+    "hasAgreement": {
+      "type": "boolean"
+    },
+    "hmsArtNr": {
+      "type": "keyword",
+      "copy_to": [
+        "keywords_bag"
+      ]
+    },
+    "isoCategory": {
+      "type": "keyword"
+    },
+    "media": {
+      "enabled": false
+    },
+    "seriesId": {
+      "type": "keyword"
+    },
+    "sparePart": {
+      "type": "boolean"
+    },
+    "main": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "keyword"
+    },
+    "supplier": {
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "identifier": {
+          "type": "keyword"
+        },
+        "name": {
+          "type": "keyword"
+        }
+      }
+    },
+    "supplierRef": {
+      "type": "keyword",
+      "copy_to": [
+        "keywords_bag"
+      ]
+    },
+    "title": {
+      "type": "text",
+      "analyzer": "norwegian",
+      "copy_to": [
+        "keywords_suggest"
+      ]
+    },
+    "articleName": {
+      "type": "text",
+      "analyzer": "norwegian",
+      "copy_to": [
+        "articleName_keyword"
+      ]
+    },
+    "articleName_keyword": {
+      "type": "keyword"
+    },
+    "updated": {
+      "type": "date",
+      "format": "strict_date_optional_time"
+    },
+    "alternativeFor": {
+          "type": "keyword"
+    },
+    "wareHouseStock": {
+      "type": "nested",
+      "properties": {
+        "location": {
+          "type": "keyword"
+        },
+        "available": {
+          "type": "long"
+        },
+        "reserved": {
+          "type": "long"
+        },
+        "needNotified": {
+          "type": "long"
+        },
+        "minmax": {
+          "type": "boolean"
+        },
+        "updated": {
+          "type": "date",
+          "format": "strict_date_optional_time"
+        }
+      }
+    }
+  }
+}
+

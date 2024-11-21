@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 val jvmTarget = "17"
-val micronautVersion="4.5.0"
+val micronautVersion="4.7.0"
 val junitJupiterVersion = "5.9.0"
 val logbackClassicVersion = "1.4.12"
 val logbackEncoderVersion = "7.3"
@@ -12,12 +12,9 @@ val tcVersion= "1.17.6"
 val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
 val openSearchJavaClientVersion = "2.8.1"
-val openSearchRestClientVersion = "2.8.1"
-val rapidsRiversVersion = "202408280906"
-val grunndataDtoVersion = "202408281041"
-
-
-
+val rapidsRiversVersion = "202410290928"
+val grunndataDtoVersion = "202409181446"
+val leaderElectionVersion = "202405151234"
 
 group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
@@ -66,6 +63,8 @@ dependencies {
     implementation("com.github.navikt:hm-rapids-and-rivers-v2-core:$rapidsRiversVersion")
     implementation("com.github.navikt:hm-rapids-and-rivers-v2-micronaut:$rapidsRiversVersion")
     implementation("no.nav.hm.grunndata:hm-grunndata-rapid-dto:$grunndataDtoVersion")
+
+    implementation("com.github.navikt:hm-micronaut-leaderelection:$leaderElectionVersion")
 
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.micronaut.test:micronaut-test-kotest5")

@@ -1,4 +1,4 @@
-package no.nav.hm.grunndata.index.product
+package no.nav.hm.grunndata.index.alternative_product
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.context.annotation.Context
@@ -7,7 +7,7 @@ import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.KafkaRapid
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.River
-import no.nav.hm.grunndata.index.agreement.AgreementLabels
+import no.nav.hm.grunndata.index.product.IsoCategoryService
 import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import no.nav.hm.grunndata.rapid.dto.rapidDTOVersion
@@ -18,20 +18,23 @@ import org.slf4j.LoggerFactory
 
 @Context
 @Requires(bean = KafkaRapid::class)
-class ProductIndexerRiver(river: RiverHead,
-                          private val objectMapper: ObjectMapper,
-                          private val productIndexer: ProductIndexer,
-                          private val isoCategoryService: IsoCategoryService): River.PacketListener {
-
+class AlternativeProductIndexerRiver(
+    river: RiverHead,
+    private val objectMapper: ObjectMapper,
+    private val alternativeProductIndexer: AlternativeProductIndexer,
+    private val isoCategoryService: IsoCategoryService,
+    private val techLabelService: TechLabelService,
+    private val alternativeProdukterClient: AlternativProdukterClient
+): River.PacketListener {
     companion object {
-        private val LOG = LoggerFactory.getLogger(ProductIndexerRiver::class.java)
+        private val LOG = LoggerFactory.getLogger(AlternativeProductIndexerRiver::class.java)
     }
 
     init {
         LOG.info("Using Rapid DTO version $rapidDTOVersion")
         river
             .validate { it.demandValue("createdBy", RapidApp.grunndata_db)}
-            .validate { it.demandAny("eventName", listOf(EventName.hmdbproductsyncV1, EventName.syncedRegisterProductV1)) }
+            .validate { it.demandAny("eventName", listOf(EventName.syncedRegisterProductV1)) }
             .validate { it.demandKey("payload")}
             .validate { it.demandKey("dtoVersion")}
             .register(this)
@@ -42,13 +45,21 @@ class ProductIndexerRiver(river: RiverHead,
         if (dtoVersion > rapidDTOVersion) LOG.warn("this event dto version $dtoVersion is newer than our version: $rapidDTOVersion")
         val dto = objectMapper.treeToValue(packet["payload"], ProductRapidDTO::class.java)
         if (dto.status == ProductStatus.DELETED) {
-            LOG.info("deleting product id: ${dto.id} hmsnr: ${dto.hmsArtNr} for series ${dto.seriesUUID}")
-            productIndexer.delete(dto.id)
+            LOG.info("deleting product id: ${dto.id} hmsnr: ${dto.hmsArtNr}")
+            alternativeProductIndexer.delete(dto.id)
         }
         else {
-            LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr} for series ${dto.seriesUUID}")
-            productIndexer.index(dto.toDoc(isoCategoryService))
+            LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr}, " +
+                    "disabled until we get wareHouseStock calls sorted out from oebs")
+//            if (dto.hmsArtNr != null) {
+//                alternativeProductIndexer.index(
+//                    dto.toDoc(
+//                        isoCategoryService,
+//                        techLabelService,
+//                        alternativeProdukterClient
+//                    )
+//                )
+//            }
         }
     }
-
 }
