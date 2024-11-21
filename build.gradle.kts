@@ -8,7 +8,7 @@ val micronautVersion="4.7.0"
 val junitJupiterVersion = "5.9.0"
 val logbackClassicVersion = "1.4.12"
 val logbackEncoderVersion = "7.3"
-val tcVersion= "1.17.6"
+val tcVersion= "1.20.4"
 val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
 val openSearchJavaClientVersion = "2.8.1"
@@ -16,15 +16,17 @@ val rapidsRiversVersion = "202410290928"
 val grunndataDtoVersion = "202409181446"
 val leaderElectionVersion = "202405151234"
 
+val opensearchTestContainerVersion = "2.1.1"
+
 group = "no.nav.hm"
 version = properties["version"] ?: "local-build"
 
 plugins {
-    kotlin("jvm") version "1.9.21"
-    kotlin("kapt") version "1.9.21"
+    kotlin("jvm") version "1.9.25"
+    kotlin("kapt") version "1.9.25"
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "4.4.0"
+    id("io.micronaut.application") version "4.4.4"
 }
 
 configurations.all {
@@ -54,7 +56,7 @@ dependencies {
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-http-client")
     implementation("org.opensearch.client:opensearch-java:$openSearchJavaClientVersion")
-    implementation("org.opensearch.client:opensearch-rest-client:$openSearchRestClientVersion")
+    implementation("org.opensearch.client:opensearch-rest-client:$openSearchJavaClientVersion")
 
     implementation("io.micronaut.micrometer:micronaut-micrometer-core")
     implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
@@ -70,8 +72,9 @@ dependencies {
     testImplementation("io.micronaut.test:micronaut-test-kotest5")
     testImplementation("io.kotest:kotest-runner-junit5-jvm:$kotestVersion")
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
-
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
+    testImplementation("org.testcontainers:testcontainers:$tcVersion")
+    testImplementation("org.opensearch:opensearch-testcontainers:$opensearchTestContainerVersion")
 }
 
 micronaut {

@@ -47,13 +47,12 @@ class Indexer(private val client: OpenSearchClient,
     fun updateAlias(indexName: String, aliasName: String): Boolean {
 
         val deleteAliasesRequest = DeleteAliasRequest.Builder().index(indexName).name(aliasName).build()
-        LOG.info("updateAlias for alias $aliasName and pointing to $indexName ")
         val addAction = ActionBuilders.add().index(indexName).alias(aliasName).build()
         val updateAliasesRequest = UpdateAliasesRequest.Builder().actions {
             it.add(addAction)
         }.build()
         val ack =  client.indices().updateAliases(updateAliasesRequest).acknowledged()
-        LOG.info("FINISHED delete for alias $aliasName and pointing to $indexName with $ack")
+        LOG.info("update for alias $aliasName and pointing to $indexName with status: $ack")
         return ack
     }
 

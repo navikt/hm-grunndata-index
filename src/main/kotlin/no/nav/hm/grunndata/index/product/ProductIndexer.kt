@@ -41,33 +41,6 @@ class ProductIndexer(
     }
 
 
-    fun deleteProducts() {
-        var page = gdbApiClient.findDeletedProducts(
-            status = ProductStatus.DELETED.name,
-            size = 3000, page = 0, sort = "updated,asc"
-        )
-
-        val noDeleted = page.content.size
-        LOG.info("Found $noDeleted products to remove from index")
-
-        var noActualDeleted = 0;
-
-        page.content.forEach {
-            val response = indexer.delete(it.id.toString(), aliasName)
-            if (response.status().equals("OK")) {
-                noActualDeleted++
-            } else if (response.status().equals("NOT_FOUND")) {
-                LOG.info("Product ${it.id} not found in index")
-            } else {
-                LOG.error("Failed to delete product ${it.seriesUUID} from index, status: ${response.status()}")
-            }
-        }
-
-        LOG.info("Deleted $noActualDeleted products from index")
-
-    }
-
-
     fun reIndex(alias: Boolean) {
         val indexName = createIndexName(IndexType.products)
         if (!indexExists(indexName)) {
