@@ -128,6 +128,8 @@ class Indexer(private val client: OpenSearchClient,
         }
     }
 
+
+
 }
 
 fun createIndexName(type: IndexType): String = "${type.name}_${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"))}"

@@ -5,6 +5,7 @@ import io.micronaut.context.annotation.ConfigurationProperties
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
 import org.apache.hc.client5.http.auth.AuthScope
 import org.apache.hc.client5.http.auth.UsernamePasswordCredentials
 import org.apache.hc.client5.http.impl.async.HttpAsyncClientBuilder
@@ -35,18 +36,12 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv, private val obj
             AuthScope(host),
             UsernamePasswordCredentials(openSearchEnv.user, openSearchEnv.password.toCharArray())
         )
-        val sslcontext = SSLContextBuilder
-            .create()
-            .loadTrustMaterial(
-                null
-            ) { chains: Array<X509Certificate?>?, authType: String? -> true }
-            .build()
 
         val builder = ApacheHttpClient5TransportBuilder.builder(host)
             .setMapper(JacksonJsonpMapper(objectMapper))
             .setHttpClientConfigCallback { httpClientBuilder: HttpAsyncClientBuilder ->
                 val tlsStrategy = ClientTlsStrategyBuilder.create()
-                    .setSslContext(sslcontext)
+                    .setSslContext(SSLContext.getDefault())
                     .build()
                 val connectionManager = PoolingAsyncClientConnectionManagerBuilder
                     .create()
