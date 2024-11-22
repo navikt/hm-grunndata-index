@@ -20,6 +20,7 @@ import org.opensearch.client.opensearch.indices.CreateIndexRequest
 import org.opensearch.client.opensearch.indices.DeleteAliasRequest
 import org.opensearch.client.opensearch.indices.ExistsAliasRequest
 import org.opensearch.client.opensearch.indices.ExistsRequest
+import org.opensearch.client.opensearch.indices.GetAliasRequest
 import org.opensearch.client.opensearch.indices.IndexSettings
 import org.opensearch.client.opensearch.indices.UpdateAliasesRequest
 import org.opensearch.client.opensearch.indices.update_aliases.Action
@@ -48,10 +49,10 @@ class Indexer(private val client: OpenSearchClient,
     }
 
     fun updateAlias(indexName: String, aliasName: String): Boolean {
-
-        val deleteAliasesRequest = DeleteAliasRequest.Builder().index(indexName).name(aliasName).build()
+        val deleteAction = ActionBuilders.remove().index(indexName).alias(aliasName).build()
         val addAction = ActionBuilders.add().index(indexName).alias(aliasName).build()
         val updateAliasesRequest = UpdateAliasesRequest.Builder().actions {
+            it.remove(deleteAction)
             it.add(addAction)
         }.build()
         val ack =  client.indices().updateAliases(updateAliasesRequest).acknowledged()
@@ -62,6 +63,8 @@ class Indexer(private val client: OpenSearchClient,
     fun existsAlias(aliasName: String)
         = client.indices().existsAlias(ExistsAliasRequest.Builder().name(aliasName).build()).value()
 
+    fun getAlias(aliasName: String)
+        = client.indices().getAlias(GetAliasRequest.Builder().name(aliasName).build())
 
     fun createIndex(indexName: String, settings: String?=null, mapping: String?=null): Boolean {
         val mapper = client._transport().jsonpMapper()
@@ -114,8 +117,7 @@ class Indexer(private val client: OpenSearchClient,
         client.indices().exists(ExistsRequest.Builder().index(indexName).build()).value()
 
     fun initAlias(aliasName: String, settings: String?=null, mapping: String?=null) {
-        val alias = existsAlias(aliasName)
-        if (!alias) {
+        if (!existsAlias(aliasName)) {
             LOG.warn("alias $aliasName is not pointing any index")
             val indexName = "${aliasName}_${LocalDate.now()}"
             LOG.warn("Creating index $indexName")
@@ -123,8 +125,7 @@ class Indexer(private val client: OpenSearchClient,
             updateAlias(indexName, aliasName)
         }
         else {
-
-           //LOG.info("alias $aliasName is pointing to ${alias.elementAt(0)}")
+            LOG.info("Aliases is pointing to ${getAlias(aliasName).toJsonString()}")
         }
     }
 

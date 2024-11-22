@@ -65,10 +65,9 @@ class OpensearchIndexerSearchTest(private val osContainer: OSContainer,
         )
         val docs = listOf(doc1, doc2)
         val response = supplierIndexer.index(docs)
-        LOG.info("OS running: ${osContainer.container.httpHostAddress}")
         response.shouldNotBeNull()
         response.errors() shouldBe false
-        supplierIndexer.getAlias() shouldBe true
+        supplierIndexer.getAlias().shouldNotBeNull()
     }
 
     @Test
@@ -114,6 +113,7 @@ class OpensearchIndexerSearchTest(private val osContainer: OSContainer,
         )
         val response = productIndexer.index(productDoc)
         response.errors() shouldBe false
-        productIndexer.getAlias() shouldBe true
+        productIndexer.getAlias().result().shouldNotBeNull()
+
     }
 }
