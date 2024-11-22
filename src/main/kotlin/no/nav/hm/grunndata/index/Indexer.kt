@@ -11,6 +11,7 @@ import org.opensearch.client.opensearch._types.Refresh
 import org.opensearch.client.opensearch._types.mapping.TypeMapping
 import org.opensearch.client.opensearch.core.BulkRequest
 import org.opensearch.client.opensearch.core.BulkResponse
+import org.opensearch.client.opensearch.core.CountRequest
 import org.opensearch.client.opensearch.core.DeleteRequest
 import org.opensearch.client.opensearch.core.DeleteResponse
 import org.opensearch.client.opensearch.core.bulk.BulkOperation
@@ -138,6 +139,8 @@ abstract class Indexer(private val client: OpenSearchClient,
 
     fun indexExists(indexName: String):Boolean =
         client.indices().exists(ExistsRequest.Builder().index(indexName).build()).value()
+
+    fun docCount(): Long = client.count(CountRequest.Builder().index(aliasName).build()).count()
 
     private fun initAlias() {
         if (!existsAlias()) {

@@ -5,12 +5,14 @@ import io.kotest.matchers.shouldBe
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import java.time.LocalDateTime
 import java.util.UUID
+import no.nav.helse.rapids_rivers.toUUID
 import no.nav.hm.grunndata.index.supplier.SupplierDoc
 import no.nav.hm.grunndata.index.supplier.SupplierIndexer
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import no.nav.hm.grunndata.rapid.dto.SupplierStatus
 import no.nav.hm.grunndata.rapid.dto.TechData
 import org.junit.jupiter.api.Test
+import org.opensearch.client.opensearch._types.Result
 import org.slf4j.LoggerFactory
 
 @MicronautTest
@@ -68,7 +70,10 @@ class OpensearchIndexerSearchTest(
         val response = supplierIndexer.index(docs)
         response.shouldNotBeNull()
         response.errors() shouldBe false
-        supplierIndexer.getAlias().shouldNotBeNull()
+        supplierIndexer.getAlias().result().keys.size shouldBe 1
+        supplierIndexer.docCount() shouldBe 2
+        supplierIndexer.delete(doc2.id.toUUID()).result() shouldBe Result.Deleted
+
     }
 
     @Test
@@ -114,7 +119,7 @@ class OpensearchIndexerSearchTest(
         )
         val response = productIndexer.index(productDoc)
         response.errors() shouldBe false
-        productIndexer.getAlias().result().shouldNotBeNull()
+        productIndexer.getAlias().result().keys.size shouldBe 1
 
     }
 }
