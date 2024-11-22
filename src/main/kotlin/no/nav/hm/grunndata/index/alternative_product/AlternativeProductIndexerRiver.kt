@@ -51,15 +51,6 @@ class AlternativeProductIndexerRiver(
         else {
             LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr}, " +
                     "disabled until we get wareHouseStock calls sorted out from oebs")
-//            if (dto.hmsArtNr != null) {
-//                alternativeProductIndexer.index(
-//                    dto.toDoc(
-//                        isoCategoryService,
-//                        techLabelService,
-//                        alternativeProdukterClient
-//                    )
-//                )
-//            }
         }
     }
 }

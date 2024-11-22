@@ -5,14 +5,12 @@ import jakarta.inject.Singleton
 import no.nav.hm.grunndata.index.IndexType
 import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.index.createIndexName
-import java.util.*
-import org.opensearch.client.opensearch.core.BulkResponse
-import org.opensearch.client.opensearch.core.DeleteResponse
+import org.opensearch.client.opensearch.OpenSearchClient
 
 @Singleton
-class NewsIndexer(private val indexer: Indexer,
-                  @Value("\${news.aliasName}") private val aliasName: String,
-                  private val newsGdbApiClient: NewsGDBApiClient) {
+class NewsIndexer(@Value("\${news.aliasName}") private val aliasName: String,
+                  private val newsGdbApiClient: NewsGDBApiClient,
+                  private val client: OpenSearchClient): Indexer(client, settings, mapping, aliasName) {
 
     companion object {
         private val LOG = org.slf4j.LoggerFactory.getLogger(NewsIndexer::class.java)
@@ -22,15 +20,6 @@ class NewsIndexer(private val indexer: Indexer,
             .getResource("/opensearch/news_mapping.json")?.readText()
     }
 
-    init {
-        try {
-            initAlias()
-        } catch (e: Exception) {
-            LOG.error("OpenSearch might not be ready ${e.message}, will wait 10s and retry")
-            Thread.sleep(10000)
-            initAlias()
-        }
-    }
 
     fun reIndex(alias: Boolean) {
         val indexName = createIndexName(IndexType.news)
@@ -47,32 +36,5 @@ class NewsIndexer(private val indexer: Indexer,
         }
 
     }
-
-
-
-    fun index(docs: List<NewsDoc>): BulkResponse = indexer.index(docs, aliasName)
-
-    fun index(doc: NewsDoc): BulkResponse = indexer.index(listOf(doc), aliasName)
-
-
-    fun index(doc: NewsDoc, indexName: String): BulkResponse =
-        indexer.index(listOf(doc), indexName)
-
-
-    fun index(docs: List<NewsDoc>, indexName: String): BulkResponse =
-        indexer.index(docs,indexName)
-
-    fun delete(uuid: UUID): DeleteResponse = indexer.delete(uuid.toString(), aliasName)
-
-    fun createIndex(indexName: String): Boolean = indexer.createIndex(indexName, settings, mapping)
-
-    fun updateAlias(indexName: String): Boolean = indexer.updateAlias(indexName,aliasName)
-
-    fun getAlias() = indexer.existsAlias(aliasName)
-
-    fun indexExists(indexName: String): Boolean = indexer.indexExists(indexName)
-
-    fun initAlias() = indexer.initAlias(aliasName, settings, mapping)
-
 
 }

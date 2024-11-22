@@ -12,14 +12,15 @@ import org.opensearch.client.opensearch.core.DeleteResponse
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.UUID
+import org.opensearch.client.opensearch.OpenSearchClient
 
 @Singleton
 class ProductIndexer(
-    private val indexer: Indexer,
     @Value("\${products.aliasName}") private val aliasName: String,
     private val gdbApiClient: GdbApiClient,
-    private val isoCategoryService: IsoCategoryService
-) {
+    private val isoCategoryService: IsoCategoryService,
+    private val client: OpenSearchClient
+):Indexer(client, settings, mapping, aliasName) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(ProductIndexer::class.java)
@@ -29,16 +30,7 @@ class ProductIndexer(
             .getResource("/opensearch/products_mapping.json")?.readText()
     }
 
-    init {
 
-        try {
-            initAlias()
-        } catch (e: Exception) {
-            LOG.error("OpenSearch might not be ready ${e.message}, will wait 10s and retry")
-            Thread.sleep(10000)
-            initAlias()
-        }
-    }
 
 
     fun reIndex(alias: Boolean) {
@@ -75,7 +67,7 @@ class ProductIndexer(
             )
         }
         if (alias) {
-            updateAlias(indexName)
+            updateAlias(indexName = indexName)
         }
     }
 
@@ -89,7 +81,7 @@ class ProductIndexer(
                 it.status != ProductStatus.DELETED
             }
             LOG.info("indexing ${products.size} products to $aliasName")
-            index(products)
+            index(products, aliasName)
         }
     }
 
@@ -103,35 +95,8 @@ class ProductIndexer(
                 it.status != ProductStatus.DELETED
             }
             LOG.info("indexing ${products.size} products to $aliasName")
-            index(products)
+            index(products, aliasName)
         }
     }
-
-
-    fun index(docs: List<ProductDoc>): BulkResponse = indexer.index(docs, aliasName)
-
-
-    fun index(doc: ProductDoc): BulkResponse = indexer.index(listOf(doc), aliasName)
-
-
-    fun index(doc: ProductDoc, indexName: String): BulkResponse =
-        indexer.index(listOf(doc), indexName)
-
-
-    fun index(docs: List<ProductDoc>, indexName: String): BulkResponse =
-        indexer.index(docs, indexName)
-
-    fun delete(uuid: UUID): DeleteResponse = indexer.delete(uuid.toString(), aliasName)
-
-    fun createIndex(indexName: String): Boolean = indexer.createIndex(indexName, settings, mapping)
-
-    fun updateAlias(indexName: String): Boolean = indexer.updateAlias(indexName, aliasName)
-
-    fun getAlias() = indexer.getAlias(aliasName)
-
-    fun indexExists(indexName: String): Boolean = indexer.indexExists(indexName)
-
-    fun initAlias() = indexer.initAlias(aliasName, settings, mapping)
-
 
 }

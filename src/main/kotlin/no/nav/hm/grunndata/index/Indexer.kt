@@ -1,12 +1,11 @@
 package no.nav.hm.grunndata.index
 
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import jakarta.inject.Singleton
 import java.io.StringReader
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 import org.opensearch.client.opensearch.OpenSearchClient
 import org.opensearch.client.opensearch._types.Refresh
 import org.opensearch.client.opensearch._types.mapping.TypeMapping
@@ -17,42 +16,40 @@ import org.opensearch.client.opensearch.core.DeleteResponse
 import org.opensearch.client.opensearch.core.bulk.BulkOperation
 import org.opensearch.client.opensearch.core.bulk.IndexOperation
 import org.opensearch.client.opensearch.indices.CreateIndexRequest
-import org.opensearch.client.opensearch.indices.DeleteAliasRequest
 import org.opensearch.client.opensearch.indices.ExistsAliasRequest
 import org.opensearch.client.opensearch.indices.ExistsRequest
 import org.opensearch.client.opensearch.indices.GetAliasRequest
 import org.opensearch.client.opensearch.indices.IndexSettings
 import org.opensearch.client.opensearch.indices.UpdateAliasesRequest
-import org.opensearch.client.opensearch.indices.update_aliases.Action
 import org.opensearch.client.opensearch.indices.update_aliases.ActionBuilders
-import org.opensearch.client.opensearch.indices.update_aliases.ActionBuilders.add
-import org.opensearch.client.opensearch.indices.update_aliases.ActionBuilders.remove
 import org.slf4j.LoggerFactory
 
-
-@Singleton
-class Indexer(private val client: OpenSearchClient,
-              private val objectMapper: ObjectMapper) {
+abstract class Indexer(private val client: OpenSearchClient,
+                       private val settings: String?,
+                       private val mapping: String?,
+                       private val aliasName: String) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(Indexer::class.java)
     }
 
-    fun initIndex(indexName: String, settings: String?=null, mapping: String?=null) {
-        val request = ExistsRequest.Builder().index(indexName).build()
-        if (!client.indices().exists(request).value()) {
-            if (createIndex(indexName, settings, mapping))
-                LOG.info("$indexName has been created")
-            else
-                LOG.error("Failed to create $indexName")
+
+    init {
+        try {
+            initAlias()
+        } catch (e: Exception) {
+            LOG.error("Trying to init alias ${aliasName}, failed! OpenSearch might not be ready ${e.message}, will wait 10s and retry")
+            Thread.sleep(10000)
+            initAlias()
         }
     }
 
-    fun updateAlias(indexName: String, aliasName: String): Boolean {
-        val deleteAction = ActionBuilders.remove().index(indexName).alias(aliasName).build()
+
+    fun updateAlias(indexName: String): Boolean {
+        val removeAction = ActionBuilders.remove().index("*").alias(aliasName).build()
         val addAction = ActionBuilders.add().index(indexName).alias(aliasName).build()
         val updateAliasesRequest = UpdateAliasesRequest.Builder().actions {
-            it.remove(deleteAction)
+            it.remove(removeAction)
             it.add(addAction)
         }.build()
         val ack =  client.indices().updateAliases(updateAliasesRequest).acknowledged()
@@ -60,10 +57,24 @@ class Indexer(private val client: OpenSearchClient,
         return ack
     }
 
-    fun existsAlias(aliasName: String)
+    fun removeAllIndicesForAlias() {
+        val aliasResponse = client.indices().getAlias(GetAliasRequest.Builder().name(aliasName).build())
+        LOG.info("Removing alias $aliasName from indices: ${aliasResponse.result().keys}")
+        val indices = aliasResponse.result().keys
+        val updateAliasesRequestBuilder = UpdateAliasesRequest.Builder()
+        indices.forEach { index ->
+            val removeAction = ActionBuilders.remove().index(index).alias(aliasName).build()
+            updateAliasesRequestBuilder.actions { it.remove(removeAction) }
+        }
+        val updateAliasesRequest = updateAliasesRequestBuilder.build()
+        val ack = client.indices().updateAliases(updateAliasesRequest).acknowledged()
+        LOG.info("Removed alias $aliasName from indices: $indices with status: $ack")
+    }
+
+    fun existsAlias()
         = client.indices().existsAlias(ExistsAliasRequest.Builder().name(aliasName).build()).value()
 
-    fun getAlias(aliasName: String)
+    fun getAlias()
         = client.indices().getAlias(GetAliasRequest.Builder().name(aliasName).build())
 
     fun createIndex(indexName: String, settings: String?=null, mapping: String?=null): Boolean {
@@ -82,6 +93,14 @@ class Indexer(private val client: OpenSearchClient,
         val ack = client.indices().create(createIndexRequest.build()).acknowledged()!!
         LOG.info("FINISH createIndex for $indexName with $ack")
         return ack
+    }
+
+    fun index(doc: SearchDoc): BulkResponse {
+        return index(doc, aliasName)
+    }
+
+    fun index(docs: List<SearchDoc>): BulkResponse {
+        return index(docs, aliasName)
     }
 
     fun index(doc: SearchDoc, indexName: String): BulkResponse {
@@ -108,6 +127,10 @@ class Indexer(private val client: OpenSearchClient,
         }
     }
 
+    fun delete(id: UUID): DeleteResponse {
+        return delete(id.toString(), aliasName)
+    }
+
     fun delete(id: String, indexName: String): DeleteResponse {
         val request = DeleteRequest.Builder().index(indexName).id(id)
         return client.delete(request.build())
@@ -116,21 +139,18 @@ class Indexer(private val client: OpenSearchClient,
     fun indexExists(indexName: String):Boolean =
         client.indices().exists(ExistsRequest.Builder().index(indexName).build()).value()
 
-    fun initAlias(aliasName: String, settings: String?=null, mapping: String?=null) {
-        if (!existsAlias(aliasName)) {
+    private fun initAlias() {
+        if (!existsAlias()) {
             LOG.warn("alias $aliasName is not pointing any index")
             val indexName = "${aliasName}_${LocalDate.now()}"
-            LOG.warn("Creating index $indexName")
-            createIndex(indexName,settings, mapping)
-            updateAlias(indexName, aliasName)
+            LOG.info("Creating index $indexName")
+            createIndex(indexName, settings, mapping)
+            updateAlias(indexName)
         }
         else {
-            LOG.info("Aliases is pointing to ${getAlias(aliasName).toJsonString()}")
+            LOG.info("Aliases is pointing to ${getAlias().toJsonString()}")
         }
     }
-
-
-
 }
 
 fun createIndexName(type: IndexType): String = "${type.name}_${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"))}"

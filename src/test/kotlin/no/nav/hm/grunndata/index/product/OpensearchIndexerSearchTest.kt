@@ -14,10 +14,11 @@ import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 
 @MicronautTest
-class OpensearchIndexerSearchTest(private val osContainer: OSContainer,
-                                  private val supplierIndexer: SupplierIndexer,
-                                  private val productIndexer: ProductIndexer
-                                  ) {
+class OpensearchIndexerSearchTest(
+    private val osContainer: OSContainer,
+    private val supplierIndexer: SupplierIndexer,
+    private val productIndexer: ProductIndexer
+) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(OpensearchIndexerSearchTest::class.java)
@@ -74,7 +75,7 @@ class OpensearchIndexerSearchTest(private val osContainer: OSContainer,
     fun testProductIndexer() {
         osContainer.shouldNotBeNull()
         productIndexer.shouldNotBeNull()
-        val productDoc = ProductDoc (
+        val productDoc = ProductDoc(
             id = UUID.randomUUID().toString(),
             supplier = ProductSupplier(
                 id = UUID.randomUUID().toString(),
@@ -97,7 +98,7 @@ class OpensearchIndexerSearchTest(private val osContainer: OSContainer,
             main = true,
             seriesId = UUID.randomUUID().toString(),
             data = listOf(TechData("key", "value", "unit")),
-            media =  emptyList(),
+            media = emptyList(),
             expired = LocalDateTime.now().plusYears(2),
             filters = TechDataFilters(),
             agreements = emptyList(),
