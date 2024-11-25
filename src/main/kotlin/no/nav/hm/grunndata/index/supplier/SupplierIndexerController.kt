@@ -23,5 +23,5 @@ class SupplierIndexerController(private val supplierIndexer: SupplierIndexer) {
     }
 
     @Get("/alias")
-    fun getAlias() = supplierIndexer.getAlias()
+    fun getAlias() = supplierIndexer.getAlias().toJsonString()
 }

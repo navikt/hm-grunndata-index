@@ -47,30 +47,23 @@ abstract class Indexer(private val client: OpenSearchClient,
 
 
     fun updateAlias(indexName: String): Boolean {
-        val removeAction = ActionBuilders.remove().index("*").alias(aliasName).build()
+        val updateAliasesRequestBuilder = UpdateAliasesRequest.Builder()
+        if (existsAlias()) {
+            val aliasResponse = getAlias()
+            val indices = aliasResponse.result().keys
+            indices.forEach { index ->
+                val removeAction = ActionBuilders.remove().index(index).alias(aliasName).build()
+                updateAliasesRequestBuilder.actions { it.remove(removeAction) }
+            }
+        }
         val addAction = ActionBuilders.add().index(indexName).alias(aliasName).build()
-        val updateAliasesRequest = UpdateAliasesRequest.Builder().actions {
-            it.remove(removeAction)
-            it.add(addAction)
-        }.build()
-        val ack =  client.indices().updateAliases(updateAliasesRequest).acknowledged()
+        updateAliasesRequestBuilder.actions { it.add(addAction) }
+        val updateAliasesRequest = updateAliasesRequestBuilder.build()
+        val ack = client.indices().updateAliases(updateAliasesRequest).acknowledged()
         LOG.info("update for alias $aliasName and pointing to $indexName with status: $ack")
         return ack
     }
 
-    fun removeAllIndicesForAlias() {
-        val aliasResponse = client.indices().getAlias(GetAliasRequest.Builder().name(aliasName).build())
-        LOG.info("Removing alias $aliasName from indices: ${aliasResponse.result().keys}")
-        val indices = aliasResponse.result().keys
-        val updateAliasesRequestBuilder = UpdateAliasesRequest.Builder()
-        indices.forEach { index ->
-            val removeAction = ActionBuilders.remove().index(index).alias(aliasName).build()
-            updateAliasesRequestBuilder.actions { it.remove(removeAction) }
-        }
-        val updateAliasesRequest = updateAliasesRequestBuilder.build()
-        val ack = client.indices().updateAliases(updateAliasesRequest).acknowledged()
-        LOG.info("Removed alias $aliasName from indices: $indices with status: $ack")
-    }
 
     fun existsAlias()
         = client.indices().existsAlias(ExistsAliasRequest.Builder().name(aliasName).build()).value()
@@ -92,7 +85,7 @@ abstract class Indexer(private val client: OpenSearchClient,
             createIndexRequest.mappings(typeMapping)
         }
         val ack = client.indices().create(createIndexRequest.build()).acknowledged()!!
-        LOG.info("FINISH createIndex for $indexName with $ack")
+        LOG.info("Created $indexName with status: $ack")
         return ack
     }
 

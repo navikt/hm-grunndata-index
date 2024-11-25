@@ -29,7 +29,7 @@ class AlternativeProductIndexerController(private val alternativeProductIndexer:
     }
 
     @Get("/alias")
-    fun getAlias() = alternativeProductIndexer.getAlias()
+    fun getAlias() = alternativeProductIndexer.getAlias().toJsonString()
 
 
 }

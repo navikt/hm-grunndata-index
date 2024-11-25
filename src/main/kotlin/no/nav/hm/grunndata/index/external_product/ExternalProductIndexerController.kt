@@ -23,5 +23,5 @@ class ExternalProductIndexerController(private val externalProductIndexer: Exter
     }
 
     @Get("/alias")
-    fun getAlias() = externalProductIndexer.getAlias()
+    fun getAlias() = externalProductIndexer.getAlias().toJsonString()
 }

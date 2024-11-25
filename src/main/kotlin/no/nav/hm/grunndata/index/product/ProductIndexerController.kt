@@ -39,7 +39,7 @@ class ProductIndexerController(private val productIndexer: ProductIndexer) {
     }
 
     @Get("/alias")
-    fun getAlias() = productIndexer.getAlias()
+    fun getAlias() = productIndexer.getAlias().toJsonString()
 
     @Delete("{uuid}")
     fun deleteProductById(uuid: UUID) {

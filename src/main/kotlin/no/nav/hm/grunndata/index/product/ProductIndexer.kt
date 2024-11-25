@@ -36,7 +36,6 @@ class ProductIndexer(
     fun reIndex(alias: Boolean) {
         val indexName = createIndexName(IndexType.products)
         if (!indexExists(indexName)) {
-            LOG.info("creating index $indexName")
             createIndex(indexName)
         }
         var updated = LocalDateTime.now().minusYears(30)
