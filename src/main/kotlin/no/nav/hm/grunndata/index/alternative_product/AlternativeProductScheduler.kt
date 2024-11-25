@@ -21,6 +21,9 @@ open class AlternativeProductScheduler(private val alternativeProductIndexer: Al
         // stoler med oppreisningsfunksjon
         "18091501",
         "18091502",
+        // Kalendere, dagsplanleggere og tidtakere
+        "22271501",
+        "22271201",
     )
 
     @LeaderOnly
