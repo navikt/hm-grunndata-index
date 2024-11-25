@@ -30,6 +30,19 @@ class AlternativeProductIndexer(
             .getResource("/opensearch/alternative_products_settings.json")!!.readText()
         private val mapping = AlternativeProductIndexer::class.java
             .getResource("/opensearch/alternative_products_mapping.json")!!.readText()
+        val isos = setOf(
+            // løfteplattform
+            "12360401",
+            "12360301",
+            "12361202",
+            "12361501",
+            // stoler med oppreisningsfunksjon
+            "18091501",
+            "18091502",
+            // Kalendere, dagsplanleggere og tidtakere
+            "22271501",
+            "22271201",
+        )
     }
 
 
@@ -40,29 +53,7 @@ class AlternativeProductIndexer(
             LOG.info("creating index $indexName")
             createIndex(indexName, settings, mapping)
         }
-        var updated =  LocalDateTime.now().minusYears(30)
-        var page = gdbApiClient.findProducts(updated = updated.toString(),
-            size=3000, page = 0, sort="updated,asc")
-        var lastId: UUID? = null
-        while(page.numberOfElements>0) {
-            val products = page.content.filter {
-                it.status != ProductStatus.DELETED && it.hmsArtNr != null
-            }.map { it.toDoc(isoCategoryService, techLabelService, alternativProdukterClient)}
-            LOG.info("indexing ${products.size} products to $indexName")
-            if (products.isNotEmpty()) index(products, indexName)
-            val last = page.last()
-            if (updated.equals(last.updated) && last.id == lastId) {
-                LOG.info("Last updated ${last.updated} ${last.id} is the same, increasing last updated")
-                updated = updated.plusNanos(1000000)
-            }
-            else {
-                lastId = last.id
-                updated = last.updated
-            }
-            LOG.info("updated is now: $updated")
-            page = gdbApiClient.findProducts(updated=updated.toString(),
-                size=3000, page = 0, sort="updated,asc")
-        }
+        reIndexAllByIsoCategory()
         if (alias) {
             updateAlias(indexName)
         }
@@ -77,6 +68,13 @@ class AlternativeProductIndexer(
             }.map { it.toDoc(isoCategoryService, techLabelService, alternativProdukterClient)}
             LOG.info("indexing ${products.size} products to $aliasName")
             index(products)
+        }
+    }
+
+    fun reIndexAllByIsoCategory() {
+        isos.forEach {
+            LOG.info("Reindexing isoCategory: $it")
+            reIndexByIsoCategory(it)
         }
     }
 
