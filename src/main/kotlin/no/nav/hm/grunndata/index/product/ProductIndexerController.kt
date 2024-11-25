@@ -23,8 +23,6 @@ class ProductIndexerController(private val productIndexer: ProductIndexer) {
         productIndexer.reIndex(alias)
     }
 
-
-
     @Post("/supplier/{supplierId}")
     fun indexProductsBySupplierId(supplierId: UUID) {
         productIndexer.reIndexBySupplierId(supplierId)
@@ -48,8 +46,4 @@ class ProductIndexerController(private val productIndexer: ProductIndexer) {
         productIndexer.delete(uuid)
     }
 
-    @Delete("/")
-    fun deleteAllProductsMarkedForDeletion() {
-        productIndexer.deleteProducts()
-    }
 }

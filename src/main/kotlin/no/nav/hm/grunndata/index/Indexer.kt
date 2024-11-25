@@ -1,66 +1,107 @@
 package no.nav.hm.grunndata.index
 
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import jakarta.inject.Singleton
+import java.io.StringReader
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import org.opensearch.action.admin.indices.alias.IndicesAliasesRequest
-import org.opensearch.action.admin.indices.alias.get.GetAliasesRequest
-import org.opensearch.action.bulk.BulkRequest
-import org.opensearch.action.bulk.BulkResponse
-import org.opensearch.action.delete.DeleteRequest
-import org.opensearch.action.delete.DeleteResponse
-import org.opensearch.action.index.IndexRequest
-import org.opensearch.client.RequestOptions
-import org.opensearch.client.RestHighLevelClient
-import org.opensearch.client.indices.CreateIndexRequest
-import org.opensearch.client.indices.GetIndexRequest
-import org.opensearch.cluster.metadata.AliasMetadata
-import org.opensearch.common.xcontent.XContentType
+import java.util.UUID
+import org.opensearch.client.opensearch.OpenSearchClient
+import org.opensearch.client.opensearch._types.Refresh
+import org.opensearch.client.opensearch._types.mapping.TypeMapping
+import org.opensearch.client.opensearch.core.BulkRequest
+import org.opensearch.client.opensearch.core.BulkResponse
+import org.opensearch.client.opensearch.core.CountRequest
+import org.opensearch.client.opensearch.core.DeleteRequest
+import org.opensearch.client.opensearch.core.DeleteResponse
+import org.opensearch.client.opensearch.core.bulk.BulkOperation
+import org.opensearch.client.opensearch.core.bulk.IndexOperation
+import org.opensearch.client.opensearch.indices.CreateIndexRequest
+import org.opensearch.client.opensearch.indices.ExistsAliasRequest
+import org.opensearch.client.opensearch.indices.ExistsRequest
+import org.opensearch.client.opensearch.indices.GetAliasRequest
+import org.opensearch.client.opensearch.indices.IndexSettings
+import org.opensearch.client.opensearch.indices.UpdateAliasesRequest
+import org.opensearch.client.opensearch.indices.update_aliases.ActionBuilders
 import org.slf4j.LoggerFactory
 
-@Singleton
-class Indexer(private val client: RestHighLevelClient,
-              private val objectMapper: ObjectMapper) {
+abstract class Indexer(private val client: OpenSearchClient,
+                       private val settings: String?,
+                       private val mapping: String?,
+                       private val aliasName: String) {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(Indexer::class.java)
     }
 
-    fun initIndex(indexName: String, settings: String?=null, mapping: String?=null) {
-        if (!client.indices().exists(GetIndexRequest(indexName), RequestOptions.DEFAULT)) {
-            if (createIndex(indexName, settings, mapping))
-                LOG.info("$indexName has been created")
-            else
-                LOG.error("Failed to create $indexName")
+
+    init {
+        try {
+            initAlias()
+        } catch (e: Exception) {
+            LOG.error("Trying to init alias ${aliasName}, failed! OpenSearch might not be ready ${e.message}, will wait 10s and retry")
+            Thread.sleep(10000)
+            initAlias()
         }
     }
 
-    fun updateAlias(indexName: String, aliasName: String): Boolean {
-        val remove = IndicesAliasesRequest.AliasActions(IndicesAliasesRequest.AliasActions.Type.REMOVE)
-            .index("$aliasName*")
-            .alias(aliasName)
-        val add = IndicesAliasesRequest.AliasActions(IndicesAliasesRequest.AliasActions.Type.ADD)
-            .index(indexName)
-            .alias(aliasName)
-        val request = IndicesAliasesRequest().apply {
-            addAliasAction(remove)
-            addAliasAction(add)
-        }
-        LOG.info("updateAlias for alias $aliasName and pointing to $indexName ")
-        return client.indices().updateAliases(request, RequestOptions.DEFAULT).isAcknowledged
+
+    fun updateAlias(indexName: String): Boolean {
+        val removeAction = ActionBuilders.remove().index("*").alias(aliasName).build()
+        val addAction = ActionBuilders.add().index(indexName).alias(aliasName).build()
+        val updateAliasesRequest = UpdateAliasesRequest.Builder().actions {
+            it.remove(removeAction)
+            it.add(addAction)
+        }.build()
+        val ack =  client.indices().updateAliases(updateAliasesRequest).acknowledged()
+        LOG.info("update for alias $aliasName and pointing to $indexName with status: $ack")
+        return ack
     }
 
-    fun getAlias(aliasName: String): Map<String, MutableSet<AliasMetadata>> =
-        client.indices().getAlias(GetAliasesRequest(aliasName), RequestOptions.DEFAULT).aliases
+    fun removeAllIndicesForAlias() {
+        val aliasResponse = client.indices().getAlias(GetAliasRequest.Builder().name(aliasName).build())
+        LOG.info("Removing alias $aliasName from indices: ${aliasResponse.result().keys}")
+        val indices = aliasResponse.result().keys
+        val updateAliasesRequestBuilder = UpdateAliasesRequest.Builder()
+        indices.forEach { index ->
+            val removeAction = ActionBuilders.remove().index(index).alias(aliasName).build()
+            updateAliasesRequestBuilder.actions { it.remove(removeAction) }
+        }
+        val updateAliasesRequest = updateAliasesRequestBuilder.build()
+        val ack = client.indices().updateAliases(updateAliasesRequest).acknowledged()
+        LOG.info("Removed alias $aliasName from indices: $indices with status: $ack")
+    }
+
+    fun existsAlias()
+        = client.indices().existsAlias(ExistsAliasRequest.Builder().name(aliasName).build()).value()
+
+    fun getAlias()
+        = client.indices().getAlias(GetAliasRequest.Builder().name(aliasName).build())
 
     fun createIndex(indexName: String, settings: String?=null, mapping: String?=null): Boolean {
-        val createIndexRequest = CreateIndexRequest(indexName)
-        settings?.let { createIndexRequest.source(settings, XContentType.JSON) }
-        mapping?.let { createIndexRequest.mapping(mapping, XContentType.JSON) }
-        return client.indices().create(createIndexRequest, RequestOptions.DEFAULT).isAcknowledged
+        val mapper = client._transport().jsonpMapper()
+        val createIndexRequest = CreateIndexRequest.Builder().index(indexName)
+        settings?.let {
+            val settingsParser = mapper.jsonProvider().createParser(StringReader(settings))
+            val indexSettings = IndexSettings._DESERIALIZER.deserialize(settingsParser, mapper)
+            createIndexRequest.settings(indexSettings)
+        }
+        mapping?.let {
+            val mappingsParser = mapper.jsonProvider().createParser(StringReader(mapping))
+            val typeMapping = TypeMapping._DESERIALIZER.deserialize(mappingsParser, mapper)
+            createIndexRequest.mappings(typeMapping)
+        }
+        val ack = client.indices().create(createIndexRequest.build()).acknowledged()!!
+        LOG.info("FINISH createIndex for $indexName with $ack")
+        return ack
+    }
+
+    fun index(doc: SearchDoc): BulkResponse {
+        return index(doc, aliasName)
+    }
+
+    fun index(docs: List<SearchDoc>): BulkResponse {
+        return index(docs, aliasName)
     }
 
     fun index(doc: SearchDoc, indexName: String): BulkResponse {
@@ -68,38 +109,51 @@ class Indexer(private val client: RestHighLevelClient,
     }
 
     fun index(docs: List<SearchDoc>, indexName: String): BulkResponse {
-        val bulkRequest = BulkRequest()
-        docs.forEach {
-            bulkRequest.add(
-                IndexRequest(indexName)
-                    .id(it.id)
-                    .source(objectMapper.writeValueAsString(it), XContentType.JSON)
-            )
+        val operations = docs.map { document ->
+            BulkOperation.Builder().index(
+                IndexOperation.of { it.index(indexName).id(document.id).document(document) }
+            ).build()
         }
-        return client.bulk(bulkRequest, RequestOptions.DEFAULT)
+        val bulkRequest = BulkRequest.Builder()
+            .index(indexName)
+            .operations(operations)
+            .refresh(Refresh.WaitFor)
+            .build()
+        return try {
+            client.bulk(bulkRequest)
+        }
+        catch (e: Exception) {
+            LOG.error("Failed to index $docs to $indexName", e)
+            throw e
+        }
+    }
+
+    fun delete(id: UUID): DeleteResponse {
+        return delete(id.toString(), aliasName)
     }
 
     fun delete(id: String, indexName: String): DeleteResponse {
-        val request = DeleteRequest(indexName).id(id)
-        return client.delete(request, RequestOptions.DEFAULT)
+        val request = DeleteRequest.Builder().index(indexName).id(id)
+        return client.delete(request.build())
     }
 
-    fun indexExists(indexName: String):Boolean = client.indices()
-        .exists(GetIndexRequest(indexName), RequestOptions.DEFAULT)
+    fun indexExists(indexName: String):Boolean =
+        client.indices().exists(ExistsRequest.Builder().index(indexName).build()).value()
 
-    fun initAlias(aliasName: String, settings: String?=null, mapping: String?=null) {
-        val alias = getAlias(aliasName)
-        if (alias.isEmpty()) {
+    fun docCount(): Long = client.count(CountRequest.Builder().index(aliasName).build()).count()
+
+    private fun initAlias() {
+        if (!existsAlias()) {
             LOG.warn("alias $aliasName is not pointing any index")
             val indexName = "${aliasName}_${LocalDate.now()}"
-            LOG.warn("Creating index $indexName")
-            createIndex(indexName,settings, mapping)
-            updateAlias(indexName, aliasName)
+            LOG.info("Creating index $indexName")
+            createIndex(indexName, settings, mapping)
+            updateAlias(indexName)
         }
-        else
-           LOG.info("alias $aliasName is pointing to ${alias.keys.elementAt(0)}")
+        else {
+            LOG.info("Aliases is pointing to ${getAlias().toJsonString()}")
+        }
     }
-
 }
 
 fun createIndexName(type: IndexType): String = "${type.name}_${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"))}"
