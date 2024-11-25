@@ -20,9 +20,9 @@ class SupplierIndexer(private val supplierGdbApiClient: SupplierGdbApiClient,
     companion object {
         private val LOG = LoggerFactory.getLogger(SupplierIndexer::class.java)
         private val settings = SupplierIndexer::class.java
-            .getResource("/opensearch/suppliers_settings.json")?.readText()
+            .getResource("/opensearch/suppliers_settings.json")!!.readText()
         private val mapping = SupplierIndexer::class.java
-            .getResource("/opensearch/suppliers_mapping.json")?.readText()
+            .getResource("/opensearch/suppliers_mapping.json")!!.readText()
     }
 
 
@@ -30,7 +30,7 @@ class SupplierIndexer(private val supplierGdbApiClient: SupplierGdbApiClient,
         val indexName = createIndexName(IndexType.suppliers)
         if (!indexExists(indexName)) {
             LOG.info("creating index $indexName")
-            createIndex(indexName)
+            createIndex(indexName, settings, mapping)
         }
         val page = supplierGdbApiClient.findSuppliers(size=5000, page = 0, sort="updated,asc")
         val suppliers = page.content.map { it.toDoc() }

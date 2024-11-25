@@ -19,16 +19,16 @@ class AgreementIndexer(private val agreementGdbApiClient: AgreementGdbApiClient,
     companion object {
         private val LOG = LoggerFactory.getLogger(AgreementIndexer::class.java)
         val settings = AgreementIndexer::class.java
-        .getResource("/opensearch/agreements_settings.json")?.readText()
+        .getResource("/opensearch/agreements_settings.json")!!.readText()
         val mapping = AgreementIndexer::class.java
-        .getResource("/opensearch/agreements_mapping.json")?.readText()
+        .getResource("/opensearch/agreements_mapping.json")!!.readText()
     }
 
     fun reIndex(alias: Boolean) {
         val indexName = createIndexName(IndexType.agreements)
         if (!indexExists(indexName)) {
             LOG.info("creating index $indexName")
-            createIndex(indexName)
+            createIndex(indexName, settings, mapping)
         }
         var updated =  LocalDateTime.now().minusYears(30)
         var page = agreementGdbApiClient.findAgreements(params = mapOf("updatedAfter" to updated.toString()),

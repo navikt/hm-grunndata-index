@@ -25,9 +25,9 @@ class ProductIndexer(
     companion object {
         private val LOG = LoggerFactory.getLogger(ProductIndexer::class.java)
         private val settings = ProductIndexer::class.java
-            .getResource("/opensearch/products_settings.json")?.readText()
+            .getResource("/opensearch/products_settings.json")!!.readText()
         private val mapping = ProductIndexer::class.java
-            .getResource("/opensearch/products_mapping.json")?.readText()
+            .getResource("/opensearch/products_mapping.json")!!.readText()
     }
 
     fun count() = docCount()
@@ -35,7 +35,7 @@ class ProductIndexer(
     fun reIndex(alias: Boolean) {
         val indexName = createIndexName(IndexType.products)
         if (!indexExists(indexName)) {
-            createIndex(indexName)
+            createIndex(indexName, settings, mapping)
         }
         var updated = LocalDateTime.now().minusYears(30)
         var page = gdbApiClient.findProducts(

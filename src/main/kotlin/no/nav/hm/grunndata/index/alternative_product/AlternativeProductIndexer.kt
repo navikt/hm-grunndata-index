@@ -27,9 +27,9 @@ class AlternativeProductIndexer(
     companion object {
         private val LOG = LoggerFactory.getLogger(AlternativeProductIndexer::class.java)
         private val settings = AlternativeProductIndexer::class.java
-            .getResource("/opensearch/alternative_products_settings.json")?.readText()
+            .getResource("/opensearch/alternative_products_settings.json")!!.readText()
         private val mapping = AlternativeProductIndexer::class.java
-            .getResource("/opensearch/alternative_products_mapping.json")?.readText()
+            .getResource("/opensearch/alternative_products_mapping.json")!!.readText()
     }
 
 
@@ -38,7 +38,7 @@ class AlternativeProductIndexer(
         val indexName = createIndexName(IndexType.alternative_products)
         if (!indexExists(indexName)) {
             LOG.info("creating index $indexName")
-            createIndex(indexName)
+            createIndex(indexName, settings, mapping)
         }
         var updated =  LocalDateTime.now().minusYears(30)
         var page = gdbApiClient.findProducts(updated = updated.toString(),

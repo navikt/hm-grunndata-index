@@ -26,8 +26,8 @@ import org.opensearch.client.opensearch.indices.update_aliases.ActionBuilders
 import org.slf4j.LoggerFactory
 
 abstract class Indexer(private val client: OpenSearchClient,
-                       private val settings: String?,
-                       private val mapping: String?,
+                       private val settings: String,
+                       private val mapping: String,
                        private val aliasName: String) {
 
     companion object {
@@ -71,19 +71,15 @@ abstract class Indexer(private val client: OpenSearchClient,
     fun getAlias()
         = client.indices().getAlias(GetAliasRequest.Builder().name(aliasName).build())
 
-    fun createIndex(indexName: String, settings: String?=null, mapping: String?=null): Boolean {
+    fun createIndex(indexName: String, settings: String, mapping: String): Boolean {
         val mapper = client._transport().jsonpMapper()
         val createIndexRequest = CreateIndexRequest.Builder().index(indexName)
-        settings?.let {
-            val settingsParser = mapper.jsonProvider().createParser(StringReader(settings))
-            val indexSettings = IndexSettings._DESERIALIZER.deserialize(settingsParser, mapper)
-            createIndexRequest.settings(indexSettings)
-        }
-        mapping?.let {
-            val mappingsParser = mapper.jsonProvider().createParser(StringReader(mapping))
-            val typeMapping = TypeMapping._DESERIALIZER.deserialize(mappingsParser, mapper)
-            createIndexRequest.mappings(typeMapping)
-        }
+        val settingsParser = mapper.jsonProvider().createParser(StringReader(settings))
+        val indexSettings = IndexSettings._DESERIALIZER.deserialize(settingsParser, mapper)
+        createIndexRequest.settings(indexSettings)
+        val mappingsParser = mapper.jsonProvider().createParser(StringReader(mapping))
+        val typeMapping = TypeMapping._DESERIALIZER.deserialize(mappingsParser, mapper)
+        createIndexRequest.mappings(typeMapping)
         val ack = client.indices().create(createIndexRequest.build()).acknowledged()!!
         LOG.info("Created $indexName with status: $ack")
         return ack
@@ -140,7 +136,7 @@ abstract class Indexer(private val client: OpenSearchClient,
             LOG.warn("alias $aliasName is not pointing any index")
             val indexName = "${aliasName}_${LocalDate.now()}"
             LOG.info("Creating index $indexName")
-            createIndex(indexName, settings, mapping)
+            createIndex(indexName,settings, mapping)
             updateAlias(indexName)
         }
         else {

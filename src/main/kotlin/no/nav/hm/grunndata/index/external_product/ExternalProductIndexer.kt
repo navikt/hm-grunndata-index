@@ -26,16 +26,16 @@ class ExternalProductIndexer(
     companion object {
         private val LOG = LoggerFactory.getLogger(ExternalProductIndexer::class.java)
         private val settings = ExternalProductIndexer::class.java
-            .getResource("/opensearch/external_products_settings.json")?.readText()
+            .getResource("/opensearch/external_products_settings.json")!!.readText()
         private val mapping = ExternalProductIndexer::class.java
-            .getResource("/opensearch/external_products_mapping.json")?.readText()
+            .getResource("/opensearch/external_products_mapping.json")!!.readText()
     }
 
     fun reIndex(alias: Boolean) {
         val indexName = createIndexName(IndexType.external_products)
         if (!indexExists(indexName)) {
             LOG.info("creating index $indexName")
-            createIndex(indexName)
+            createIndex(indexName, settings, mapping)
         }
         var updated =  LocalDateTime.now().minusYears(30)
         var page = gdbApiClient.findProducts(updated = updated.toString(),

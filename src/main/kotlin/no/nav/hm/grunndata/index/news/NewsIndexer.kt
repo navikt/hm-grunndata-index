@@ -15,9 +15,9 @@ class NewsIndexer(@Value("\${news.aliasName}") private val aliasName: String,
     companion object {
         private val LOG = org.slf4j.LoggerFactory.getLogger(NewsIndexer::class.java)
         private val settings = NewsIndexer::class.java
-            .getResource("/opensearch/news_settings.json")?.readText()
+            .getResource("/opensearch/news_settings.json")!!.readText()
         private val mapping = NewsIndexer::class.java
-            .getResource("/opensearch/news_mapping.json")?.readText()
+            .getResource("/opensearch/news_mapping.json")!!.readText()
     }
 
 
@@ -25,7 +25,7 @@ class NewsIndexer(@Value("\${news.aliasName}") private val aliasName: String,
         val indexName = createIndexName(IndexType.news)
         if (!indexExists(indexName)) {
             LOG.info("creating index $indexName")
-            createIndex(indexName)
+            createIndex(indexName, settings, mapping)
         }
         val page = newsGdbApiClient.findNews(size=5000, page = 0, sort="updated,asc")
         val news = page.content.map { it.toDoc() }
