@@ -79,4 +79,5 @@ class AlternativeProductIndexer(
             index(products)
         }
     }
+
 }

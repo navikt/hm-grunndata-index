@@ -46,4 +46,8 @@ class ProductIndexerController(private val productIndexer: ProductIndexer) {
         productIndexer.delete(uuid)
     }
 
+    @Get("/count")
+    fun search() = productIndexer.count()
+
+
 }

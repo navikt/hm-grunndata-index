@@ -30,8 +30,7 @@ class ProductIndexer(
             .getResource("/opensearch/products_mapping.json")?.readText()
     }
 
-
-
+    fun count() = docCount()
 
     fun reIndex(alias: Boolean) {
         val indexName = createIndexName(IndexType.products)

@@ -13,23 +13,25 @@ class AlternativeProductIndexerController(private val alternativeProductIndexer:
     }
 
     @Post("/")
-    fun indexProducts(@QueryValue(value = "alias", defaultValue = "false") alias: Boolean) {
+    fun indexAlternativeProducts(@QueryValue(value = "alias", defaultValue = "false") alias: Boolean) {
         alternativeProductIndexer.reIndex(alias)
     }
 
     @Post("/isoCategory/{isoCategory}")
-    fun indexProductsByCategory(isoCategory:String) {
+    fun indexAlternativeProductsByCategory(isoCategory:String) {
         alternativeProductIndexer.reIndexByIsoCategory(isoCategory)
     }
 
     @Post("/")
     @Put("/alias/{indexName}")
-    fun aliasProducts(indexName: String) {
+    fun aliasAlternativeProducts(indexName: String) {
         alternativeProductIndexer.updateAlias(indexName)
     }
 
     @Get("/alias")
     fun getAlias() = alternativeProductIndexer.getAlias().toJsonString()
 
+    @Get("/count")
+    fun count() = alternativeProductIndexer.docCount()
 
 }

@@ -24,4 +24,7 @@ class SupplierIndexerController(private val supplierIndexer: SupplierIndexer) {
 
     @Get("/alias")
     fun getAlias() = supplierIndexer.getAlias().toJsonString()
+
+    @Get("/count")
+    fun count() = supplierIndexer.docCount()
 }
