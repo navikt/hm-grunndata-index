@@ -6,8 +6,11 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import java.time.LocalDateTime
 import java.util.UUID
 import no.nav.helse.rapids_rivers.toUUID
+import no.nav.hm.grunndata.index.agreement.AgreementDoc
+import no.nav.hm.grunndata.index.agreement.AgreementIndexer
 import no.nav.hm.grunndata.index.supplier.SupplierDoc
 import no.nav.hm.grunndata.index.supplier.SupplierIndexer
+import no.nav.hm.grunndata.rapid.dto.AgreementStatus
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import no.nav.hm.grunndata.rapid.dto.SupplierStatus
 import no.nav.hm.grunndata.rapid.dto.TechData
@@ -19,7 +22,8 @@ import org.slf4j.LoggerFactory
 class OpensearchIndexerSearchTest(
     private val osContainer: OSContainer,
     private val supplierIndexer: SupplierIndexer,
-    private val productIndexer: ProductIndexer
+    private val productIndexer: ProductIndexer,
+    private val agreementIndexer: AgreementIndexer
 ) {
 
     companion object {
@@ -121,5 +125,32 @@ class OpensearchIndexerSearchTest(
         response.errors() shouldBe false
         productIndexer.getAlias().result().keys.size shouldBe 1
 
+    }
+
+    @Test
+    fun testAgreementIndexer() {
+        osContainer.shouldNotBeNull()
+        agreementIndexer.shouldNotBeNull()
+        val agreementDoc = AgreementDoc(
+            id = UUID.randomUUID().toString(),
+            identifier = "identifier",
+            title = "title",
+            label = "label",
+            status = AgreementStatus.ACTIVE,
+            resume = "resume",
+            text = "text",
+            reference = "reference",
+            published = LocalDateTime.now(),
+            expired = LocalDateTime.now(),
+            attachments =  emptyList(),
+            posts = emptyList(),
+            isoCategory = emptyList(),
+            createdBy = "REGISTER",
+            updatedBy = "REGISTER",
+            created = LocalDateTime.now(),
+            updated = LocalDateTime.now(),
+        )
+        val response = agreementIndexer.index(agreementDoc)
+        response.errors() shouldBe false
     }
 }
