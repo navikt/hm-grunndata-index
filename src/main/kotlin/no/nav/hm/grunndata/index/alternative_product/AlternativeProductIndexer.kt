@@ -42,6 +42,9 @@ class AlternativeProductIndexer(
             // Kalendere, dagsplanleggere og tidtakere
             "22271501",
             "22271201",
+            // varmehjelpemidler
+            "09061501",
+            "09062101"
         )
     }
 
