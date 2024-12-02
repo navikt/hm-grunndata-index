@@ -53,6 +53,7 @@ data class AgreementInfoDoc(
     val postId: UUID? = null,
     val refNr: String? = null,
     val reference: String,
+    val published: LocalDateTime,
     val expired: LocalDateTime,
 )
 
@@ -159,7 +160,8 @@ fun AgreementInfo.toDoc(): AgreementInfoDoc = AgreementInfoDoc(
     postId = postId,
     refNr = refNr,
     reference = reference,
-    expired = expired
+    expired = expired,
+    published = published ?: LocalDateTime.now()
 )
 
 fun Attributes.toDoc(): AttributesDoc {

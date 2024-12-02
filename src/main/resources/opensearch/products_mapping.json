@@ -14,6 +14,10 @@
           "type": "date",
           "format": "strict_date_optional_time"
         },
+        "published": {
+          "type": "date",
+          "format": "strict_date_optional_time"
+        },
         "id": {
           "type": "keyword"
         },
@@ -56,6 +60,10 @@
     "previousAgreements": {
       "properties": {
         "expired": {
+          "type": "date",
+          "format": "strict_date_optional_time"
+        },
+        "published": {
           "type": "date",
           "format": "strict_date_optional_time"
         },
