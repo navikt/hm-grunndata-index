@@ -51,6 +51,7 @@ class AlternativeProductIndexer(
             "18090701",
             "18092101",
             "18030602",
+            "18030601",
             // Synstekniske hjelpemidler
             "22031803",
             "22031801",
