@@ -31,6 +31,11 @@ class AlternativeProductIndexer(
         val excludeIsos = setOf(
             // Sitteputer
             "18100601",
+            // Sexual Tekniske hjelpemidler
+            "09540601",
+            "09540901",
+            "09540301",
+
         )
     }
 
@@ -56,7 +61,7 @@ class AlternativeProductIndexer(
                 it.status != ProductStatus.DELETED && it.hmsArtNr != null
             }.map { it.toDoc(isoCategoryService, techLabelService, alternativProdukterClient)}
             LOG.info("indexing ${products.size} products to $aliasName")
-            //index(products)
+            index(products)
             return products.size
         }
         return 0

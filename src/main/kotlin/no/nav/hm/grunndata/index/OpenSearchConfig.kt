@@ -31,6 +31,16 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv, private val obj
     @Singleton
     fun buildOpenSearchClient(): OpenSearchClient {
         val host = HttpHost.create(openSearchEnv.url)
+        var sslContext = SSLContext.getDefault()
+        if (openSearchEnv.url == "https://localhost:9200" && openSearchEnv.user == "admin" ) {
+            LOG.warn("Using localhost, skipping SSL certificate validation!")
+            sslContext = SSLContextBuilder
+                .create()
+                .loadTrustMaterial(
+                    null
+                ) { chains: Array<X509Certificate?>?, authType: String? -> true }
+                .build()
+        }
         val credentialsProvider: BasicCredentialsProvider = BasicCredentialsProvider()
         credentialsProvider.setCredentials(
             AuthScope(host),
@@ -41,7 +51,7 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv, private val obj
             .setMapper(JacksonJsonpMapper(objectMapper))
             .setHttpClientConfigCallback { httpClientBuilder: HttpAsyncClientBuilder ->
                 val tlsStrategy = ClientTlsStrategyBuilder.create()
-                    .setSslContext(SSLContext.getDefault())
+                    .setSslContext(sslContext)
                     .build()
                 val connectionManager = PoolingAsyncClientConnectionManagerBuilder
                     .create()
