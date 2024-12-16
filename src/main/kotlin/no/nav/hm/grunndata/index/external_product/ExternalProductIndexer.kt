@@ -5,7 +5,7 @@ import jakarta.inject.Singleton
 import no.nav.hm.grunndata.index.IndexType
 import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.index.createIndexName
-import no.nav.hm.grunndata.index.product.GdbApiClient
+import no.nav.hm.grunndata.index.GdbApiClient
 import no.nav.hm.grunndata.index.product.IsoCategoryService
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
 
@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.*
 import org.opensearch.client.opensearch.OpenSearchClient
-import org.opensearch.client.opensearch.core.BulkResponse
-import org.opensearch.client.opensearch.core.DeleteResponse
 
 @Singleton
 class ExternalProductIndexer(

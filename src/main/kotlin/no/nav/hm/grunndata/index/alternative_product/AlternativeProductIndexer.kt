@@ -5,12 +5,10 @@ import jakarta.inject.Singleton
 import no.nav.hm.grunndata.index.IndexType
 import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.index.createIndexName
-import no.nav.hm.grunndata.index.product.GdbApiClient
+import no.nav.hm.grunndata.index.GdbApiClient
 import no.nav.hm.grunndata.index.product.IsoCategoryService
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
-import java.util.*
 import org.opensearch.client.opensearch.OpenSearchClient
 
 
@@ -30,58 +28,9 @@ class AlternativeProductIndexer(
             .getResource("/opensearch/alternative_products_settings.json")!!.readText()
         private val mapping = AlternativeProductIndexer::class.java
             .getResource("/opensearch/alternative_products_mapping.json")!!.readText()
-        val isos = setOf(
-            // løfteplattform
-            "12360401",
-            "12360301",
-            "12361202",
-            "12361501",
-            // stoler med oppreisningsfunksjon
-            "18091501",
-            "18091502",
-            // Kalendere, dagsplanleggere og tidtakere
-            "22271501",
-            "22271201",
-            // varmehjelpemidler
-            "09061501",
-            "09062101",
-            // Arbeidsstoler
-            "18090302",
-            "18090301",
-            "18090701",
-            "18092101",
-            "18030602",
-            "18030601",
-            // Synstekniske hjelpemidler
-            "22031803",
-            "22031801",
-            "22031802",
-            "22031804",
-            "22390502",
-            "22390601",
-            "22180301",
-            "22302101",
-            "22391201",
-            "22030901",
-            // Ganghjelpemidler
-            "12060602",
-            "12060603",
-            "12061202",
-            "12061201",
-            "12181202",
-            "12060604",
-            "12060603",
-            "12060901",
-            "04481503",
-            "04481501",
-            "12030601",
-            // Manuelle rullestoler
-            "12220301",
-            "12220302",
-            "12220303",
-            "12220304",
-            "12240902",
-            "12240901"
+        val excludeIsos = setOf(
+            // Sitteputer
+            "18100601",
         )
     }
 
@@ -99,23 +48,32 @@ class AlternativeProductIndexer(
         }
     }
 
-    fun reIndexByIsoCategory(isoCategory: String) {
-        val page = gdbApiClient.findProductsByIsoCategory(isoCategory = isoCategory,
-            size=3000, page = 0, sort="updated,asc")
+    fun reIndexByIsoCategory(isoCategory: String): Int {
+        val page = gdbApiClient.findProducts(isoCategory = isoCategory,
+            size=5000, page = 0, sort="updated,asc", accessory = false, sparePart = false)
         if (page.numberOfElements>0) {
             val products = page.content.filter {
                 it.status != ProductStatus.DELETED && it.hmsArtNr != null
             }.map { it.toDoc(isoCategoryService, techLabelService, alternativProdukterClient)}
             LOG.info("indexing ${products.size} products to $aliasName")
-            index(products)
+            //index(products)
+            return products.size
         }
+        return 0
     }
 
     fun reIndexAllByIsoCategory() {
+        val isos = gdbApiClient.findDistinctIsoCategoryThatHasHmsnr()
+        LOG.info("Got ${isos.size} isoCategories")
+        var total = 0
         isos.forEach {
-            LOG.info("Reindexing isoCategory: $it")
-            reIndexByIsoCategory(it)
+            if (!excludeIsos.contains(it)) {
+                LOG.info("Reindexing isoCategory: $it")
+                val count = reIndexByIsoCategory(it)
+                total += count
+            }
         }
+        LOG.info("Total products indexed: $total")
     }
 
 }

@@ -1,9 +1,8 @@
 package no.nav.hm.grunndata.index.product
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import no.nav.hm.grunndata.index.agreement.AgreementLabels
-import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
+import no.nav.hm.grunndata.index.GdbApiClient
 
 @MicronautTest
 class ProductGdbApiClientTest(private val gdbApiClient: GdbApiClient,

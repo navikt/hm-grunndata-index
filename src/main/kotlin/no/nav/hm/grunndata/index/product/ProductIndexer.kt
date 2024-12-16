@@ -6,12 +6,11 @@ import no.nav.hm.grunndata.index.IndexType
 import no.nav.hm.grunndata.index.Indexer
 import no.nav.hm.grunndata.index.createIndexName
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
-import org.opensearch.client.opensearch.core.BulkResponse
-import org.opensearch.client.opensearch.core.DeleteResponse
 
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.UUID
+import no.nav.hm.grunndata.index.GdbApiClient
 import org.opensearch.client.opensearch.OpenSearchClient
 
 @Singleton

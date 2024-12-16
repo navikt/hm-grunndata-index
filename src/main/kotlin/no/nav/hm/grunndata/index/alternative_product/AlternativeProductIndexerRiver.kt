@@ -49,8 +49,8 @@ class AlternativeProductIndexerRiver(
             alternativeProductIndexer.delete(dto.id)
         }
         else {
-            LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr}, " +
-                    "disabled until we get wareHouseStock calls sorted out from oebs")
+            //LOG.info("indexing product id: ${dto.id} hmsnr: ${dto.hmsArtNr}, " +
+            //        "disabled until we get wareHouseStock calls sorted out from oebs")
         }
     }
 }

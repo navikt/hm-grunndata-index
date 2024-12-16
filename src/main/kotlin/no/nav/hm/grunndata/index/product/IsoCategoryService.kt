@@ -4,6 +4,7 @@ import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 import java.util.*
+import no.nav.hm.grunndata.index.GdbApiClient
 
 @Singleton
 class IsoCategoryService(gdbApiClient: GdbApiClient) {
