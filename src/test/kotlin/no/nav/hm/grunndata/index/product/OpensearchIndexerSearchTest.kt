@@ -102,7 +102,7 @@ class OpensearchIndexerSearchTest(
             isoCategoryText = "isoCategoryText",
             isoCategoryTextShort = "isoCategoryTextShort",
             isoSearchTag = "isoSearchTag".split(","),
-            isoCategoryTitleEn = "isoCategoryTitleEn",
+            isoCategoryTitleInternational = "isoCategoryTitleInternational",
             accessory = false,
             sparePart = false,
             main = true,
