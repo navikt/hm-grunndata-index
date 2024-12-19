@@ -124,7 +124,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
         }
 
     val iso = isoCategoryService.lookUpCode(isoCategory) ?: isoCategoryService.getClosestLevelInBranch(isoCategory)
-    val internationalIso = isoCategoryService.lookUpCode(isoCategory.take(5))
+    val internationalIso = isoCategoryService.lookUpCode(isoCategory.take(6))
     ProductDoc(
         id = id.toString(),
         supplier = ProductSupplier(
