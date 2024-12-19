@@ -1,10 +1,22 @@
 package no.nav.hm.grunndata.index.product
 
-import no.nav.hm.grunndata.rapid.dto.*
 import no.nav.hm.grunndata.index.SearchDoc
 import no.nav.hm.grunndata.index.agreement.AgreementLabels
+import no.nav.hm.grunndata.rapid.dto.AgreementInfo
+import no.nav.hm.grunndata.rapid.dto.AlternativeFor
+import no.nav.hm.grunndata.rapid.dto.Attributes
+import no.nav.hm.grunndata.rapid.dto.CompatibleWith
+import no.nav.hm.grunndata.rapid.dto.MediaInfo
+import no.nav.hm.grunndata.rapid.dto.MediaSourceType
+import no.nav.hm.grunndata.rapid.dto.MediaType
+import no.nav.hm.grunndata.rapid.dto.PakrevdGodkjenningskurs
+import no.nav.hm.grunndata.rapid.dto.ProductAgreementStatus
+import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
+import no.nav.hm.grunndata.rapid.dto.ProductStatus
+import no.nav.hm.grunndata.rapid.dto.Produkttype
+import no.nav.hm.grunndata.rapid.dto.TechData
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 data class ProductDoc(
     override val id: String,
@@ -17,6 +29,7 @@ data class ProductDoc(
     val identifier: String,
     val supplierRef: String,
     val isoCategory: String,
+    val isoCategoryTitleInternational: String?,
     val isoCategoryTitle: String?,
     val isoCategoryTitleShort: String?,
     val isoCategoryText: String?,
@@ -84,32 +97,36 @@ data class MediaDoc(
 )
 
 data class TechDataFilters(
-    val fyllmateriale: String?=null,
-    val setebreddeMaksCM: Int?=null,
-    val setebreddeMinCM: Int?=null,
-    val brukervektMinKG: Int?=null,
-    val materialeTrekk: String?=null,
-    val setedybdeMinCM: Int?=null,
-    val setedybdeMaksCM: Int?=null,
-    val setehoydeMaksCM: Int?=null,
-    val setehoydeMinCM: Int?=null,
-    val totalVektKG: Float?=null,
-    val lengdeCM: Int?=null,
-    val breddeCM: Int?=null,
-    val beregnetBarn: String?=null,
-    val brukervektMaksKG: Int?=null
+    val fyllmateriale: String? = null,
+    val setebreddeMaksCM: Int? = null,
+    val setebreddeMinCM: Int? = null,
+    val brukervektMinKG: Int? = null,
+    val materialeTrekk: String? = null,
+    val setedybdeMinCM: Int? = null,
+    val setedybdeMaksCM: Int? = null,
+    val setehoydeMaksCM: Int? = null,
+    val setehoydeMinCM: Int? = null,
+    val totalVektKG: Float? = null,
+    val lengdeCM: Int? = null,
+    val breddeCM: Int? = null,
+    val beregnetBarn: String? = null,
+    val brukervektMaksKG: Int? = null
 )
 
 data class ProductSupplier(val id: String, val identifier: String, val name: String)
 
 fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = try {
     val (onlyActiveAgreements, previousAgreements) =
-        agreements.partition { it.published!!.isBefore(LocalDateTime.now())
-                && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE
-                && this.status == ProductStatus.ACTIVE }
+        agreements.partition {
+            it.published!!.isBefore(LocalDateTime.now())
+                    && it.expired.isAfter(LocalDateTime.now()) && it.status == ProductAgreementStatus.ACTIVE
+                    && this.status == ProductStatus.ACTIVE
+        }
 
     val iso = isoCategoryService.lookUpCode(isoCategory) ?: isoCategoryService.getClosestLevelInBranch(isoCategory)
-    ProductDoc(id = id.toString(),
+    val internationalIso = isoCategoryService.lookUpCode(isoCategory.take(6))
+    ProductDoc(
+        id = id.toString(),
         supplier = ProductSupplier(
             id = supplier.id.toString(), identifier = supplier.identifier, name = supplier.name
         ),
@@ -126,6 +143,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
         isoCategoryText = iso?.isoText,
         isoCategoryTextShort = iso?.isoTextShort,
         isoSearchTag = isoCategoryService.getHigherLevelsInBranch(isoCategory).map { it.searchWords }.flatten(),
+        isoCategoryTitleInternational = internationalIso?.isoTitle ?: iso?.isoTitle,
         accessory = accessory,
         sparePart = sparePart,
         seriesId = seriesUUID?.toString(),
@@ -140,7 +158,8 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
         hasAgreement = onlyActiveAgreements.isNotEmpty(),
         previousAgreements = previousAgreements.map { it.toDoc() },
         hasPreviousAgreement = previousAgreements.isNotEmpty(),
-        filters = mapTechDataFilters(techData))
+        filters = mapTechDataFilters(techData)
+    )
 
 
 } catch (e: Exception) {
@@ -240,8 +259,7 @@ fun mapTechDataFilters(data: List<TechData>): TechDataFilters {
             beregnetBarn = beregnetBarn,
             brukervektMaksKG = brukervektMaksKG
         )
-    }
-    catch (e: Exception) {
+    } catch (e: Exception) {
         println("Error mapping techdatafilters ${e.message}")
         return TechDataFilters()
     }
