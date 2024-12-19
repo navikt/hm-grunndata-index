@@ -12,6 +12,7 @@ on:
     branches:
       - main
       - 'hotfix/**'
+      - internationalIso
 
 jobs:
   call-workflow:
