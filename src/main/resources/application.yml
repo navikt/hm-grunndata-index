@@ -9,7 +9,7 @@ micronaut:
   http:
     client:
       max-content-length: 100833718
-      read-timeout: "30s"
+      read-timeout: "5m"
       event-loop-group: http
   netty:
     event-loops:
