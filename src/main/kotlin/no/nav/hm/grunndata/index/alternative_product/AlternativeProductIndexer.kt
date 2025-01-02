@@ -109,7 +109,10 @@ class AlternativeProductIndexer(
             "18121002",
             "18120401",
             "18121801",
-            "18031501"
+            "18031501",
+            // Kjøreposer
+            "09030502",
+            "09030501"
         )
     }
 
@@ -140,6 +143,7 @@ class AlternativeProductIndexer(
     }
 
     fun reIndexAllByIsoCategory() {
+        LOG.info("We are indexing all isos with size: ${isos.size}")
         isos.forEach {
             LOG.info("Reindexing isoCategory: $it")
             reIndexByIsoCategory(it)

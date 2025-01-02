@@ -163,7 +163,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
 
 
 } catch (e: Exception) {
-    println(isoCategory)
+    println("Error while mapping id:$id  and iso: $isoCategory")
     throw e
 }
 
