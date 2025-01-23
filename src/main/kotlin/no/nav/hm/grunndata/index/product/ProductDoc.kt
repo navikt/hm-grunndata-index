@@ -198,7 +198,7 @@ fun Attributes.toDoc(): AttributesDoc {
         produkttype = produkttype,
         tenderId = tenderId,
         hasTender = hasTender,
-        compatibleWith = compatibleWidth,
+        compatibleWith = compatibleWith,
         alternativeFor = alternativeFor
     )
 }
