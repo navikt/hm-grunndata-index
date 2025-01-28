@@ -25,7 +25,7 @@ class IsoCategoryService(gdbApiClient: GdbApiClient) {
 
     fun getHigherLevelsInBranch(isoCode: String): List<IsoCategoryDTO> {
         val cat = isoCategories[isoCode]
-        if (cat==null) LOG.error("IsoCode: $isoCode not found!")
+        if (cat==null) LOG.warn("IsoCode: $isoCode not found!")
         return isoCategories.values.filter { isoCode.startsWith(it.isoCode) }
     }
 
