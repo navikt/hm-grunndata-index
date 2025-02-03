@@ -37,7 +37,7 @@ class ProductIndexer(
         if (!indexExists(indexName)) {
             createIndex(indexName, settings, mapping)
         }
-        var updated = LocalDateTime.now().minusYears(30)
+        var updated = LocalDateTime.now().minusYears(1000)
         var page = gdbApiClient.findProducts(
             updated = updated.toString(),
             size = 3000, page = 0, sort = "updated,asc"

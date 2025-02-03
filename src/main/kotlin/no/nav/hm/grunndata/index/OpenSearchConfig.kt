@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.context.annotation.ConfigurationProperties
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
+import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLContext
+import javax.net.ssl.X509TrustManager
 import org.apache.hc.client5.http.auth.AuthScope
 import org.apache.hc.client5.http.auth.UsernamePasswordCredentials
 import org.apache.hc.client5.http.impl.async.HttpAsyncClientBuilder
@@ -36,12 +38,23 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv, private val obj
             AuthScope(host),
             UsernamePasswordCredentials(openSearchEnv.user, openSearchEnv.password.toCharArray())
         )
+        val sslcontext = if ("https://localhost:9200" == openSearchEnv.url && "admin" == openSearchEnv.user) {
+            LOG.warn("Using dev/test sslcontext cause url is ${openSearchEnv.url} and user is ${openSearchEnv.user}")
+            SSLContextBuilder
+                .create()
+                .loadTrustMaterial(
+                    null
+                ) { chains: Array<X509Certificate?>?, authType: String? -> true }
+                .build()
+             } else {
+                SSLContext.getDefault()
+             }
 
         val builder = ApacheHttpClient5TransportBuilder.builder(host)
             .setMapper(JacksonJsonpMapper(objectMapper))
             .setHttpClientConfigCallback { httpClientBuilder: HttpAsyncClientBuilder ->
                 val tlsStrategy = ClientTlsStrategyBuilder.create()
-                    .setSslContext(SSLContext.getDefault())
+                    .setSslContext(sslcontext)
                     .build()
                 val connectionManager = PoolingAsyncClientConnectionManagerBuilder
                     .create()
@@ -57,6 +70,7 @@ class OpenSearchConfig(private val openSearchEnv: OpenSearchEnv, private val obj
         LOG.info("Opensearch client using ${openSearchEnv.user} and url ${openSearchEnv.url}")
         return client
     }
+
 
 }
 
