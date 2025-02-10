@@ -30,7 +30,7 @@ class AlternativeProductIndexer(
             .getResource("/opensearch/alternative_products_settings.json")!!.readText()
         private val mapping = AlternativeProductIndexer::class.java
             .getResource("/opensearch/alternative_products_mapping.json")!!.readText()
-        val isos = setOf(
+        val isos = sortedSetOf(
             // løfteplattform
             "12360401",
             "12360301",
