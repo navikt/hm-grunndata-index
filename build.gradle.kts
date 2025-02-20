@@ -13,7 +13,7 @@ val mockkVersion = "1.13.4"
 val kotestVersion = "5.5.5"
 val openSearchJavaClientVersion = "2.18.0"
 val rapidsRiversVersion = "202410290928"
-val grunndataDtoVersion = "202502101053"
+val grunndataDtoVersion = "202502200842"
 val leaderElectionVersion = "202405151234"
 
 val opensearchTestContainerVersion = "2.1.1"

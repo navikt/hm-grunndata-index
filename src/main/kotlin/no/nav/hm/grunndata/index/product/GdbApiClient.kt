@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.annotation.Client
 import no.nav.hm.grunndata.rapid.dto.ProductRapidDTO
 import java.util.UUID
+import no.nav.hm.grunndata.rapid.dto.IsoCategoryDTO
 
 @Client("\${grunndata.db.url}")
 interface GdbApiClient {
