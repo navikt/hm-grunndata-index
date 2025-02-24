@@ -39,7 +39,7 @@ spec:
       value: "http://hm-grunndata-alternativprodukter"
     - name: GRUNNDATA_REGISTER_URL
       value: "http://hm-grunndata-register/admreg"
-    - name: JAVA_OPTS
+    - name: JDK_JAVA_OPTIONS
       value: "{{java_opts}}"
   kafka:
     pool: {{ kafka_cluster }}
