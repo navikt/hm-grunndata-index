@@ -175,4 +175,13 @@ class AlternativeProductIndexer(
         }
     }
 
+    fun reIndexByHmsNr(hmsNr: String) {
+        LOG.info("Reindexing hmsNr: $hmsNr")
+        gdbApiClient.findProductByHmsArtNr(hmsNr).let {
+            if (it.status != ProductStatus.DELETED) {
+                index(listOf(it.toDoc(isoCategoryService, techLabelService, alternativProdukterClient)))
+            }
+        }
+    }
+
 }

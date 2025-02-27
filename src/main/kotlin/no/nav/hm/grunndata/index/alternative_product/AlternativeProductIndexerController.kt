@@ -17,12 +17,16 @@ class AlternativeProductIndexerController(private val alternativeProductIndexer:
         alternativeProductIndexer.reIndex(alias)
     }
 
+    @Post("/hmsNr/{hmsNr}")
+    fun indexAlternativeProductsByHmsNr(hmsNr: String) {
+        alternativeProductIndexer.reIndexByHmsNr(hmsNr)
+    }
+
     @Post("/isoCategory/{isoCategory}")
     fun indexAlternativeProductsByCategory(isoCategory:String) {
         alternativeProductIndexer.reIndexByIsoCategory(isoCategory)
     }
 
-    @Post("/")
     @Put("/alias/{indexName}")
     fun aliasAlternativeProducts(indexName: String) {
         alternativeProductIndexer.updateAlias(indexName)

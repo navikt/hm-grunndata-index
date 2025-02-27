@@ -52,7 +52,12 @@ interface GdbApiClient {
         @QueryValue("sort") sort: String? = null
     ): Page<ProductRapidDTO>
 
+    @Get(uri = "/api/v1/products/hmsArtNr/{hmsArtNr}", consumes = [APPLICATION_JSON])
+    fun findProductByHmsArtNr(hmsArtNr: String): ProductRapidDTO
+
     @Get(uri = "/api/v1/isocategories", consumes = [APPLICATION_JSON])
     fun retrieveIsoCategories(): List<IsoCategoryDTO>
+
+
 
 }

@@ -90,6 +90,7 @@ abstract class Indexer(private val client: OpenSearchClient,
     }
 
     fun index(docs: List<SearchDoc>): BulkResponse {
+        LOG.info("indexing ${docs.size} docs to $aliasName")
         return index(docs, aliasName)
     }
 

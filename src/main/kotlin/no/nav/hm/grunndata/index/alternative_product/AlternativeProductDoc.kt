@@ -34,7 +34,6 @@ data class AlternativeProductDoc(
     val hasAgreement: Boolean = false,
     val alternativeFor: Set<String> = emptySet(),
     val wareHouseStock: List<WareHouseStockDoc> = emptyList(),
-    val filters: Map<String, Any> = emptyMap()
 ) : SearchDoc
 
 data class WareHouseStock(
@@ -113,15 +112,10 @@ fun ProductRapidDTO.toDoc(
         agreements = onlyActiveAgreements.map { it.toDoc() },
         hasAgreement = onlyActiveAgreements.isNotEmpty(),
         alternativeFor = alternativeProdukterResponse.alternatives.map { it }.toSet(),
-        wareHouseStock = alternativeProdukterResponse.original.warehouseStock.map { it.toDoc()},
-        filters = techData.mapNotNull { data ->
-            techLabelService.fetchLabelByIsoCodeLabel(isoCategory, data.key)?.let {
-                it.systemLabel to data.value
-            }
-        }.toMap()
+        wareHouseStock = alternativeProdukterResponse.original.warehouseStock.map { it.toDoc()}
     )
 } catch (e: Exception) {
-    println(isoCategory)
+    println("ERROR: $isoCategory")
     throw e
 }
 
