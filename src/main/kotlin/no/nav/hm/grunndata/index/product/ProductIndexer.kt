@@ -97,4 +97,15 @@ class ProductIndexer(
         }
     }
 
+    fun reIndexByIsoCategory(iso: String) {
+        val page = gdbApiClient.findProductsByIsoCategory(iso, 3000, 0, "updated,asc")
+        if (page.numberOfElements > 0) {
+            val products = page.content.map { it.toDoc(isoCategoryService) }.filter {
+                it.status != ProductStatus.DELETED
+            }
+            LOG.info("indexing ${products.size} products to $aliasName")
+            index(products, aliasName)
+        }
+    }
+
 }

@@ -33,6 +33,11 @@ class ProductIndexerController(private val productIndexer: ProductIndexer) {
         productIndexer.reIndexBySeriesId(seriesId)
     }
 
+    @Post("/isoCategory/{isoCategory}")
+    fun indexProductsByCategory(isoCategory: String) {
+        productIndexer.reIndexByIsoCategory(isoCategory)
+    }
+
     @Put("/alias/{indexName}")
     fun aliasProducts(indexName: String) {
         productIndexer.updateAlias(indexName)
