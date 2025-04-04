@@ -148,6 +148,7 @@ fun ProductRapidDTO.toDoc(isoCategoryService: IsoCategoryService): ProductDoc = 
         isoCategoryTitleInternational = internationalIso?.isoTitle ?: iso?.isoTitle,
         accessory = accessory,
         sparePart = sparePart,
+        main = mainProduct,
         seriesId = seriesUUID?.toString(),
         data = techData,
         media = media.map { it.toDoc() }.sortedBy { it.priority },
