@@ -121,6 +121,7 @@ class AlternativeProductIndexer(
             "18121801",
             "18121803",
             "18121804",
+            "18122401",
             // Løfteplattformer
             "18300301",
             "18300501",
