@@ -67,13 +67,13 @@ data class WareHouseStockDoc(
     val updated: LocalDateTime = LocalDateTime.now()
 )
 
-fun WareHouseStock.toDoc(): WareHouseStockDoc = WareHouseStockDoc(
-    location = organisasjons_navn.substring(4),
-    available = tilgjengelig,
-    reserved = reservert,
-    needNotified = behovsmeldt,
+fun StockQuantity.toDoc(dto: ProductStockDTO): WareHouseStockDoc = WareHouseStockDoc(
+    location = location,
+    available = available,
+    reserved = reserved,
+    needNotified = needNotified,
     minmax = minmax,
-    updated = LocalDateTime.now()
+    updated = dto.updated
 )
 
 fun ProductRapidDTO.toDoc(
@@ -112,7 +112,7 @@ fun ProductRapidDTO.toDoc(
         agreements = onlyActiveAgreements.map { it.toDoc() },
         hasAgreement = onlyActiveAgreements.isNotEmpty(),
         alternativeFor = alternativeProdukterResponse.alternatives.map { it }.toSet(),
-        wareHouseStock = alternativeProdukterResponse.original.warehouseStock.map { it.toDoc()}
+        wareHouseStock = alternativeProdukterResponse.original.stockQuantity.map { it.toDoc(alternativeProdukterResponse.original)}
     )
 } catch (e: Exception) {
     println("ERROR: $isoCategory")
