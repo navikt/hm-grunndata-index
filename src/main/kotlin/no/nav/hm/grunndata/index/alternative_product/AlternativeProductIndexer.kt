@@ -197,6 +197,24 @@ class AlternativeProductIndexer(
         }
     }
 
+    fun reIndexAllDinstinctHmsNr() {
+        val hmsNrs = alternativProdukterClient.fetchAllDistinctHmsArtnr()
+        LOG.info("Reindexing all distinct hmsNr: ${hmsNrs.size}")
+        val mappedDoc = mutableListOf<AlternativeProductDoc>()
+        hmsNrs.forEach { hmsNr ->
+            gdbApiClient.findProductByHmsArtNr(hmsNr).let {
+                if (it.status != ProductStatus.DELETED) {
+                    mappedDoc.add(it.toDoc(isoCategoryService, techLabelService, alternativProdukterClient))
+                }
+            }
+            if (mappedDoc.size > 1000) {
+                index(mappedDoc)
+                mappedDoc.clear()
+            }
+        }
+        if (mappedDoc.isNotEmpty()) { index(mappedDoc) }
+    }
+
     fun reIndexByHmsNr(hmsNr: String) {
         LOG.info("Reindexing hmsNr: $hmsNr")
         gdbApiClient.findProductByHmsArtNr(hmsNr).let {

@@ -1,5 +1,6 @@
 package no.nav.hm.grunndata.index.alternative_product
 
+import io.micronaut.core.annotation.Introspected
 import io.micronaut.http.MediaType.APPLICATION_JSON
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.client.annotation.Client
@@ -13,8 +14,12 @@ interface AlternativProdukterClient {
     @Get(uri = "/alternativ/stock-alternatives/{hmsNr}", consumes = [APPLICATION_JSON])
     fun fetchAlternativProdukter(hmsNr: String): ProductStockAlternatives
 
+    @Get(uri = "//hmsArtNrMapping/all/distinct", consumes = [APPLICATION_JSON])
+    fun fetchAllDistinctHmsArtnr(): List<String>
+
 }
 
+@Introspected
 data class ProductStockDTO(
     val id: UUID,
     val hmsArtnr: String,
@@ -23,6 +28,7 @@ data class ProductStockDTO(
     val updated: LocalDateTime = LocalDateTime.now()
 )
 
+@Introspected
 data class StockQuantity(
     val inStock: Boolean,
     val amountInStock: Int,
