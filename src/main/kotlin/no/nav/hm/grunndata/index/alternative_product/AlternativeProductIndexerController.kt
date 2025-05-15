@@ -19,6 +19,7 @@ class AlternativeProductIndexerController(private val alternativeProductIndexer:
 
     @Post("/hmsNr/{hmsNr}")
     fun indexAlternativeProductsByHmsNr(hmsNr: String) {
+        LOG.info("reIndex alternative products by hmsNr: $hmsNr")
         alternativeProductIndexer.reIndexByHmsNr(hmsNr)
     }
 

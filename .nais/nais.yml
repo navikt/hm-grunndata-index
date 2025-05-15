@@ -52,3 +52,6 @@ spec:
         - application: hm-grunndata-register
       external:
         - host: navikt.github.io
+    inbound:
+      rules:
+        - application: hm-grunndata-alternativprodukter

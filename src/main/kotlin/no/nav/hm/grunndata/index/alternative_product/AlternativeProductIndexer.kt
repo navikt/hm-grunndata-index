@@ -9,8 +9,7 @@ import no.nav.hm.grunndata.index.product.GdbApiClient
 import no.nav.hm.grunndata.index.product.IsoCategoryService
 import no.nav.hm.grunndata.rapid.dto.ProductStatus
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
-import java.util.*
+
 import org.opensearch.client.opensearch.OpenSearchClient
 
 
