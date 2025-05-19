@@ -14,7 +14,7 @@ interface AlternativProdukterClient {
     @Get(uri = "/alternativ/stock-alternatives/{hmsNr}", consumes = [APPLICATION_JSON])
     fun fetchAlternativProdukter(hmsNr: String): ProductStockAlternatives
 
-    @Get(uri = "//hmsArtNrMapping/all/distinct", consumes = [APPLICATION_JSON])
+    @Get(uri = "/hmsArtNrMapping/all/distinct", consumes = [APPLICATION_JSON])
     fun fetchAllDistinctHmsArtnr(): List<String>
 
 }
