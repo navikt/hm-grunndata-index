@@ -198,14 +198,15 @@ class AlternativeProductIndexer(
 
     fun reIndexAllDinstinctHmsNr() {
         val hmsNrs = alternativProdukterClient.fetchAllDistinctHmsArtnr()
-        LOG.info("Reindexing all distinct hmsNr: ${hmsNrs.size}")
+        LOG.info("Reindexing all distinct size: ${hmsNrs.size}")
         val mappedDoc = mutableListOf<AlternativeProductDoc>()
         hmsNrs.forEach { hmsNr ->
-            gdbApiClient.findProductByHmsArtNr(hmsNr).let {
+            LOG.info("indexing alternative product $hmsNr")
+            gdbApiClient.findProductByHmsArtNr(hmsNr)?.let {
                 if (it.status != ProductStatus.DELETED) {
                     mappedDoc.add(it.toDoc(isoCategoryService, techLabelService, alternativProdukterClient))
                 }
-            }
+            } ?: LOG.warn("Could not find alternative product $hmsNr")
             if (mappedDoc.size > 1000) {
                 index(mappedDoc)
                 mappedDoc.clear()
@@ -216,7 +217,7 @@ class AlternativeProductIndexer(
 
     fun reIndexByHmsNr(hmsNr: String) {
         LOG.info("Reindexing hmsNr: $hmsNr")
-        gdbApiClient.findProductByHmsArtNr(hmsNr).let {
+        gdbApiClient.findProductByHmsArtNr(hmsNr)?.let {
             if (it.status != ProductStatus.DELETED) {
                 index(listOf(it.toDoc(isoCategoryService, techLabelService, alternativProdukterClient)))
             }
