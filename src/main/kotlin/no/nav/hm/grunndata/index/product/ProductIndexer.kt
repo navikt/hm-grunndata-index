@@ -30,7 +30,7 @@ class ProductIndexer(
             .getResource("/opensearch/products_mapping.json")!!.readText()
     }
 
-    val size: Int = 6000
+    val size: Int = 5000
 
     fun count() = docCount()
 
