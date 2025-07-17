@@ -30,6 +30,8 @@ class ProductIndexer(
             .getResource("/opensearch/products_mapping.json")!!.readText()
     }
 
+    val size: Int = 6000
+
     fun count() = docCount()
 
     fun reIndex(alias: Boolean) {
@@ -40,7 +42,7 @@ class ProductIndexer(
         var updated = LocalDateTime.now().minusYears(1000)
         var page = gdbApiClient.findProducts(
             updated = updated.toString(),
-            size = 3000, page = 0, sort = "updated,asc"
+            size = size, page = 0, sort = "updated,asc"
         )
         var lastId: UUID? = null
         while (page.numberOfElements > 0) {
@@ -61,7 +63,7 @@ class ProductIndexer(
             LOG.info("updated is now: $updated")
             page = gdbApiClient.findProducts(
                 updated = updated.toString(),
-                size = 3000, page = 0, sort = "updated,asc"
+                size = size, page = 0, sort = "updated,asc"
             )
         }
         if (alias) {
@@ -73,7 +75,7 @@ class ProductIndexer(
         var pageNumber = 0
         var page = gdbApiClient.findProductsBySupplierId(
             supplierId = supplierId,
-            size = 1000, page = pageNumber, sort = "updated,asc"
+            size = size, page = pageNumber, sort = "updated,asc"
         )
         while (page.numberOfElements > 0) {
             val products = page.content.map { it.toDoc(isoCategoryService) }.filter {
@@ -85,7 +87,7 @@ class ProductIndexer(
             }
             page = gdbApiClient.findProductsBySupplierId(
                 supplierId = supplierId,
-                size = 1000, page = ++pageNumber, sort = "updated,asc"
+                size = size, page = ++pageNumber, sort = "updated,asc"
             )
         }
         LOG.info("finished indexing products for supplier $supplierId")
@@ -94,7 +96,7 @@ class ProductIndexer(
     fun reIndexBySeriesId(seriesId: UUID) {
         val page = gdbApiClient.findProductsBySeriesId(
             seriesUUID = seriesId,
-            size = 3000, page = 0, sort = "updated,asc"
+            size = size, page = 0, sort = "updated,asc"
         )
         if (page.numberOfElements > 0) {
             val products = page.content.map { it.toDoc(isoCategoryService) }.filter {
@@ -107,7 +109,7 @@ class ProductIndexer(
 
     fun reIndexByIsoCategory(iso: String) {
         var pageNumber = 0
-        var page = gdbApiClient.findProductsByIsoCategory(iso, 3000, pageNumber, "updated,asc")
+        var page = gdbApiClient.findProductsByIsoCategory(iso, size, pageNumber, "updated,asc")
         while (page.numberOfElements > 0) {
             val products = page.content.map { it.toDoc(isoCategoryService) }.filter {
                 it.status != ProductStatus.DELETED
@@ -116,7 +118,7 @@ class ProductIndexer(
                 LOG.info("indexing ${products.size} products to $aliasName")
                 index(products, aliasName)
             }
-            page = gdbApiClient.findProductsByIsoCategory(iso, 3000, ++pageNumber , "updated,asc")
+            page = gdbApiClient.findProductsByIsoCategory(iso, size, ++pageNumber , "updated,asc")
         }
     }
 
