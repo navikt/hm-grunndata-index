@@ -1,3 +1,5 @@
+ARCHIVED - THIS CODE HAS BEEN MOVED INTO hm-grunndata-db
+
 # hm-grunndata-index
 index grunndata to opensearch
 
